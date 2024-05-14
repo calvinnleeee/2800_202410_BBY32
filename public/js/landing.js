@@ -20,16 +20,15 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
   event.preventDefault();
 
   // get form inputs
-  var userEmail = document.getElementById("login-email").value;
+  var userID = document.getElementById("login-id").value;
   var userPw = document.getElementById("login-pw").value;
 
   // Joi validation
   const schema = Joi.object({
-    email:  Joi.string().email({
-      minDomainSegments: 2, tlds: { allow: ['com', 'org', 'net', 'ca']}}).required(),
-    pw:     Joi.string().max(20).required()
+    ID: Joi.string().min(6).max(20).alphanum().required(),
+    pw: Joi.string().max(20).required()
   });
-  var validationResult = schema.validate({email: userEmail, pw: userPw});
+  var validationResult = schema.validate({ID: userID, pw: userPw});
 
   // if there is an error, display a meaningful message to the user depending on the error
   if (validationResult.error != null) {
@@ -95,6 +94,8 @@ document.querySelectorAll(".clear-error").forEach((btn) => {
   btn.addEventListener("click", (event) => {
     document.getElementById("loginError").textContent = "";
     document.getElementById("loginError").replaceChildren(document.createElement('br'));
+    document.getElementById("signupError").textContent = "";
+    document.getElementById("signupError").replaceChildren(document.createElement('br'));
   });
 });
 
