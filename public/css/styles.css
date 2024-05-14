@@ -41,20 +41,20 @@ body {
 .center-me {
   margin-top: 35%;
   text-align: center;
+  height: 80vh;
   animation: fadeIn ease 2s;
+}
+
+.carousel-inner {
+  height: 80vh;
 }
 
 .error {
   color: red;
 }
 
-#signup-carousel-item, #login-carousel-item {
-  height: 50vh;
-  /* width: 90vw; */
-}
-
 .carousel-item {
-  height: 50vh;
+  height: 80vh;
 }
 
 .landing-btn {
