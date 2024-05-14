@@ -66,9 +66,11 @@ app.get('/', (req, res) => {
 */
 app.post('signupSubmit', async (req, res) => {
   // user variables
-  var name = req.body.name;
-  var email = req.body.email;
-  var pw = req.body.password;
+  let id = req.body.id;
+  let name = req.body.name;
+  let email = req.body.email;
+  let pw = req.body.password;
+  // let id = req.body.signup-id;
   // var name = req.body.signup-name;
   // var email = req.body.signup-email;
   // var pw = req.body.signup-password;
