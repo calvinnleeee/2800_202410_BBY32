@@ -17,15 +17,16 @@ Colour theme
 
 body {
   background-color: white;
+  height: 100vh;
 }
 
-.header_colours {
+.header-colours {
   /* background: linear-gradient(180deg, #519E5C, #FFFFFF); */
   background: linear-gradient(180deg, #90C2E7, #FFFFFF);
   height: 10vh;
 }
 
-.nav_colours {
+.nav-colours {
   background: linear-gradient(0deg, #519E5C, #FFFFFF);
   height: 10vh;
 }
@@ -39,6 +40,7 @@ body {
 
 .center-me {
   margin-top: 35%;
+  text-align: center;
   animation: fadeIn ease 2s;
 }
 
