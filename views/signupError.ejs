@@ -8,6 +8,7 @@
 <script>
   document.getElementById("tryagain").addEventListener("click", (e) => {
     e.preventDefault();
+    sessionStorage.setItem("prev", "signup");
     history.go(-1);
   });
 </script>

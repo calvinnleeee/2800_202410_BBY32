@@ -10,9 +10,18 @@
       validation).
 */
 
+// Joi object for schema validation on client side
 const Joi = window.joi;
 
-console.log(history);
+// Change the active carousel window if you came back from an error page
+if (sessionStorage.getItem("prev") == "signup") {
+  document.getElementById("landing-item").classList.toggle("active");
+  document.getElementById("signup-carousel-item").classList.toggle("active");
+}
+else if (sessionStorage.getItem("prev") == "login") {
+  document.getElementById("landing-item").classList.toggle("active");
+  document.getElementById("login-carousel-item").classList.toggle("active");
+}
 
 // Add event listener to login form to validate using Joi before posting
 document.getElementById("loginForm").addEventListener("submit", function(event) {
@@ -47,6 +56,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     this.submit();
   }
 });
+
 
 // Add event listener to signup form to validate with Joi before posting
 document.getElementById("signupForm").addEventListener("submit", function(event) {
@@ -97,6 +107,7 @@ document.querySelectorAll(".clear-error").forEach((btn) => {
     document.getElementById("loginError").replaceChildren(document.createElement('br'));
   });
 });
+
 
 // Function for configuring the error message to display, taking the message to parse and
 // the element to put the error message in as arguments
