@@ -44,6 +44,7 @@ var mongoStore = MongoStore.create({
 const saltRounds = 12;    // used for bcrypt password hashing
 
 // Cookies for sessions
+const expireTime = 1000 * 60 * 60;  // 1 hour
 app.use(session({ 
   secret: node_session_secret,
   store: mongoStore,
@@ -52,17 +53,20 @@ app.use(session({
 }));
 
 
-// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
 // Landing page (Login/Signup)
 
 app.get('/', (req, res) => {
   res.render('index');
 });
 
+
 /*
   Signup submission
   Author: Calvin Lee
   Description: Signup validation and creating a new user in the database.
+  Notes: Most of this code was taken from COMP2537 assignment 2 work, with modifications to variables
+    our application.
 */
 app.post('/signupSubmit', async (req, res) => {
   // user variables
@@ -102,8 +106,43 @@ app.post('/signupSubmit', async (req, res) => {
 });
 
 
+/*
+  Login submission
+  Author: Calvin Lee
+  Description: Login submission, checks for an existing record with a given ID and logins in
+    if the record's password matches the input password. 
+  Notes: Most of this code was taken from COMP2537 assignment 2 work, with modifications to variables
+    to match our application.
+*/
+app.post('/loginSubmit', async (req, res) => {
+  // user variables
+  let id = req.body.id;
+  let pw = req.body.password;
 
-// ---------------------------------------------------------------------
+  // search db for a user with given userid
+  const result = await userCollection.find({userid: id}).project({username: 1, password: 1}).toArray();
+
+  // if no user was found
+  if (result.length != 1) {
+    res.render("loginError");
+  }
+  // password is correct, create a session and log the user in
+  else if (await bcrypt.compare(pw, result[0].password)) {
+    req.session.authenticated = true;
+    req.session.name = result[0].username;
+    req.session.cookie.maxAge = expireTime;
+    // res.redirect("loggedin page here");
+    console.log("login successful");
+    return;
+  }
+  // otherwise password was wrong
+  else {
+    res.render("loginError");
+    return;
+  }
+});
+
+// ---------------------------------------------------------------------------------
 // 404 - Handle non-existent pages
 
 app.get('*', (req, res) => {
@@ -111,7 +150,7 @@ app.get('*', (req, res) => {
   // res.render("404");
 });
 
-// ---------------------------------------------------------------------
+// ---------------------------------------------------------------------------------
 // Listen - run server
 
 app.listen(port, () => {
