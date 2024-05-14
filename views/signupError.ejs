@@ -1,0 +1,15 @@
+<%- include('templates/header') %>
+
+<div class="container text-center my-auto">
+  <h3>A user with that <%= err %> already exists.</h3>
+  <p style="font-size: 14pt;">Please <a id="tryagain" href="">try again</a>!</p>
+</div>
+
+<script>
+  document.getElementById("tryagain").addEventListener("click", (e) => {
+    e.preventDefault();
+    history.go(-1);
+  });
+</script>
+
+<%- include('templates/footer') %>

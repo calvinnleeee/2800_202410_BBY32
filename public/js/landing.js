@@ -12,6 +12,8 @@
 
 const Joi = window.joi;
 
+console.log(history);
+
 // Add event listener to login form to validate using Joi before posting
 document.getElementById("loginForm").addEventListener("submit", function(event) {
   // prevent default form submission
