@@ -60,6 +60,12 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+//USE THIS TO CHECK THE NAVBAR ON LOCAL HOST, DELETE THIS BEFORE PUSHING TO DEV!!!!!!!
+app.get('/mock', (req, res) => {
+  res.render('mock');
+  
+});
+
 
 /*
   Signup submission
