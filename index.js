@@ -142,6 +142,35 @@ app.post('/loginSubmit', async (req, res) => {
   }
 });
 
+/*
+  Forgot password submission
+  Author: Calvin Lee
+  Description: Forgot password submission, check the database for an account with the provided
+    email, and if it exists, send them an email with a new password and instructions for reset.
+*/
+app.post('/forgotSubmit', async (req, res) => {
+  let email = req.body.email;
+
+  // search the db to see if a user with the provided email exists
+  // const result = await userCollection.find({email: email}).project({username: 1}).toArray();
+
+  // if a user was found, reset their password and send them an email
+  if (result.length == 1) {
+    // generate a random 6-character password
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let newPw = '';
+    for (let i = 0; i < 6; i++) {
+      newPw += chars[Math.floor(Math.random() * chars.length)];
+      console.log(newPw);
+    }
+
+    let hashedPw = await bcrypt.hash(newPw, saltRounds);
+    userCollection.updateOne({email: email}, {$set: {password: newPw}});
+
+  }
+
+});
+
 // ---------------------------------------------------------------------------------
 // 404 - Handle non-existent pages
 
