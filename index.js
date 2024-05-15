@@ -31,6 +31,7 @@ const google_client_id = process.env.GOOGLE_CLIENT_ID;
 const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
 const google_refresh_token = process.env.GOOGLE_REFRESH_TOKEN;
 const google_user = process.env.GOOGLE_USER;
+const accessToken = process.env.GOOGLE_ACCESS_TOKEN;
 
 // MongoDB setup (maybe move out and use an include to reduce clutter?)
 const MongoClient = require("mongodb").MongoClient;
@@ -156,11 +157,11 @@ app.post('/forgotSubmit', async (req, res) => {
   let email = req.body.email;
 
   // search the db to see if a user with the provided email exists
-  const result = await userCollection.find({email: email}).project({username: 1}).toArray();
+  const result = await userCollection.find({email: email}).project({userid: 1}).toArray();
 
   // if a user was found, reset their password and send them an email
   if (result.length == 1) {
-    let username = result[0].username;
+    let userid = result[0].userid;
     
     // generate a random 6-character password
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -168,7 +169,7 @@ app.post('/forgotSubmit', async (req, res) => {
     for (let i = 0; i < 6; i++) {
       newPw += chars[Math.floor(Math.random() * chars.length)];
     }
-
+    console.log("The new password is '" + newPw + "'");
     let hashedPw = await bcrypt.hash(newPw, saltRounds);
     userCollection.updateOne({email: email}, {$set: {password: hashedPw}});
 
@@ -176,37 +177,38 @@ app.post('/forgotSubmit', async (req, res) => {
     const nodemailer = require("nodemailer");
     const { google } = require("googleapis");
     const OAuth2 = google.auth.OAuth2;
-
-    const OAuth_client = new OAuth2(google_client_id, google_client_secret);
-    OAuth2_client.setCredentials({refresh_token: google_refresh_token});
-    let accessToken = OAuth2_client.getAccessToken();
     
+    const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
+    OAuth2_client.setCredentials({refresh_token: `${google_refresh_token}`});
+    console.log("credentials set");
+    // let accessToken = await OAuth2_client.getAccessToken();
+
     let transport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: google_user,
-        clientId: google_client_id,
-        clientSecret: google_client_secret,
-        refreshToken: google_refresh_token,
-        accessToken: accessToken
+        user: `${google_user}`,
+        clientId: `${google_client_id}`,
+        clientSecret: `${google_client_secret}`,
+        refreshToken: `${google_refresh_token}`,
+        accessToken: `${accessToken}`
       }
     });
 
     let mail_options = {
       from: `The Carbon Cap <${google_user}>`,
-      to: email,
+      to: `${email}`,
       subject: `The Carbon Cap - Password Reset`,
-      text: `Hello user! The password for your account '${username}' has been reset to '${newPw}'. 
+      text: `Hello user! The password for your account '${userid}' has been reset to '${newPw}'. 
       Please log in with this new password and go to your profile settings to change your password.`
     };
 
     transport.sendMail(mail_options, (err, result) => {
       if (err) {
-        console.log("Error: " + err);
+        console.log("Error: ", err);
       }
       else {
-        console.log("Result: " + result);
+        console.log("Result: ", result);
       }
       transport.close();
     });
