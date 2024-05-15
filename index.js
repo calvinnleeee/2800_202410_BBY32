@@ -208,6 +208,7 @@ app.post('/forgotSubmit', async (req, res) => {
       else {
         console.log("Result: " + result);
       }
+      transport.close();
     });
   }
   // whether or not there was a user or not, render the resetPw.ejs to tell the user that
