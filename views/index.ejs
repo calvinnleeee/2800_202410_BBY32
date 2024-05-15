@@ -1,0 +1,105 @@
+<%- include('templates/header') %>
+
+<!--
+  Landing page EJS.
+  Author: Calvin Lee
+  Description: Display the main landing page, with signup and login functionality.
+    Implements Bootstrap's Carousel display components for enhanced UX.
+  Note: Forms and buttons taken from COMP2537 assignment 2.
+ -->
+
+<div id="loginWheel" class="carousel slide center-me" data-bs-touch="false">
+  <div class="carousel-inner">
+
+    <div class="carousel-item bg-white active" id="landing-item">
+      <img src="/img/carboncap3.png" alt="logo" width="<%= 667 / 2 %>" height="<%= 381 / 2 %>">
+      <p class="slogan">Let's put a cap on our global emissions!</p>
+
+      <a  class="btn btn-lg btn-success mb-4 landing-btn clear-error"
+          role="button"
+          data-bs-target="#loginWheel"
+          data-bs-slide="prev">Log in</a><br/>
+
+      <a  class="btn btn-lg btn-success mb-4 landing-btn clear-error"
+          role="button"
+          data-bs-target="#loginWheel"
+          data-bs-slide="next">Sign up</a>
+
+    </div>
+
+    <div class="carousel-item bg-white" id="signup-carousel-item">
+      <h2>Create a new user</h2>
+      <p class="error" id="signupError"><br/></p>
+      <form method="post" action="/signupSubmit" id="signupForm">
+
+        <div class="container">
+          <div class="mb-3">
+            <label for="id" class="form-label">Your user ID</label>
+            <input type="text" class="form-control" id="signup-id" name="id" placeholder="ex. superuser123">
+          </div>
+
+          <div class="mb-3">
+            <label for="name" class="form-label">Your name</label>
+            <input type="text" class="form-control" id="signup-name" name="name" placeholder="ex. John Doe">
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Your email address</label>
+            <input type="email" class="form-control" id="signup-email" name="email" placeholder="ex. email@yahoo.com">
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Your password</label>
+            <input type="password" class="form-control" id="signup-pw" name="password" placeholder="Max 30 characters.">
+          </div>
+
+          <input class="btn btn-lg btn-success mb-3 landing-btn" type="submit" value="Submit"/>
+       </div>
+      </form>
+
+      <a  class="btn btn-lg btn-success landing-btn"
+          role="button"
+          data-bs-target="#loginWheel"
+          data-bs-slide="prev">Go back</a>
+    </div>
+
+    <div class="carousel-item bg-white" id="login-carousel-item">
+      <h2>Log in</h2>
+      <p class="error" id="loginError"><br/></p>
+      <form method="post" action="/loginSubmit" id="loginForm">
+        <div class="container">
+          <div class="mb-3">
+            <label for="id" class="form-label">Your user ID</label>
+            <input type="text" class="form-control" name="id" id="login-id">
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" id="login-pw">
+          </div>
+
+          <input class="btn btn-lg btn-success mb-3 landing-btn" type="submit" value="Login"/>
+         </div>
+      </form>
+
+      <a  class="btn btn-lg btn-success mb-4 landing-btn"
+          role="button"
+          data-bs-target="#loginWheel"
+          data-bs-slide="next">Go back</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- <script type="importmap">
+  {
+    "imports": {
+      "joi": "./../node_modules/joi/dist/joi-browser.min.js"
+    }
+  }
+</script> -->
+<script src="https://cdn.jsdelivr.net/npm/joi@17.13.1/dist/joi-browser.min.js"></script>
+<!-- <script src="./../node_modules/joi/dist/joi-browser.min.js"></script> -->
+<script src="/js/landing.js"></script>
+
+<%- include('templates/footer') %>
