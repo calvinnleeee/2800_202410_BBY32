@@ -27,7 +27,7 @@
 <body>
   <div class="container mx-auto p-4">
     <div class="flex flex-col items-center justify-center">
-      <h1 class="hello">Hello, Y/N</h1>
+      <h1 class="hello">Welcome, <%= name %>!</h1>
       <h2 class="capping">Let's get capping! </h2>
     </div>
 
@@ -45,19 +45,17 @@
       </div>
     </div>
 
-    <div class="mt-4">
-      <div class="bg-white shadow mt-2 p-4 rounded-lg">
-        <div class="flex items-center justify-between space-x-2">
-          <div class="bg-green rounded-full p-1">
-            <i class="fas fa-lightbulb text-black text-2xl"></i>
-          </div>
-          <div>
+    <div class="col-md-3">
+      <div class="card">
+          <h5 class="card-header">CAP OF THE DAY:</h5>
+            <div class = "card-body">
             <h4 class="text-lg font-bold text-green">CAP OF THE DAY:</h4>
+            <h5> Did you know </h5>
             <p id="factText" class="text-sm text-gray"></p>
             <p id="factSource" class="text-sm text-green font-bold mt-1"></p>
           </div>
-          <button id="moreFacts" class="bg-green text-black px-4 py-2 rounded-lg">More facts</button>
-          <button id="" class="bg-green text-black px-4 py-2 rounded-lg">Read More</button>
+          <button id="moreFacts" class="btn btn-success">More facts</button>
+          <button id="" class="btn btn-success">Read More</button>
 
         </div>
       </div>
@@ -87,7 +85,6 @@
         // Click "More facts" button click to generate a new random fact.
         document.getElementById('moreFacts').addEventListener('click', getRandomFact);
       })
-      
       .catch(error => console.error('Error fetching facts:', error));
   </script>
 </body>
