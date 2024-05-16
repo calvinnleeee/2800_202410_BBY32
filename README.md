@@ -19,10 +19,27 @@ Team Members:
 - Ethan Nguyen
 
 ## Technologies Used
-- HTML / CSS / JS
+# For coding:
+- HTML / CSS / JavaScript
 - Node.js
+- - Express
+- - Express-session
+- - Nodemailer
+- - Joi
+- - Bcrypt
+- - Googleapis
+- - Mongodb
+- - Connect-mongo
+- - Dotenv
+- - Ejs
 - Bootstrap 5.3
 - MongoDB
+- EJS (Embedded JavaScript)
+
+# For planning:
+- Figma (whiteboard, wireframes)
+- Trello (Agile, sprint/task planning)
+- Canva (wireframes, prototype mockups)
 
 ## More details to come
 TBA
