@@ -52,6 +52,7 @@ app.use(session({
   resave: true
 }));
 
+// Check if user's session
 function isValidSession(req) {
 	return req.session.authenticated === true;
 }
@@ -151,6 +152,20 @@ app.post('/loginSubmit', async (req, res) => {
   else {
     res.render("loginError");
     return;
+  }
+});
+
+// ---------------------------------------------------------------------------------
+// Profile button
+
+app.get('/profile', (req, res) => {
+  // Check if the user is logged in
+  if (isValidSession(req)) {
+      // If logged in, render the 'profile' page
+      res.render('profile');
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
   }
 });
 
