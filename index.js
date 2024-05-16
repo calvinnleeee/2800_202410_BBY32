@@ -52,6 +52,9 @@ app.use(session({
   resave: true
 }));
 
+function isValidSession(req) {
+	return req.session.authenticated === true;
+}
 
 // ---------------------------------------------------------------------------------
 // Landing page (Login/Signup)
@@ -63,8 +66,11 @@ app.get('/', (req, res) => {
 // ---------------------------------------------------------------------
 // Main page(After login)
 app.get('/main', (req, res) => {
-  res.render('main');
-  
+  if (isValidSession(req)) {
+		let name = req.session.name;
+		// If user is logged in, render the 'index' page for welcome message
+  res.render('main', {name: name});
+  }
 });
 
 /*
