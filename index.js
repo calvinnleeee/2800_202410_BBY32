@@ -31,7 +31,7 @@ const google_client_id = process.env.GOOGLE_CLIENT_ID;
 const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
 const google_refresh_token = process.env.GOOGLE_REFRESH_TOKEN;
 const google_user = process.env.GOOGLE_USER;
-const accessToken = process.env.GOOGLE_ACCESS_TOKEN;
+// const accessToken = process.env.GOOGLE_ACCESS_TOKEN;
 
 // MongoDB setup (maybe move out and use an include to reduce clutter?)
 const MongoClient = require("mongodb").MongoClient;
@@ -181,7 +181,7 @@ app.post('/forgotSubmit', async (req, res) => {
     const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
     OAuth2_client.setCredentials({refresh_token: `${google_refresh_token}`});
     console.log("credentials set");
-    // let accessToken = await OAuth2_client.getAccessToken();
+    let accessToken = await OAuth2_client.getAccessToken();
 
     let transport = nodemailer.createTransport({
       service: 'gmail',
