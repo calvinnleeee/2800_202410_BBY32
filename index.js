@@ -149,6 +149,14 @@ app.post('/loginSubmit', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------------
+// Log out button
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/'); // Redirect to the index page
+});
+
+// ---------------------------------------------------------------------------------
 // 404 - Handle non-existent pages
 
 app.get('*', (req, res) => {
