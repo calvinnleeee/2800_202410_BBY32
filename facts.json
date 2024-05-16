@@ -1,0 +1,39 @@
+{
+    "facts": [
+      {
+        "number": 1,
+        "fact": "Upgrading your lightbulbs to more efficient LEDs can save 0.1 tonnes of CO2e per year.",
+        "source": "@BBC"
+      },
+      {
+        "number": 2,
+        "fact": "Turn your water heater down to 120˚F. This can save about 550 pounds of CO2 a year.",
+        "source": "@Columbia.edu"
+      },
+      {
+        "number": 3,
+        "fact": "Take shorter showers and fix leaking fixtures in your bathroom. The average person wastes up to 30 gallons of water every day without even realizing it.",
+        "source": "@Green Citizen"
+      },
+      {
+        "number": 4,
+        "fact": "Take care of your car. Keeping your tires properly inflated can increase your fuel efficiency by three percent; and ensuring that your car is properly maintained can increase it by four percent.",
+        "source": "@Columbia.edu"
+      },
+      {
+        "number": 5,
+        "fact": "Rethink disposable packaging and products. Single-use plastic is not only a major source of water pollution and a huge source of what’s sent to landfill but it’s also accompanied by a big carbon footprint.",
+        "source": "@Treehugger"
+      },
+      {
+        "number": 6,
+        "fact": "Use a reusable water bottle. By avoiding single-use plastic bottles, you can significantly reduce your carbon footprint and help decrease plastic pollution.",
+        "source": "@Treehugger"
+      },
+      {
+        "number": 7,
+        "fact": "Doing two loads of laundry weekly in cold water instead of hot or warm water can save up to 500 pounds of carbon dioxide each year.",
+        "source": "@globalgiving"
+      }
+    ]
+  }
