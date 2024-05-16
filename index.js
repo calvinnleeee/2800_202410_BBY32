@@ -106,7 +106,7 @@ app.post('/signupSubmit', async (req, res) => {
   req.session.authenticated = true;
   req.session.name = name;
   req.session.cookie.maxAge = 1000 * 60 * 60 * 24;  // 24 hours
-  // res.redirect("loggedin page here");
+  res.redirect("/main");
   console.log("Submission successful");
   return;
 });
@@ -137,7 +137,7 @@ app.post('/loginSubmit', async (req, res) => {
     req.session.authenticated = true;
     req.session.name = result[0].username;
     req.session.cookie.maxAge = expireTime;
-    // res.redirect("loggedin page here");
+    res.redirect("/main");
     console.log("login successful");
     return;
   }
