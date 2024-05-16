@@ -12,7 +12,8 @@ The design takes assumptions for things that may happen in 30 years, such as, bu
 ## About Us
 
 Team Name: BBY-32, the Carbon Cap
-Team Members: 
+
+Team Members:
 - Calvin Lee
 - Brian Diep
 - Anna Dao
