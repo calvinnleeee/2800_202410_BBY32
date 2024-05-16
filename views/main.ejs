@@ -1,0 +1,79 @@
+<%- include('templates/header') %>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="flex flex-col items-center justify-center">
+            <h1 style='text-align: center' class="hello">Hello, Y/N</h1>
+            <h2 style='text-align: center'class="capping">Let's get capping! </h2>
+          </div>
+    </div>
+    <div class="col-md-6">
+        <div class="mt-4">
+            <h3 class="text-xl font-bold text-green">Dashboard</h3>
+            <div class="bg-white shadow mt-2 p-4 rounded-lg">
+              <div class="flex items-center justify-between space-x-2">
+                <!-- didnt add the button style, dont think it does anything  -->
+                <button class="bg-green text-black px-4 py-2 rounded-lg">Month</button>
+                <button class="bg-gray text-green px-4 py-2 rounded-lg">Week</button>
+                <button class="bg-green text-black px-4 py-2 rounded-lg">See more</button>
+              </div>
+              <div class="mt-4">
+                <canvas id="myChart"></canvas>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="col-md-3">
+        <div class="mt-4">
+            <div class="bg-white shadow mt-2 p-4 rounded-lg">
+              <div class="flex items-center justify-between space-x-2">
+                <div class="bg-green rounded-full p-1">
+                  <i class="fas fa-lightbulb text-black text-2xl"></i>
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-green">CAP OF THE DAY:</h4>
+                  <p class="text-sm text-gray">Doing two loads of laundry weekly in cold water instead of hot or warm water
+                    can save up to 500 pounds of carbon dioxide each year.</p>
+                  <p class="text-sm text-green font-bold mt-1">@globalgiving</p>
+                </div>
+                <button class="bg-green text-black px-4 py-2 rounded-lg">Read More</button>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+    integrity="sha512-ElR16o87II1Y6n0Z8e3c8638oa32310bF7h+t25t3v6e0uztq6/PXF3g82w863P2r212+r68n37568432655"
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'kWh',
+          data: [12, 19, 3, 5, 2, 3, 4],
+          backgroundColor: [
+          ],
+          borderColor: [
+
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+<!-- Template should actually be afterlogin footer template -->
+<%- include('templates/footer') %>

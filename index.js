@@ -59,6 +59,13 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+// ---------------------------------------------------------------------
+// Main page(After login)
+app.get('/main', (req, res) => {
+  res.render('main');
+  
+});
+
 /*
   Signup submission
   Author: Calvin Lee
