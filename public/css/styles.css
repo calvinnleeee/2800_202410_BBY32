@@ -32,7 +32,7 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
-/* Login page */
+/* Login/signup pages */
 
 .slogan {
   padding-bottom: 5px;
@@ -41,7 +41,7 @@ body {
 .center-me {
   margin-top: 35%;
   text-align: center;
-  height: 80vh;
+  height: 50vh;
   animation: fadeIn ease 2s;
 }
 
@@ -59,6 +59,10 @@ body {
 
 .landing-btn {
   width: 40vw;
+}
+
+.errorPage {
+  margin-top: 33vh;
 }
 
 /* ---------------------------------------------------------------- */
