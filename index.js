@@ -57,7 +57,7 @@ app.use(session({
   resave: true
 }));
 
-// Check if user's session
+// Check if user's session is valid
 function isValidSession(req) {
 	return req.session.authenticated === true;
 }
@@ -66,18 +66,25 @@ function isValidSession(req) {
 // Landing page (Login/Signup)
 
 app.get('/', (req, res) => {
+  // redirect if there is already a valid session
+  if (isValidSession(req)) {
+    res.redirect('/main');
+    return;
+  }
   res.render('index');
 });
 
 // ---------------------------------------------------------------------
-// Main page(After login)
+// Main page (After login)
+
 app.get('/main', (req, res) => {
   if (isValidSession(req)) {
 		let name = req.session.name;
 		// If user is logged in, render the 'index' page for welcome message
-  res.render('main', {name: name});
+    res.render('main', {name: name});
   }
 });
+
 
 /*
   Signup submission
@@ -92,10 +99,6 @@ app.post('/signupSubmit', async (req, res) => {
   let name = req.body.name;
   let email = req.body.email;
   let pw = req.body.password;
-  // let id = req.body.signup-id;
-  // var name = req.body.signup-name;
-  // var email = req.body.signup-email;
-  // var pw = req.body.signup-password;
 
   // Joi validation done on browser side, move on to next step
   // verify that email and id do not already exist in the database, fail if it does
@@ -124,8 +127,6 @@ app.post('/signupSubmit', async (req, res) => {
   req.session.userid = result[0].userid;
   req.session.cookie.maxAge = 1000 * 60 * 60 * 24;  // 24 hours
   res.redirect("/main");
-  console.log("Submission successful");
-  console.log(result);
   return;
 });
 
@@ -158,8 +159,6 @@ app.post('/loginSubmit', async (req, res) => {
     req.session.email = result[0].email;
     req.session.userid = result[0].userid;
     res.redirect("/main");
-    console.log("login successful");
-    console.log(result);
     return;
   }
   // otherwise password was wrong
@@ -202,7 +201,6 @@ app.post('/forgotSubmit', async (req, res) => {
     
     const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
     OAuth2_client.setCredentials({refresh_token: `${google_refresh_token}`});
-    console.log("credentials set");
     let accessToken = await OAuth2_client.getAccessToken();
 
     let transport = nodemailer.createTransport({

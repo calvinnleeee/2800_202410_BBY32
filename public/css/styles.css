@@ -22,12 +22,13 @@ body {
 
 .header-colours {
   /* background: linear-gradient(180deg, #519E5C, #FFFFFF); */
-  background: linear-gradient(180deg, #90C2E7, #FFFFFF);
+  background: linear-gradient(180deg, #90C2E7, rgba(255, 255, 255, 0));
   height: 10vh;
+  z-index: 0;
 }
 
 .nav-colours {
-  background: linear-gradient(0deg, #519E5C, #FFFFFF);
+  background: linear-gradient(0deg, #519E5C, rgba(255, 255, 255, 0));
   height: 10vh;
 }
 
@@ -46,7 +47,7 @@ body {
 }
 
 .carousel-inner {
-  height: 80vh;
+  height: 60vh;
 }
 
 .error {
@@ -54,7 +55,7 @@ body {
 }
 
 .carousel-item {
-  height: 80vh;
+  height: 70vh;
 }
 
 .landing-btn {
