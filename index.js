@@ -133,7 +133,7 @@ app.post('/loginSubmit', async (req, res) => {
   let pw = req.body.password;
 
   // search db for a user with given userid
-  const result = await userCollection.find({userid: id}).project({username: 1, password: 1}).toArray();
+  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
 
   // if no user was found
   if (result.length != 1) {
@@ -144,8 +144,11 @@ app.post('/loginSubmit', async (req, res) => {
     req.session.authenticated = true;
     req.session.name = result[0].username;
     req.session.cookie.maxAge = expireTime;
+    req.session.email = result[0].email;
+    req.session.userid = result[0].userid;
     res.redirect("/main");
     console.log("login successful");
+    console.log(result);
     return;
   }
   // otherwise password was wrong
@@ -159,10 +162,12 @@ app.post('/loginSubmit', async (req, res) => {
 // Profile button
 
 app.get('/profile', (req, res) => {
-  // Check if the user is logged in
+  let name = req.session.name;
+  let userid = req.session.userid;
+  let email = req.session.email;
   if (isValidSession(req)) {
       // If logged in, render the 'profile' page
-      res.render('profile');
+      res.render('profile', { name: name, userid: userid, email: email });
   } else {
       // If not logged in, redirect to the login page
       res.redirect('/login'); 
