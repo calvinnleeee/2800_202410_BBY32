@@ -57,6 +57,10 @@ app.use(session({
   resave: true
 }));
 
+// Check if user's session
+function isValidSession(req) {
+	return req.session.authenticated === true;
+}
 
 // ---------------------------------------------------------------------------------
 // Landing page (Login/Signup)
@@ -65,6 +69,15 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+// ---------------------------------------------------------------------
+// Main page(After login)
+app.get('/main', (req, res) => {
+  if (isValidSession(req)) {
+		let name = req.session.name;
+		// If user is logged in, render the 'index' page for welcome message
+  res.render('main', {name: name});
+  }
+});
 
 /*
   Signup submission
@@ -105,7 +118,7 @@ app.post('/signupSubmit', async (req, res) => {
   req.session.authenticated = true;
   req.session.name = name;
   req.session.cookie.maxAge = 1000 * 60 * 60 * 24;  // 24 hours
-  // res.redirect("loggedin page here");
+  res.redirect("/main");
   console.log("Submission successful");
   return;
 });
@@ -125,7 +138,7 @@ app.post('/loginSubmit', async (req, res) => {
   let pw = req.body.password;
 
   // search db for a user with given userid
-  const result = await userCollection.find({userid: id}).project({username: 1, password: 1}).toArray();
+  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
 
   // if no user was found
   if (result.length != 1) {
@@ -136,8 +149,11 @@ app.post('/loginSubmit', async (req, res) => {
     req.session.authenticated = true;
     req.session.name = result[0].username;
     req.session.cookie.maxAge = expireTime;
-    // res.redirect("loggedin page here");
+    req.session.email = result[0].email;
+    req.session.userid = result[0].userid;
+    res.redirect("/main");
     console.log("login successful");
+    console.log(result);
     return;
   }
   // otherwise password was wrong
@@ -217,6 +233,30 @@ app.post('/forgotSubmit', async (req, res) => {
   // an email has been sent if the account exists.
   res.render('resetPw');
 
+});
+
+// ---------------------------------------------------------------------------------
+// Profile button
+
+app.get('/profile', (req, res) => {
+  let name = req.session.name;
+  let userid = req.session.userid;
+  let email = req.session.email;
+  if (isValidSession(req)) {
+      // If logged in, render the 'profile' page
+      res.render('profile', { name: name, userid: userid, email: email });
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
+});
+
+// ---------------------------------------------------------------------------------
+// Log out button
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/'); // Redirect to the index page
 });
 
 // ---------------------------------------------------------------------------------

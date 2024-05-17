@@ -1,0 +1,94 @@
+<%- include('templates/headerAfterLogin') %>
+
+<style>
+  .btn {
+    margin-right: 10px;
+  }
+  .card-header h5 {
+    margin: 0;
+  }
+  .container-fluid {
+    padding-bottom: 70px; 
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row d-flex align-items-center justify-content-center">
+    <div class="col-12 col-md-3 text-center mb-4">
+      <img src='/img/mainlogo.png' alt="Logo" class="img-fluid" style="max-width: 130px; height: auto;">
+      <h1 class="hello">Welcome, <%= name %>!</h1>
+      <h4 class="capping">Let's get capping!</h4>
+    </div>
+    <div class="col-12 col-md-6 mb-4">
+      <!-- new -->
+      <div class="card text-center border">
+        <h5 class="card-header">Dashboard</h5>
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active text-success" aria-current="true" href="#">Day</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="#">Week</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="#">Month</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="#">Year</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <img src="/img/mockdata.png" alt="Logo" class="img-fluid mb-3" style="object-fit: cover;">
+          <a href="#" class="btn btn-success">Details</a>
+        </div>
+      </div>
+      <!-- new -->
+    </div>
+    <div class="col-12 col-md-3 mb-4">
+      <div class="card">
+        <h5 class="card-header">CAP OF THE DAY</h5>
+        <div class="card-body">
+          <p id="factText" class="card-text"></p>
+          <p id="factSource" class="text-sm text-green font-bold mt-1"></p>
+          <div class="d-flex justify-content-between mt-2">
+            <button id="moreFacts" class="btn btn-success">More facts</button>
+            <button id="readMore" class="btn btn-success">Read more</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+  integrity="sha512-ElR16o87II1Y6n0Z8e3c8638oa32310bF7h+t25t3v6e0uztq6/PXF3g82w863P2r212+r68n37568432655"
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  // Fetch facts from the JSON file called facts.json
+  fetch('../json/facts.json')
+      .then(response => response.json())
+      .then(data => {
+          const facts = data.facts;
+
+          function getRandomFact() {
+              const randomNumber = Math.floor(Math.random() * facts.length);
+              const randomFact = facts[randomNumber];
+              document.getElementById('factText').innerText = randomFact.fact;
+              document.getElementById('factSource').innerText = randomFact.source;
+          }
+
+          // This is the new initial fact when the user loads the page
+          getRandomFact();
+
+          // Click "More facts" button click to generate a new random fact.
+          document.getElementById('moreFacts').addEventListener('click', getRandomFact);
+      })
+      .catch(error => console.error('Error fetching facts:', error));
+</script>
+
+<!-- Template should be afterlogin -->
+<%- include('templates/footerAfterLogin') %>
