@@ -113,13 +113,19 @@ app.post('/signupSubmit', async (req, res) => {
   // create a new user in db with the provided name, email, and password (after encrypting it)
   var hashedpw = await bcrypt.hash(pw, saltRounds);
   await userCollection.insertOne({ userid: id, username: name, email: email, password: hashedpw });
+  // search db for a user with given userid
+  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
 
   // create a session for the user and log them in
   req.session.authenticated = true;
   req.session.name = name;
+  req.session.name = result[0].username;
+  req.session.email = result[0].email;
+  req.session.userid = result[0].userid;
   req.session.cookie.maxAge = 1000 * 60 * 60 * 24;  // 24 hours
   res.redirect("/main");
   console.log("Submission successful");
+  console.log(result);
   return;
 });
 
