@@ -1,0 +1,79 @@
+/*
+  CSS file for the Carbon Cap.
+  Minor note: media query required for mobile or don't worry about it?
+*/
+
+/* 
+Colour theme
+#FCF7F8 - snow (slight off-white)
+#CED3DC - french gray
+#519E5C - colour of the hat, main colour
+#635C51 - walnut brown (woody colour)
+#90C2E7 - light sky blue
+*/
+
+/* ---------------------------------------------------------------- */
+/* Top header, bottom nav bars */
+
+body {
+  background-color: white;
+  height: 100vh;
+}
+
+.header-colours {
+  /* background: linear-gradient(180deg, #519E5C, #FFFFFF); */
+  background: linear-gradient(180deg, #90C2E7, rgba(255, 255, 255, 0));
+  height: 10vh;
+  z-index: 0;
+}
+
+.nav-colours {
+  background: linear-gradient(0deg, #519E5C, rgba(255, 255, 255, 0));
+  height: 10vh;
+}
+
+/* ---------------------------------------------------------------- */
+/* Login/signup pages */
+
+.slogan {
+  padding-bottom: 5px;
+}
+
+.center-me {
+  margin-top: 35%;
+  text-align: center;
+  height: 50vh;
+  animation: fadeIn ease 2s;
+}
+
+.carousel-inner {
+  height: 60vh;
+}
+
+.error {
+  color: red;
+}
+
+.carousel-item {
+  height: 70vh;
+}
+
+.landing-btn {
+  width: 40vw;
+}
+
+.errorPage {
+  margin-top: 33vh;
+}
+
+/* ---------------------------------------------------------------- */
+/* Etc. */
+
+/* @keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+} */

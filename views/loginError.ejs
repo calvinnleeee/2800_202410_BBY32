@@ -1,0 +1,16 @@
+<%- include('templates/header') %>
+
+<div class="container text-center errorPage">
+  <h3>A user with that ID or password doesn't exist.</h3>
+  <p style="font-size: 14pt;">Please <a id="tryagain" href="">try again</a>!</p>
+</div>
+
+<script>
+  document.getElementById("tryagain").addEventListener("click", (e) => {
+    e.preventDefault();
+    sessionStorage.setItem("prev", "login");
+    history.go(-1);
+  });
+</script>
+
+<%- include('templates/footer') %>

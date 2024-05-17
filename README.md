@@ -12,17 +12,35 @@ The design takes assumptions for things that may happen in 30 years, such as, bu
 ## About Us
 
 Team Name: BBY-32, the Carbon Cap
-Team Members: 
+
+Team Members:
 - Calvin Lee
 - Brian Diep
 - Anna Dao
 - Ethan Nguyen
 
 ## Technologies Used
-- HTML / CSS / JS
+# For coding:
+- HTML / CSS / JavaScript
 - Node.js
+- - Express
+- - Express-session
+- - Nodemailer
+- - Joi
+- - Bcrypt
+- - Googleapis
+- - Mongodb
+- - Connect-mongo
+- - Dotenv
+- - Ejs
 - Bootstrap 5.3
 - MongoDB
+- EJS (Embedded JavaScript)
+
+# For planning:
+- Figma (whiteboard, wireframes)
+- Trello (Agile, sprint/task planning)
+- Canva (wireframes, prototype mockups)
 
 ## More details to come
 TBA
