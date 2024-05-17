@@ -85,7 +85,7 @@ else if (sessionStorage.getItem("prev") == "login") {
     name:   Joi.string().max(30).required(),
     email:  Joi.string().email({
       minDomainSegments: 2, tlds: { allow: ['com', 'org', 'net', 'ca']}}).required(),
-    pw:     Joi.string().max(20).required()
+    pw:     Joi.string().min(6).max(20).required()
   });
   var validationResult = schema.validate({ID: userID, name: userName, email: userEmail, pw: userPw});
 
