@@ -22,7 +22,7 @@
     <div class="col-12 col-md-6 mb-4">
       <!-- new -->
       <div class="card text-center border">
-        <h5 class="card-header">Dashboard</h5>
+        <h5 class="card-header">Here's a quick look!</h5>
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
@@ -67,28 +67,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
   integrity="sha512-ElR16o87II1Y6n0Z8e3c8638oa32310bF7h+t25t3v6e0uztq6/PXF3g82w863P2r212+r68n37568432655"
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-  // Fetch facts from the JSON file called facts.json
-  fetch('../json/facts.json')
-      .then(response => response.json())
-      .then(data => {
-          const facts = data.facts;
-
-          function getRandomFact() {
-              const randomNumber = Math.floor(Math.random() * facts.length);
-              const randomFact = facts[randomNumber];
-              document.getElementById('factText').innerText = randomFact.fact;
-              document.getElementById('factSource').innerText = randomFact.source;
-          }
-
-          // This is the new initial fact when the user loads the page
-          getRandomFact();
-
-          // Click "More facts" button click to generate a new random fact.
-          document.getElementById('moreFacts').addEventListener('click', getRandomFact);
-      })
-      .catch(error => console.error('Error fetching facts:', error));
-</script>
+<script src="/js/main.js"></script>
 
 <!-- Template should be after login -->
 <%- include('templates/footerAfterLogin') %>

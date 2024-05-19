@@ -65,6 +65,11 @@ function isValidSession(req) {
 // ---------------------------------------------------------------------------------
 // Landing page (Login/Signup)
 
+/*
+  Index/landing page
+  Author: Calvin Lee
+  Description: The main page for the root URL.
+*/
 app.get('/', (req, res) => {
   // redirect if there is already a valid session
   if (isValidSession(req)) {
@@ -72,17 +77,6 @@ app.get('/', (req, res) => {
     return;
   }
   res.render('index');
-});
-
-// ---------------------------------------------------------------------
-// Main page (After login)
-
-app.get('/main', (req, res) => {
-  if (isValidSession(req)) {
-		let name = req.session.name;
-		// If user is logged in, render the 'index' page for welcome message
-    res.render('main', {name: name});
-  }
 });
 
 
@@ -236,12 +230,57 @@ app.post('/forgotSubmit', async (req, res) => {
   // whether or not there was a user or not, render the resetPw.ejs to tell the user that
   // an email has been sent if the account exists.
   res.render('resetPw');
-
 });
 
 // ---------------------------------------------------------------------------------
-// Profile button
+// After login / Navigation from navbar
 
+/*
+  Main page load
+  Author: Brian Diep
+  Description: Connect to the main page after logging in, or if there's already a
+    valid session. Redirect to the login page if there's no existing session.
+*/
+app.get('/main', (req, res) => {
+  if (isValidSession(req)) {
+		let name = req.session.name;
+		// If user is logged in, render the 'index' page for welcome message
+    res.render('main', {name: name});
+  }
+  else {
+    res.redirect('/');
+    return;
+  }
+});
+
+
+// app.get('/dash', (req, res) => {
+
+//   res.render('dash');
+// });
+
+
+// app.get('/devices', (req, res) => {
+
+//   res.render('devices');
+// });
+
+
+// app.get('/settings', (req, res) => {
+
+//   res.render('settings');
+// });
+
+
+// ---------------------------------------------------------------------------------
+// Pages from the hamburger menu
+
+/*
+  Profile page
+  Author: Brian Diep
+  Description: Access to the profile page for editing user information, from the
+    hamburger menu.
+*/
 app.get('/profile', (req, res) => {
   let name = req.session.name;
   let userid = req.session.userid;
@@ -268,7 +307,7 @@ app.get('/logout', (req, res) => {
 
 app.get('*', (req, res) => {
   res.status(404);
-  // res.render("404");
+  res.render("404");
 });
 
 // ---------------------------------------------------------------------------------
