@@ -1,10 +1,10 @@
 
-<div class="row justify-content-between align-items-center mx-auto">
+<div class="d-flex justify-content-evenly mx-auto nav-div position-relative">
   <!-- Dropdown -->
-  <div class="col-2 text-center">
+  <div class="d-inline-block">
     <div class="dropdown dropup">
       <a class="nav-link text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="/img/icons/dropdown-icon.png" alt="Dropdown" width="35" height="38">
+        <img src="/img/icons/dropdown-icon.png" alt="Dropdown" class="nav-icon">
       </a>
       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
         <li><a class="dropdown-item" href="#">
@@ -20,24 +20,24 @@
   </div>
 
   <!-- Other navigation items -->
-  <div class="col-2 text-center">
-    <a href="#">
-      <img src="/img/icons/home-icon.png" alt="Home" width="50" height="50">
+  <div class="d-inline-block">
+    <a href="/main">
+      <img class="nav-icon nav-icon-active" id="home-icon" src="/img/icons/home-icon.png" alt="Home">
     </a>
   </div>
-  <div class="col-2 text-center"> 
-    <a href="#">
-      <img src="/img/icons/dashboard-icon.png" alt="Dashboard" width="54" height="50">
+  <div class="d-inline-block"> 
+    <a href="/dash">
+      <img class="nav-icon" id="dash-icon" src="/img/icons/dashboard-icon.png" alt="Dashboard">
     </a>
   </div>
-  <div class="col-2 text-center"> 
-    <a href="#">
-      <img src="/img/icons/devices-icon.png" alt="Devices" width="50" height="49">
+  <div class="d-inline-block"> 
+    <a href="/devices">
+      <img class="nav-icon" id="device-icon" src="/img/icons/devices-icon.png" alt="Devices">
     </a>
   </div>
-  <div class="col-2 text-center">
-    <a class="nav-link text-white" href="#">
-      <img src="/img/icons/settings-icon.png" alt="Settings" width="50" height="50">
+  <div class="d-inline-block">
+    <a href="/settings">
+      <img class="nav-icon" id="settings-icon" src="/img/icons/settings-icon.png" alt="Settings">
     </a>
   </div>
 </div>
