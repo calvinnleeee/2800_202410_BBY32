@@ -104,6 +104,16 @@ body {
   right: 20px;
 }
 
+.dropdown-item {
+  font-size: 14pt;
+  color: #635C51;
+}
+
+.dropdown-icons {
+  width: 24px;
+  height: auto;
+}
+
 /* ---------------------------------------------------------------- */
 /* Etc. */
 
