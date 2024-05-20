@@ -80,13 +80,28 @@ body {
 }
 
 .nav-icon {
-  width: 50px;
+  width: 65px;
   height: auto;
+  padding: 3px;
 }
 
 .nav-icon-active {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
   border-radius: 20%;
+}
+
+/* ---------------------------------------------------------------- */
+/* Dropdown menu */
+
+.dropdown-icon {
+  width: 45px;
+  height: auto;
+}
+
+#dropdown {
+  position: fixed;
+  top: 20px;
+  right: 20px;
 }
 
 /* ---------------------------------------------------------------- */
