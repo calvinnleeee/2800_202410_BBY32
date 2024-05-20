@@ -77,6 +77,7 @@ app.get('/', (req, res) => {
     return;
   }
   res.render('index');
+  return;
 });
 
 
@@ -144,6 +145,7 @@ app.post('/loginSubmit', async (req, res) => {
   // if no user was found
   if (result.length != 1) {
     res.render("loginError");
+    return;
   }
   // password is correct, create a session and log the user in
   else if (await bcrypt.compare(pw, result[0].password)) {
@@ -230,6 +232,7 @@ app.post('/forgotSubmit', async (req, res) => {
   // whether or not there was a user or not, render the resetPw.ejs to tell the user that
   // an email has been sent if the account exists.
   res.render('resetPw');
+  return;
 });
 
 // ---------------------------------------------------------------------------------
@@ -246,6 +249,7 @@ app.get('/main', (req, res) => {
 		let name = req.session.name;
 		// If user is logged in, render the 'index' page for welcome message
     res.render('main', {name: name});
+    return;
   }
   else {
     res.redirect('/');
@@ -288,9 +292,12 @@ app.get('/profile', (req, res) => {
   if (isValidSession(req)) {
       // If logged in, render the 'profile' page
       res.render('profile', { name: name, userid: userid, email: email });
-  } else {
+      return;
+  }
+  else {
       // If not logged in, redirect to the login page
-      res.redirect('/login'); 
+      res.redirect('/login');
+      return;
   }
 });
 
@@ -300,6 +307,7 @@ app.get('/profile', (req, res) => {
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/'); // Redirect to the index page
+  return;
 });
 
 // ---------------------------------------------------------------------------------
@@ -308,6 +316,7 @@ app.get('/logout', (req, res) => {
 app.get('*', (req, res) => {
   res.status(404);
   res.render("404");
+  return;
 });
 
 // ---------------------------------------------------------------------------------
