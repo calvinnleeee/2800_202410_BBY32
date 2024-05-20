@@ -1,25 +1,35 @@
 
-<div class="d-flex justify-content-evenly mx-auto nav-div position-relative">
-  <!-- Dropdown -->
-  <div class="d-inline-block">
-    <div class="dropdown dropup">
-      <a class="nav-link text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="/img/icons/dropdown-icon.png" alt="Dropdown" class="nav-icon">
-      </a>
-      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li><a class="dropdown-item" href="#">
-          <form action="/logout" method="GET">
-            <button class="btn btn-danger mb-3" type="submit">Log Out</button>
-          </form>
-        </a></li>
-        <li><hr class="dropdown-divider"></li> 
-        <li><a class="dropdown-item" href="#"><form action="/profile" method="GET">
-          <button class="btn btn-success mb-3" type="submit">Profile</button></a></li>
-      </ul>
-    </div>
+<!-- Dropdown menu -->
+<div class="d-inline-block" id="dropdown">
+
+  <div class="dropdown">
+    <a class="nav-link text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="/img/icons/dropdown-icon.png" alt="Dropdown" class="dropdown-icon">
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="#"><form action="/profile" method="GET">
+        <button class="btn btn-success" type="submit">Profile</button>
+      </a></li>
+
+      <li><a class="dropdown-item" href="#"><form action="/settings" method="GET">
+        <button class="btn btn-success" type="submit">Settings</button>
+      </a></li>
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li><a class="dropdown-item" href="#">
+        <form action="/logout" method="GET">
+          <button class="btn btn-danger" type="submit">Log Out</button>
+        </form>
+      </a></li>
+    </ul>
   </div>
 
-  <!-- Other navigation items -->
+</div>
+
+<!-- Navigation bar items -->
+<div class="d-flex justify-content-evenly mx-auto nav-div position-relative mb-2">
+
   <div class="d-inline-block">
     <a href="/main">
       <img class="nav-icon nav-icon-active" id="home-icon" src="/img/icons/home-icon.png" alt="Home">
@@ -35,9 +45,10 @@
       <img class="nav-icon" id="device-icon" src="/img/icons/devices-icon.png" alt="Devices">
     </a>
   </div>
-  <div class="d-inline-block">
+  <!-- <div class="d-inline-block">
     <a href="/settings">
       <img class="nav-icon" id="settings-icon" src="/img/icons/settings-icon.png" alt="Settings">
     </a>
-  </div>
+  </div> -->
+
 </div>
