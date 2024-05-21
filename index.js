@@ -269,6 +269,10 @@ app.get('/main', (req, res) => {
 
 app.get('/devices', (req, res) => {
   // load the user's list of devices and pass it into the render as an array
+
+
+  userCollection.updateOne({email: email}, {$set: {password: hashedPw}});
+
   res.render('devices');
   return;
 });
