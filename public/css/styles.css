@@ -129,10 +129,12 @@ body {
   width: 75vw;
 }
 
+#device-help {
+  display: inline-block;
+}
+
 .device-submit {
-  display: block;
-  margin-left: auto;
-  margin-right: 7vw;
+  display: inline-block;
 }
 
 /* ---------------------------------------------------------------- */
