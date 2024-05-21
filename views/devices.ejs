@@ -9,15 +9,21 @@
 
     <label class="mb-1" for="deviceName">Device name:</label><br/>
     <div class="form-input">
-      <input class="mb-4 form-textbox" type="text" id="deviceName" name="deviceName">
+      <input class="mb-4 form-textbox" type="text" id="deviceName" name="deviceName"
+             placeholder="Name of your device">
     </div>
     
     <label class="mb-1" for="deviceWattage">Device wattage:</label><br/>
     <div class="form-input">
-      <input class="mb-4 form-textbox" type="number" id="deviceWattage" name="deviceWattage"><br/>
+      <input class="mb-4 form-textbox" type="number" id="deviceWattage" name="deviceWattage"
+             placeholder="Units in kWh"><br/>
     </div>
-    
-    <input class="btn btn-md btn-success device-submit" type="submit" value="Add device">
+
+    <div class="container d-flex justify-content-between px-4">
+      <button type="button" class="btn btn-md btn-success" id="device-help"
+        data-bs-toggle="modal" data-bs-target="#helpText">?</button>
+      <input class="btn btn-md btn-success device-submit" type="submit" value="Add device">
+    </div>
 </form>
 
 </div>
@@ -27,10 +33,41 @@
 
   <div class="container" id="device-list">
 <!-- use EJS and pass in an array of devices from the server to populate this section -->
+<!-- generating fake information for now -->
+    <div class="row">
+
+
+
+    </div>
   </div>
 
 </div>
 
+<!-- Modal component for the help button -->
+<div class="modal" id="helpText" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Device wattage</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Help text here -->
+        <p>
+          To find the wattage of your device, look for the information labels that are usually
+          placed on the back of the device.
+        </p>
+        <p>
+          If you cannot find the label, search online for the estimated wattage of your device
+          and it will be enough for this app.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="/js/devices.js"></script>
 

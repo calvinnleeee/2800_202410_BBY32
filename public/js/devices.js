@@ -8,3 +8,11 @@
 
 // use browser-side Joi to reduce number of get/post calls on the server
 const Joi = window.joi;
+
+/*
+  Add an event listener to the help button for adding a device, to prevent the default
+  function and do something else.
+*/
+document.getElementById("device-help").addEventListener("click", e => {
+  e.preventDefault();
+});
