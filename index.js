@@ -62,6 +62,9 @@ function isValidSession(req) {
 	return req.session.authenticated === true;
 }
 
+// Set up navbars for pages after login
+app.use('/', setupNav);
+
 // ---------------------------------------------------------------------------------
 // Landing page (Login/Signup)
 
@@ -264,10 +267,10 @@ app.get('/main', (req, res) => {
 // });
 
 
-// app.get('/devices', (req, res) => {
-
-//   res.render('devices');
-// });
+app.get('/devices', (req, res) => {
+  res.render('devices');
+  return;
+});
 
 
 // app.get('/settings', (req, res) => {
@@ -325,3 +328,13 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+// ---------------------------------------------------------------------------------
+// Middleware
+
+function setupNav(req, res, next) {
+  app.locals.currentPage = req.path;
+  // console.log(req.path)
+  next();
+}

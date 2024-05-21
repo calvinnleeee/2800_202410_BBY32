@@ -1,0 +1,37 @@
+<%- include('templates/headerAfterLogin') %>
+
+<h1 class="text-center mt-3">Devices</h1>
+
+<div class="container mt-3 pt-3 border-top">
+  <h2 class="text-center">Add a New Device</h2>
+  <p class="device-error text-center"><br/></p>
+  <form action="/addDevice" method="post">
+
+    <label class="mb-1" for="deviceName">Device name:</label><br/>
+    <div class="form-input">
+      <input class="mb-4 form-textbox" type="text" id="deviceName" name="deviceName">
+    </div>
+    
+    <label class="mb-1" for="deviceWattage">Device wattage:</label><br/>
+    <div class="form-input">
+      <input class="mb-4 form-textbox" type="number" id="deviceWattage" name="deviceWattage"><br/>
+    </div>
+    
+    <input class="btn btn-md btn-success device-submit" type="submit" value="Add device">
+</form>
+
+</div>
+
+<div class="container mt-3 pt-3 border-top">
+  <h2 class="text-center">Your devices</h2>
+
+  <div class="container" id="device-list">
+<!-- use EJS and pass in an array of devices from the server to populate this section -->
+  </div>
+
+</div>
+
+
+<script src="/js/devices.js"></script>
+
+<%- include('templates/footerAfterLogin') %>

@@ -45,17 +45,20 @@
 
   <div class="d-inline-block">
     <a href="/main">
-      <img class="nav-icon nav-icon-active" id="home-icon" src="/img/icons/home-icon.png" alt="Home">
+      <img  class="nav-icon <% if (locals.currentPage == "/main") { %> nav-icon-active <% } %>"
+            id="home-icon" src="/img/icons/home-icon.png" alt="Home">
     </a>
   </div>
   <div class="d-inline-block"> 
     <a href="/dash">
-      <img class="nav-icon" id="dash-icon" src="/img/icons/dashboard-icon.png" alt="Dashboard">
+      <img  class="nav-icon <% if (locals.currentPage == "/dash") { %> nav-icon-active <% } %>"
+            id="dash-icon" src="/img/icons/dashboard-icon.png" alt="Dashboard">
     </a>
   </div>
   <div class="d-inline-block"> 
     <a href="/devices">
-      <img class="nav-icon" id="device-icon" src="/img/icons/devices-icon.png" alt="Devices">
+      <img  class="nav-icon <% if (locals.currentPage == "/devices") { %> nav-icon-active <% } %>"
+            id="device-icon" src="/img/icons/devices-icon.png" alt="Devices">
     </a>
   </div>
   <!-- <div class="d-inline-block">

@@ -115,6 +115,27 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
+/* Devices page */
+
+.device-error {
+  color: red;
+}
+
+.form-input {
+  text-align: center;
+}
+
+.form-textbox {
+  width: 75vw;
+}
+
+.device-submit {
+  display: block;
+  margin-left: auto;
+  margin-right: 7vw;
+}
+
+/* ---------------------------------------------------------------- */
 /* Etc. */
 
 /* @keyframes fadeIn {
