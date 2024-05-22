@@ -33,6 +33,7 @@
     </div>
     
     <!-- User Details and Update Form -->
+    <form action="/updateProfile" method="post">
     <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
       <div class="card h-100">
         <div class="card-body">
@@ -41,35 +42,41 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="userid">User ID</label>
-                <input type="text" class="form-control" id="userid" placeholder="Enter user ID" value="<%= userid %>">
+                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter user ID" value="<%= userid %>">
               </div>
               <div class="form-group">
                 <label for="fullName">Name</label>
-                <input type="text" class="form-control" id="fullName" placeholder="Enter full name" value="<%= name %>">
+                <input type="text" name="name" class="form-control" id="fullName" value="<%= name %>">
               </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="eMail">Email</label>
-                <input type="email" class="form-control" id="eMail" placeholder="Enter your email" value="<%= email %>">
+                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter your email" value="<%= email %>">
+            </div>
+              <div class="form-group">
+                <label for="oldPassword">Current Password</label>
+                <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Enter current password">
               </div>
               <div class="form-group">
-                <label for="currentPW">Current Password</label>
-                <input type="password" class="form-control" id="currentPW" placeholder="Enter current password">
-              </div>
-              <div class="form-group">
-                <label for="newPW">New Password</label>
-                <input type="password" class="form-control" id="newPW" placeholder="Enter new password">
+                <label for="newPassword">New Password</label>
+                <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new password">
               </div>
             </div>
           </div>
           <div class="text-right">
             <button type="button" id="cancel" name="cancel" class="btn btn-secondary">Cancel</button>
-            <button type="button" id="update" name="update" class="btn btn-success">Update</button>
+            <!-- <button type="submit" id="update" name="update" class="btn btn-success">Update</button> -->
+
+              <button class="btn btn-success" type="submit">Update</button>
+              <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                <p style="color:red"><%= errorMessage %></p>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
+  </form>
   </div>
 </div>
 <%- include('templates/footerAfterLogin') %>
