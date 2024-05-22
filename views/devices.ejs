@@ -1,16 +1,28 @@
 <%- include('templates/headerAfterLogin') %>
 
+<a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
+
 <h1 class="text-center mt-3">Devices</h1>
 
 <div class="container mt-3 pt-3 border-top">
   <h2 class="text-center">Add a New Device</h2>
   <p class="device-error text-center"><br/></p>
   <form action="/addDevice" method="post">
-
     <label class="mb-1" for="deviceName">Device name:</label><br/>
     <div class="form-input">
-      <input class="mb-4 form-textbox" type="text" id="deviceName" name="deviceName"
-             placeholder="Name of your device">
+      <!-- <input class="mb-4 form-textbox" type="text" id="deviceName" name="deviceName"
+             placeholder="Name of your device"> -->
+      
+      <!-- <input class="mb-4 form-search" list="options" id="deviceName" name="deviceName"
+             placeholder="Type to search...">
+      <datalist id="options"></datalist> -->
+      <div id="deviceDropdown">
+        <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
+        <div class="deviceDrop" id="deviceDrop">
+          <!-- fill in options with JS here -->
+        </div>
+      </div>
+      
     </div>
     
     <label class="mb-1" for="deviceWattage">Device wattage:</label><br/>
