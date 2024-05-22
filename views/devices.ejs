@@ -36,24 +36,75 @@
         data-bs-toggle="modal" data-bs-target="#helpText">?</button>
       <input class="btn btn-md btn-success device-submit" type="submit" value="Add device">
     </div>
-</form>
+  </form>
 
 </div>
 
 <div class="container mt-3 pt-3 border-top">
-  <h2 class="text-center">Your devices</h2>
+  <h2 class="text-center mb-3">Your devices</h2>
 
-  <div class="container" id="device-list">
-<!-- use EJS and pass in an array of devices from the server to populate this section -->
-<!-- generating fake information for now -->
-    <div class="row">
+  <table class="table">
 
+    <thead>
+      <tr>
+        <th scope="col" id="table-kwh"><img class="device-icon" src="/img/icons/electricity-icon.png">(kWh)</th>
+        <th scope="col" colspan="2">Name of device</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
 
+    <tbody>
+    <!-- use EJS and pass in an array of devices from the server to populate this section -->
+    <!-- generating fake information for now -->
 
-    </div>
-  </div>
+    <!-- <% for (let i = 0; i < deviceList.length; i++) { %>
+      <tr>
+        <th scope="row">deviceList[i][1]</th>
+        <td colspan="3">deviceList[i][0]</td>
+        <td>
+          <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
+            <img class="device-icon mx-1" src="/img/icons/settings-dropdown.png">
+          </a>
+          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
+            <img class="device-icon" src="/img/icons/delete-icon.png">
+          </a>
+        </td>
+      </tr>
+    <% } %> -->
+
+      <tr>
+        <th scope="row">14</th>
+        <td colspan="3">air conditioner</td>
+        <td>
+          <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
+            <img class="device-icon mx-1" src="/img/icons/settings-dropdown.png">
+          </a>
+          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
+            <img class="device-icon" src="/img/icons/delete-icon.png">
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">12</th>
+        <td colspan="3">bitcoin miner</td>
+        <td>
+          <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
+            <img class="device-icon mx-1" src="/img/icons/settings-dropdown.png">
+          </a>
+          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
+            <img class="device-icon" src="/img/icons/delete-icon.png">
+          </a>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
 
 </div>
+
+<!-- <button type="button" class="btn btn-md btn-success" id="device-help"
+        data-bs-toggle="modal" data-bs-target="#helpText">?</button> -->
 
 <!-- Modal component for the help button -->
 <div class="modal" id="helpText" tabindex="-1">
@@ -81,6 +132,49 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal component for the edit device button -->
+<div class="modal" id="deviceEdit" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit wattage</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Edit device text input here -->
+        <p>Your "device-name-here" current has a wattage rating of X kWh.</p>
+        <p>Enter the new wattage rating for this device here: </p>
+        <input type="number">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal component for the delete device button -->
+<div class="modal" id="deviceDelete" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete device</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Edit device text input here -->
+        <p>Are you sure you want to delete this device?</p>
+        <p>Warning: You will lose all associated data/history associated with this device.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger">Delete</button>
       </div>
     </div>
   </div>
