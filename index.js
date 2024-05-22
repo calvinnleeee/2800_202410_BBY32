@@ -259,6 +259,13 @@ app.get('/profile', (req, res) => {
 // Profile Update
 
 app.post('/updateProfile', async (req, res) => {
+  // const user = {
+  //   userid: req.session.userid,
+  //   name: req.session.name,
+  //   email: req.session.email,
+  // };
+  let errorMessage = '';
+  let successMessage = 'Succesfully updated!';
   // Extract and log old user details
   let oldUserId = req.session.userid;
   let oldName = req.session.name;
@@ -279,7 +286,7 @@ app.post('/updateProfile', async (req, res) => {
   console.log('New UserID:', newUserId);
   console.log('New Name:', newName);
   console.log('New email:', newEmail);
-  console.log('NEW Password:', newPw);
+  console.log('New Password:', newPw);
   console.log('---------------------');
 
   // Update password if new password is provided
@@ -308,18 +315,41 @@ app.post('/updateProfile', async (req, res) => {
   }
 
   // Update email if new email is provided
+  // Check if a new email is provided and doesn't already exist
   if (newEmail) {
-      await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
-      // Update the session with the new email
-      req.session.email = newEmail;
-  }
+    const emailExists = await userCollection.countDocuments({ email: newEmail }) > 0;
+    if (!emailExists) {
+        await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
+        req.session.email = newEmail;
+    } else {
+        const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
+        const errorMessage = "An account is already associated with this E-mail";
+        res.render('profile', {
+            errorMessage: errorMessage,
+            userid: oldUserId, 
+            name: oldName, 
+            email: oldEmail, 
+        });
+        return;
+    }
+}
 
-  // Update user ID if new user ID is provided
-  if (newUserId) {
-      await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
-      // Update the session with the new user ID
-      req.session.userid = newUserId;
-  }
+// Check if the new user ID already exists
+const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
+if (newUserId && !idExists) {
+    await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
+    req.session.userid = newUserId;
+} else if (newUserId && idExists) {
+    const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
+    const errorMessage = "An account is already associated with this User ID";
+    res.render('profile', {
+        errorMessage: errorMessage,
+        userid: oldUserId, 
+        name: oldName, 
+        email: oldEmail, 
+    });
+    return;
+}
 
   // Redirect back to the profile page after updating
   res.redirect('/profile');
