@@ -256,6 +256,76 @@ app.get('/profile', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------------
+// Profile Update
+
+app.post('/updateProfile', async (req, res) => {
+  // Extract and log old user details
+  let oldUserId = req.session.userid;
+  let oldName = req.session.name;
+  let oldEmail = req.session.email;
+  let oldPw = req.body.oldPassword;
+  console.log('-------CURRENT-------');
+  console.log('Old UserID:', oldUserId);
+  console.log('Old Name:', oldName);
+  console.log('Old Email:', oldEmail);
+  console.log('Old Password:', oldPw);
+  console.log('--------NEW--------');
+
+  // Extract new user details from request body
+  let newUserId = req.body.userId;
+  let newName = req.body.name;
+  let newEmail = req.body.email;
+  let newPw = req.body.newPassword;
+  console.log('New UserID:', newUserId);
+  console.log('New Name:', newName);
+  console.log('New email:', newEmail);
+  console.log('NEW Password:', newPw);
+  console.log('---------------------');
+
+  // Update password if new password is provided
+  if (newPw) {
+      let email = req.session.email;
+      const user = await userCollection.findOne({ email: email });
+
+      // If user exists and old password matches the stored password
+      if (user && await bcrypt.compare(oldPw, user.password)) {
+          console.log('User Password:', user.password); // Log the hashed password from the database
+
+          // Hash the new password
+          const hashedNewPassword = await bcrypt.hash(newPw, saltRounds);
+          console.log('Hashed New Password:', hashedNewPassword); // Log the hashed new password
+
+          // Update the user's password in the database
+          await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
+      }
+  }
+
+  // Update name if new name is provided
+  if (newName) {
+      await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
+      // Update the session with the new name
+      req.session.name = newName;
+  }
+
+  // Update email if new email is provided
+  if (newEmail) {
+      await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
+      // Update the session with the new email
+      req.session.email = newEmail;
+  }
+
+  // Update user ID if new user ID is provided
+  if (newUserId) {
+      await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
+      // Update the session with the new user ID
+      req.session.userid = newUserId;
+  }
+
+  // Redirect back to the profile page after updating
+  res.redirect('/profile');
+});
+
+// ---------------------------------------------------------------------------------
 // Log out button
 
 app.get('/logout', (req, res) => {
