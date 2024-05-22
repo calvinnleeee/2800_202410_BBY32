@@ -268,9 +268,12 @@ app.get('/main', (req, res) => {
 
 
 app.get('/devices', (req, res) => {
-  // load the user's list of devices and pass it into the render as an array
+  // load the user's list of devices and store it in an array
+  // let userid = req.session.userid;
+  // let userDevices = await userCollection.find({userid: userid}).project({devices: 1}).toArray();
 
-  res.render('devices');
+  // res.render('devices');
+  res.render('devices', {deviceList: []});
   return;
 });
 
