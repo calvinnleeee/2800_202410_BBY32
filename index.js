@@ -259,13 +259,8 @@ app.get('/profile', (req, res) => {
 // Profile Update
 
 app.post('/updateProfile', async (req, res) => {
-  // const user = {
-  //   userid: req.session.userid,
-  //   name: req.session.name,
-  //   email: req.session.email,
-  // };
   let errorMessage = '';
-  let successMessage = 'Succesfully updated!';
+  let successMessage = '';
   // Extract and log old user details
   let oldUserId = req.session.userid;
   let oldName = req.session.name;
@@ -291,27 +286,38 @@ app.post('/updateProfile', async (req, res) => {
 
   // Update password if new password is provided
   if (newPw) {
-      let email = req.session.email;
-      const user = await userCollection.findOne({ email: email });
+    let email = req.session.email;
+    const user = await userCollection.findOne({ email: email });
 
-      // If user exists and old password matches the stored password
-      if (user && await bcrypt.compare(oldPw, user.password)) {
-          console.log('User Password:', user.password); // Log the hashed password from the database
+    // If user exists and old password matches the stored password
+    if (user && await bcrypt.compare(oldPw, user.password)) {
+        console.log('User Password:', user.password); // Log the hashed password from the database
 
-          // Hash the new password
-          const hashedNewPassword = await bcrypt.hash(newPw, saltRounds);
-          console.log('Hashed New Password:', hashedNewPassword); // Log the hashed new password
+        // Check if the new password is the same as the old password
+        if (await bcrypt.compare(newPw, user.password)) {
+            errorMessage = 'The new password cannot be the same as the old password.';
+            return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
+        }
 
-          // Update the user's password in the database
-          await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
-      }
-  }
+        // Hash the new password
+        const hashedNewPassword = await bcrypt.hash(newPw, saltRounds);
+        console.log('Hashed New Password:', hashedNewPassword); // Log the hashed new password
+
+        // Update the user's password in the database
+        await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
+        successMessage += 'Succesfully updated! ';
+    } else {
+        errorMessage = 'Current password is incorrect.';
+        return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
+    }
+}
 
   // Update name if new name is provided
   if (newName) {
       await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
       // Update the session with the new name
       req.session.name = newName;
+      successMessage += 'Succesfully updated! ';
   }
 
   // Update email if new email is provided
@@ -321,6 +327,7 @@ app.post('/updateProfile', async (req, res) => {
     if (!emailExists) {
         await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
         req.session.email = newEmail;
+        successMessage += 'Succesfully updated! ';
     } else {
         const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
         const errorMessage = "An account is already associated with this E-mail";
@@ -339,6 +346,7 @@ const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
 if (newUserId && !idExists) {
     await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
     req.session.userid = newUserId;
+    successMessage += 'Succesfully updated! ';
 } else if (newUserId && idExists) {
     const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
     const errorMessage = "An account is already associated with this User ID";
@@ -351,8 +359,9 @@ if (newUserId && !idExists) {
     return;
 }
 
-  // Redirect back to the profile page after updating
-  res.redirect('/profile');
+if (!errorMessage) {
+  res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
+}
 });
 
 // ---------------------------------------------------------------------------------
