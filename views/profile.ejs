@@ -42,17 +42,17 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="userid">User ID</label>
-                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter user ID" value="<%= userid %>">
+                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter new user ID">
               </div>
               <div class="form-group">
                 <label for="fullName">Name</label>
-                <input type="text" name="name" class="form-control" id="fullName" value="<%= name %>">
+                <input type="text" name="name" class="form-control" id="fullName" placeholder="Enter new Name">
               </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
               <div class="form-group">
                 <label for="eMail">Email</label>
-                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter your email" value="<%= email %>">
+                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter new email">
             </div>
               <div class="form-group">
                 <label for="oldPassword">Current Password</label>
@@ -70,8 +70,15 @@
 
               <button class="btn btn-success" type="submit">Update</button>
               <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
-                <p style="color:red"><%= errorMessage %></p>
+                <div class="alert alert-danger mt-2">
+                  <%= errorMessage %>
+                </div>
             <% } %>
+            <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+              <div class="alert alert-danger mt-2">
+                <%= successMessage %>
+              </div>
+          <% } %>
           </div>
         </div>
       </div>
