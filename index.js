@@ -297,11 +297,15 @@ app.get('/devices', async (req, res) => {
 });
 
 
+/*
+  New device submission
+  Author: Calvin Lee
+  Description: Add a new device to the user's list of current devices in the database.
+*/
 app.get('/addDevice', async (req, res) => {
   let newName = decodeURIComponent(req.query.device);
   let newKWH = decodeURIComponent(req.query.kwh);
   let userid = req.session.userid;
-  console.log(newName, newKWH);
 
   // get the user's current list of devices
   let prevDeviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
@@ -312,8 +316,6 @@ app.get('/addDevice', async (req, res) => {
     prevDeviceList = prevDeviceList[0].user_devices;
   }
 
-  console.log(prevDeviceList);
-
   let newDeviceList = [];
   // if the user has no previous list of devices
   if (!prevDeviceList) {
@@ -322,7 +324,6 @@ app.get('/addDevice', async (req, res) => {
   // if a previous list exists
   else {
     newDeviceList = prevDeviceList.concat( {name: newName, kWh: newKWH} );
-    console.log(newDeviceList);
   }
 
   await userCollection.updateOne({userid: userid}, {$set: {user_devices: newDeviceList}});
@@ -331,13 +332,34 @@ app.get('/addDevice', async (req, res) => {
   return;
 });
 
-// app.post('/deviceSubmit', (req, res) => {
 
-// var deviceName = req.body.deviceName;
-// var deviceWatt = req.body.deviceWattage;
-// userCollection.updateOne({email: email}, {$set: {password: hashedPw}});
-//   return;
-// });
+/*
+  Edit device submission
+  Author: Calvin Lee
+  Description: Edit a user's device in the database to update its kWh rating
+*/
+app.get('/editDevice', async (req, res) => {
+  let deviceName = decodeURIComponent(req.query.device);
+  let newKWH = decodeURIComponent(req.query.kwh);
+  let userid = req.session.userid;
+
+  // find the index of the device in the previous array
+  // editing means array already exists, don't need to handle the user_devices array not existing
+  let deviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  deviceList = deviceList[0].user_devices;
+  let deviceIndex = undefined;
+  for (let i = 0; i < deviceList.length; i++) {
+    if (deviceName === deviceList[i].name) {
+      deviceIndex = i;
+    }
+  }
+  // update the device to the new kWh rating and push it to the database
+  deviceList[deviceIndex] = { name: deviceName, kWh: newKWH };
+  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+
+  res.redirect('/devices');
+  return;
+});
 
 
 // app.get('/settings', (req, res) => {
