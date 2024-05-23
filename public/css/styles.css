@@ -20,6 +20,13 @@ body {
   height: 100vh;
 }
 
+#back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+}
+
 .header-colours {
   /* background: linear-gradient(180deg, #519E5C, #FFFFFF); */
   background: linear-gradient(180deg, #90C2E7, rgba(255, 255, 255, 0));
@@ -112,6 +119,76 @@ body {
 .dropdown-icons {
   width: 24px;
   height: auto;
+}
+
+/* ---------------------------------------------------------------- */
+/* Devices page */
+
+.error-text {
+  color: red;
+}
+
+.form-input {
+  text-align: center;
+}
+
+.form-textbox, #deviceName {
+  width: 75vw;
+}
+
+#deviceDropdown {
+  position: relative;
+}
+
+#deviceDropdown .deviceDrop {
+  position: absolute;
+  width: 80%;
+  margin: auto;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  background: white;
+  display: none;
+  z-index: 1000;
+}
+
+.option {
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: rgb(75, 75, 75);
+}
+
+#device-help {
+  display: inline-block;
+}
+
+#device-add {
+  display: inline-block;
+}
+
+.device-submit {
+  float: right;
+}
+
+#table-kwh {
+  font-size: 10pt;
+}
+
+.device-icon {
+  width: 25px;
+  height: auto;
+}
+
+.table-container {
+  max-height: 65vh;
+  overflow-y: scroll;
 }
 
 /* ---------------------------------------------------------------- */
