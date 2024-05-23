@@ -2,30 +2,32 @@
 
 <a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
 
-<h1 class="text-center mt-3">Devices</h1>
+<h1 class="text-center my-3">Devices</h1>
 
-<div class="container mt-3 pt-3 border-top">
+<div class="container d-flex justify-content-between mt-4 px-4">
+  <button type="button" class="btn btn-md btn-success" id="device-help"
+    data-bs-toggle="modal" data-bs-target="#helpText">?</button>
+  <button class="btn btn-md btn-success" id="device-add" type="submit" value="Add device"
+    data-bs-toggle="modal" data-bs-target="#addDevice">+</button>
+</div>
+
+<!-- <div class="container mt-3 pt-3 border-top">
   <h2 class="text-center">Add a New Device</h2>
   <p class="device-error text-center"><br/></p>
   <form action="/addDevice" method="post">
     <label class="mb-1" for="deviceName">Device name:</label><br/>
     <div class="form-input">
-      <!-- <input class="mb-4 form-textbox" type="text" id="deviceName" name="deviceName"
-             placeholder="Name of your device"> -->
-      
-      <!-- <input class="mb-4 form-search" list="options" id="deviceName" name="deviceName"
-             placeholder="Type to search...">
-      <datalist id="options"></datalist> -->
+
       <div id="deviceDropdown">
         <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
         <div class="deviceDrop" id="deviceDrop">
-          <!-- fill in options with JS here -->
+          
         </div>
       </div>
       
     </div>
     
-    <label class="mb-1" for="deviceWattage">Device wattage:</label><br/>
+    <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
     <div class="form-input">
       <input class="mb-4 form-textbox" type="number" id="deviceWattage" name="deviceWattage"
              placeholder="Units in kWh"><br/>
@@ -38,10 +40,10 @@
     </div>
   </form>
 
-</div>
+</div> -->
 
-<div class="container mt-3 pt-3 border-top">
-  <h2 class="text-center mb-3">Your devices</h2>
+<div class="table-container container mt-3 pt-3">
+  <!-- <h2 class="text-center mb-3">Your devices</h2> -->
 
   <table class="table">
 
@@ -97,6 +99,7 @@
           </a>
         </td>
       </tr>
+      
     </tbody>
 
   </table>
@@ -106,8 +109,51 @@
 <!-- <button type="button" class="btn btn-md btn-success" id="device-help"
         data-bs-toggle="modal" data-bs-target="#helpText">?</button> -->
 
+<!-- Modal component for the add device button -->
+<div class="modal fade" id="addDevice" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add a new device</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <h2 class="text-center">Add a New Device</h2>
+        <p class="device-error text-center"><br/></p>
+        <form action="/addDevice" method="post">
+          <label class="mb-1" for="deviceName">Device name:</label><br/>
+          <div class="form-input">
+
+            <div id="deviceDropdown">
+              <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
+              <div class="deviceDrop" id="deviceDrop">
+                <!-- fill in options with JS here -->
+              </div>
+            </div>
+            
+          </div>
+          
+          <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
+          <div class="form-input">
+            <input class="mb-4 form-textbox" type="number" id="deviceWattage" name="deviceWattage"
+                  placeholder="Units in kWh"><br/>
+          </div>
+
+          <input class="btn btn-md btn-success device-submit" type="submit" value="Add device">
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal component for the help button -->
-<div class="modal" id="helpText" tabindex="-1">
+<div class="modal fade" id="helpText" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -138,7 +184,7 @@
 </div>
 
 <!-- Modal component for the edit device button -->
-<div class="modal" id="deviceEdit" tabindex="-1">
+<div class="modal fade" id="deviceEdit" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -160,7 +206,7 @@
 </div>
 
 <!-- Modal component for the delete device button -->
-<div class="modal" id="deviceDelete" tabindex="-1">
+<div class="modal fade" id="deviceDelete" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
