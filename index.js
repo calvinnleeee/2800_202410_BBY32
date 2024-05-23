@@ -167,6 +167,7 @@ app.post('/loginSubmit', async (req, res) => {
   }
 });
 
+
 /*
   Forgot password submission
   Author: Calvin Lee
@@ -280,6 +281,7 @@ app.get('/loadDevices', async (req, res) => {
   return;
 });
 
+
 /*
   Device page load
   Author: Calvin Lee
@@ -353,6 +355,7 @@ app.get('/editDevice', async (req, res) => {
       deviceIndex = i;
     }
   }
+
   // update the device to the new kWh rating and push it to the database
   deviceList[deviceIndex] = { name: deviceName, kWh: newKWH };
   await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
@@ -361,6 +364,35 @@ app.get('/editDevice', async (req, res) => {
   return;
 });
 
+
+/*
+  Delete device submission
+  Author: Calvin Lee
+  Description: Delete a user's device from the database
+*/
+app.get('/deleteDevice', async (req, res) => {
+  let deviceName = decodeURIComponent(req.query.device);
+  let kwh = decodeURIComponent(req.query.kwh);
+  let userid = req.session.userid;
+
+  // find the index of the device in the previous array
+  // deleting means array already exists, don't need to handle the user_devices array not existing
+  let deviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  deviceList = deviceList[0].user_devices;
+  let deviceIndex = undefined;
+  for (let i = 0; i < deviceList.length; i++) {
+    if (deviceName === deviceList[i].name && kwh === deviceList[i].kWh) {
+      deviceIndex = i;
+    }
+  }
+
+  // remove the device from the array and push it back to the database
+  deviceList = deviceList.toSpliced(deviceIndex, 1);
+  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+
+  res.redirect('/devices');
+  return;
+});
 
 // app.get('/settings', (req, res) => {
 
