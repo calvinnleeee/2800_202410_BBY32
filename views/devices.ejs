@@ -45,7 +45,7 @@
         </td>
       </tr>
     <% } %>
-    
+
     </tbody>
 
   </table>
@@ -65,7 +65,7 @@
       </div>
       <div class="modal-body">
         
-        <p class="add-error text-center"><br/></p>
+        <p class="error-text text-center" id="add-error"><br/></p>
         <form action="/addDevice" method="post">
 
           <label class="mb-1" for="deviceName">Device name:</label><br/>
@@ -145,13 +145,16 @@
       </div>
       <div class="modal-body">
         <!-- Edit device text input here -->
-        <p>Your "device-name-here" current has a wattage rating of X kWh.</p>
+        <p>Your <span id="edit-device-name"></span> currently has a kWh rating of <span id="edit-device-kwh"></span>.</p>
+        <p class="error-text" id="edit-error"><br/></p>
         <p>Enter the new wattage rating for this device here: </p>
-        <input type="number" id="editKWH">
+        <div class="form-input">
+          <input type="number" id="editKWH" placeholder="kW * usage in hours">
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Submit</button>
+        <button type="button" class="btn btn-success" id="edit-submit">Submit</button>
       </div>
     </div>
   </div>
