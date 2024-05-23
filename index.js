@@ -62,6 +62,9 @@ function isValidSession(req) {
 	return req.session.authenticated === true;
 }
 
+// Set up navbars for pages after login
+app.use('/', setupNav);
+
 // ---------------------------------------------------------------------------------
 // Landing page (Login/Signup)
 
@@ -164,6 +167,7 @@ app.post('/loginSubmit', async (req, res) => {
   }
 });
 
+
 /*
   Forgot password submission
   Author: Calvin Lee
@@ -264,11 +268,131 @@ app.get('/main', (req, res) => {
 // });
 
 
-// app.get('/devices', (req, res) => {
+/*
+  Author: Calvin Lee
+  Description: Load the list of possible devices from the database for the user to search
+    from when adding a new device
+*/
+app.get('/loadDevices', async (req, res) => {
+  const deviceCollection = database.db("devices").collection('appliances');
+  const data = await deviceCollection.find({}).project({_id: 0, name: 1, kWh: 1}).toArray();
 
-//   res.render('devices');
-// });
+  res.json(data);
+  return;
+});
 
+
+/*
+  Device page load
+  Author: Calvin Lee
+  Description: Take a user's list of devices, stored in the database under their document,
+    and load it into the page to show the user their devices.
+*/
+app.get('/devices', async (req, res) => {
+  // load the user's list of devices and store it in an array
+  let userid = req.session.userid;
+  let userDevices = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  userDevices = userDevices[0].user_devices;
+  
+  res.render('devices', {deviceList: userDevices});
+  return;
+});
+
+
+/*
+  New device submission
+  Author: Calvin Lee
+  Description: Add a new device to the user's list of current devices in the database.
+*/
+app.get('/addDevice', async (req, res) => {
+  let newName = decodeURIComponent(req.query.device);
+  let newKWH = decodeURIComponent(req.query.kwh);
+  let userid = req.session.userid;
+
+  // get the user's current list of devices
+  let prevDeviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  if (prevDeviceList.length < 1) {
+    prevDeviceList = undefined;
+  }
+  else {
+    prevDeviceList = prevDeviceList[0].user_devices;
+  }
+
+  let newDeviceList = [];
+  // if the user has no previous list of devices
+  if (!prevDeviceList) {
+    newDeviceList = [ {name: newName, kWh: newKWH} ];
+  }
+  // if a previous list exists
+  else {
+    newDeviceList = prevDeviceList.concat( {name: newName, kWh: newKWH} );
+  }
+
+  await userCollection.updateOne({userid: userid}, {$set: {user_devices: newDeviceList}});
+
+  res.redirect('/devices');
+  return;
+});
+
+
+/*
+  Edit device submission
+  Author: Calvin Lee
+  Description: Edit a user's device in the database to update its kWh rating
+*/
+app.get('/editDevice', async (req, res) => {
+  let deviceName = decodeURIComponent(req.query.device);
+  let newKWH = decodeURIComponent(req.query.kwh);
+  let userid = req.session.userid;
+
+  // find the index of the device in the previous array
+  // editing means array already exists, don't need to handle the user_devices array not existing
+  let deviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  deviceList = deviceList[0].user_devices;
+  let deviceIndex = undefined;
+  for (let i = 0; i < deviceList.length; i++) {
+    if (deviceName === deviceList[i].name) {
+      deviceIndex = i;
+    }
+  }
+
+  // update the device to the new kWh rating and push it to the database
+  deviceList[deviceIndex] = { name: deviceName, kWh: newKWH };
+  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+
+  res.redirect('/devices');
+  return;
+});
+
+
+/*
+  Delete device submission
+  Author: Calvin Lee
+  Description: Delete a user's device from the database
+*/
+app.get('/deleteDevice', async (req, res) => {
+  let deviceName = decodeURIComponent(req.query.device);
+  let kwh = decodeURIComponent(req.query.kwh);
+  let userid = req.session.userid;
+
+  // find the index of the device in the previous array
+  // deleting means array already exists, don't need to handle the user_devices array not existing
+  let deviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  deviceList = deviceList[0].user_devices;
+  let deviceIndex = undefined;
+  for (let i = 0; i < deviceList.length; i++) {
+    if (deviceName === deviceList[i].name && kwh === deviceList[i].kWh) {
+      deviceIndex = i;
+    }
+  }
+
+  // remove the device from the array and push it back to the database
+  deviceList = deviceList.toSpliced(deviceIndex, 1);
+  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+
+  res.redirect('/devices');
+  return;
+});
 
 // app.get('/settings', (req, res) => {
 
@@ -434,3 +558,13 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+// ---------------------------------------------------------------------------------
+// Middleware
+
+function setupNav(req, res, next) {
+  app.locals.currentPage = req.path;
+  // console.log(req.path)
+  next();
+}
