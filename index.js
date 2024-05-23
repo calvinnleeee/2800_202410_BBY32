@@ -302,6 +302,115 @@ app.get('/profile', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------------
+// Profile Update
+
+app.post('/updateProfile', async (req, res) => {
+  let errorMessage = '';
+  let successMessage = '';
+  // Extract and log old user details
+  let oldUserId = req.session.userid;
+  let oldName = req.session.name;
+  let oldEmail = req.session.email;
+  let oldPw = req.body.oldPassword;
+  console.log('-------CURRENT-------');
+  console.log('Old UserID:', oldUserId);
+  console.log('Old Name:', oldName);
+  console.log('Old Email:', oldEmail);
+  console.log('Old Password:', oldPw);
+  console.log('--------NEW--------');
+
+  // Extract new user details from request body
+  let newUserId = req.body.userId;
+  let newName = req.body.name;
+  let newEmail = req.body.email;
+  let newPw = req.body.newPassword;
+  console.log('New UserID:', newUserId);
+  console.log('New Name:', newName);
+  console.log('New email:', newEmail);
+  console.log('New Password:', newPw);
+  console.log('---------------------');
+
+  // Update password if new password is provided
+  if (newPw) {
+    let email = req.session.email;
+    const user = await userCollection.findOne({ email: email });
+
+    // If user exists and old password matches the stored password
+    if (user && await bcrypt.compare(oldPw, user.password)) {
+        console.log('User Password:', user.password); // Log the hashed password from the database
+
+        // Check if the new password is the same as the old password
+        if (await bcrypt.compare(newPw, user.password)) {
+            errorMessage = 'The new password cannot be the same as the old password.';
+            return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
+        }
+
+        // Hash the new password
+        const hashedNewPassword = await bcrypt.hash(newPw, saltRounds);
+        console.log('Hashed New Password:', hashedNewPassword); // Log the hashed new password
+
+        // Update the user's password in the database
+        await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
+        successMessage += 'Succesfully updated! ';
+    } else {
+        errorMessage = 'Current password is incorrect.';
+        return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
+    }
+}
+
+  // Update name if new name is provided
+  if (newName) {
+      await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
+      // Update the session with the new name
+      req.session.name = newName;
+      successMessage += 'Succesfully updated! ';
+  }
+
+  // Update email if new email is provided
+  // Check if a new email is provided and doesn't already exist
+  if (newEmail) {
+    const emailExists = await userCollection.countDocuments({ email: newEmail }) > 0;
+    if (!emailExists) {
+        await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
+        req.session.email = newEmail;
+        successMessage += 'Succesfully updated! ';
+    } else {
+        const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
+        const errorMessage = "An account is already associated with this E-mail";
+        res.render('profile', {
+            errorMessage: errorMessage,
+            userid: oldUserId, 
+            name: oldName, 
+            email: oldEmail, 
+        });
+        return;
+    }
+}
+
+// Check if the new user ID already exists
+const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
+if (newUserId && !idExists) {
+    await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
+    req.session.userid = newUserId;
+    successMessage += 'Succesfully updated! ';
+} else if (newUserId && idExists) {
+    const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
+    const errorMessage = "An account is already associated with this User ID";
+    res.render('profile', {
+        errorMessage: errorMessage,
+        userid: oldUserId, 
+        name: oldName, 
+        email: oldEmail, 
+    });
+    return;
+}
+
+if (!errorMessage) {
+  res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
+}
+});
+
+// ---------------------------------------------------------------------------------
 // Log out button
 
 app.get('/logout', (req, res) => {
