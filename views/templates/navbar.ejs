@@ -1,0 +1,70 @@
+
+<!-- Dropdown menu -->
+<div class="d-inline-block" id="dropdown">
+
+  <div class="dropdown">
+    <a class="nav-link text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="/img/icons/dropdown-icon.png" alt="Dropdown" class="dropdown-icon">
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="/profile">
+
+        <div class="row align-items-start">
+          <div class="col-4">
+            <img class="dropdown-icons" src="/img/icons/profile-dropdown.png">
+          </div>
+          <div class="col-8">Profile</div>
+        </div>
+
+      </a></li>
+
+      <li><a class="dropdown-item" href="/settings">
+
+        <div class="row align-items-start">
+          <div class="col-4">
+            <img class="dropdown-icons" src="/img/icons/settings-dropdown.png">
+          </div>
+          <div class="col-8">Settings</div>
+        </div>
+
+        <!-- <button class="btn btn-success" type="submit">Settings</button> -->
+      </a></li>
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li><a class="dropdown-item" href="/logout">
+        <button class="btn btn-danger" type="submit">Log Out</button>
+      </a></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- Navigation bar items -->
+<div class="d-flex justify-content-evenly mx-auto nav-div position-relative mb-2">
+
+  <div class="d-inline-block">
+    <a href="/main">
+      <img  class="nav-icon <% if (locals.currentPage == "/main") { %> nav-icon-active <% } %>"
+            id="home-icon" src="/img/icons/home-icon.png" alt="Home">
+    </a>
+  </div>
+  <div class="d-inline-block"> 
+    <a href="/dash">
+      <img  class="nav-icon <% if (locals.currentPage == "/dash") { %> nav-icon-active <% } %>"
+            id="dash-icon" src="/img/icons/dashboard-icon.png" alt="Dashboard">
+    </a>
+  </div>
+  <div class="d-inline-block"> 
+    <a href="/devices">
+      <img  class="nav-icon <% if (locals.currentPage == "/devices") { %> nav-icon-active <% } %>"
+            id="device-icon" src="/img/icons/devices-icon.png" alt="Devices">
+    </a>
+  </div>
+  <!-- <div class="d-inline-block">
+    <a href="/settings">
+      <img class="nav-icon" id="settings-icon" src="/img/icons/settings-icon.png" alt="Settings">
+    </a>
+  </div> -->
+
+</div>

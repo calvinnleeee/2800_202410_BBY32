@@ -1,88 +1,80 @@
 <%- include('templates/headerAfterLogin') %>
 <style>
-      .container-fluid {
+  .container-fluid {
     padding-bottom: 40px; 
   }
 </style>
 <!-- Bootstrap template with adjustments -->
 
 <div class="container-fluid">
-    <a href="/main" class="btn btn-success mb-3"><</a>
-    <br>
-    <h1>User Profile</h1>
-    <div class="container-fluid">
-        <div class="row gutters">
-        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="account-settings">
-                    <div class="user-profile text-center mx-auto">
-                        <div class="user-avatar">
-                            <img src='/img/edit-user-icon.png' alt="Logo" width="130" height="120">
-                        </div>
-                        <h5 class="user-id">User ID: <%= userid %></h5>
-                        <h5 class="user-name">Name: <%= name %></h5>
-                        <h5 class="user-email">Email: <%= email %></h5>
-                    </div>
-                </div>
+  <a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
+  <h1 class="text-center">User Profile</h1>
+  
+  <div class="row gutters">
+    <!-- User Profile Card -->
+    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+      <div class="card h-100">
+        <div class="card-body text-center">
+          <div class="user-avatar">
+            <img src="/img/edit-user-icon.png" alt="Logo" width="130" height="120">
+          </div>
+          <h5 class="user-id">User ID: <%= userid %></h5>
+          <h5 class="user-name">Name: <%= name %></h5>
+          <h5 class="user-email">Email: <%= email %></h5>
+        </div>
+      </div>
+    </div>
+    
+    <!-- User Details and Update Form -->
+    <form action="/updateProfile" method="post">
+    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+      <div class="card h-100">
+        <div class="card-body">
+          <h6 class="mb-2 text-success">Personal Details</h6>
+          <div class="row gutters">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="userid">User ID</label>
+                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter new user ID">
+              </div>
+              <div class="form-group">
+                <label for="fullName">Name</label>
+                <input type="text" name="name" class="form-control" id="fullName" placeholder="Enter new Name">
+              </div>
             </div>
-        </div>
-        </div>
-        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-        <div class="card h-100">
-            <div class="card-body">
-                <div class="row gutters">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <h6 class="mb-2 text-success">Personal Details</h6>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label for="userid">User ID</label>
-                                <input type="email" class="form-control" id="eMail" placeholder="Enter user ID">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="Name">Name</label>
-                            <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label for="eMail">Email</label>
-                            <input type="email" class="form-control" id="eMail" placeholder="Enter email ID">
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label for="changePW">Current Password</label>
-                            <input type="text" class="form-control" id="phone" placeholder="Enter current password">
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                        <div class="form-group">
-                            <label for="newPW">New Password</label>
-                            <input type="url" class="form-control" id="website" placeholder="Enter new password">
-                        </div>
-                    </div>
-                </div>
-                <div class="row gutters">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="text-right">
-                            <button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
-                            <button type="button" id="submit" name="submit" class="btn btn-success">Update</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="eMail">Email</label>
+                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter new email">
             </div>
+              <div class="form-group">
+                <label for="oldPassword">Current Password</label>
+                <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Enter current password">
+              </div>
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new password">
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <button type="button" id="cancel" name="cancel" class="btn btn-secondary">Cancel</button>
+              <button class="btn btn-success" type="submit">Update</button>
+              <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                <div class="alert alert-danger mt-2">
+                  <%= errorMessage %>
+                </div>
+            <% } %>
+            <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+              <div class="alert alert-success mt-2">
+                  <%= successMessage %>
+              </div>
+          <% } %>
+          </div>
         </div>
-        </div>
-        </div>
-        </div>
-
-
-
-   
-
-
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
 <%- include('templates/footerAfterLogin') %>
