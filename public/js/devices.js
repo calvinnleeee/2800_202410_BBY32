@@ -9,6 +9,11 @@
 // use browser-side Joi to reduce number of get/post calls on the server
 const Joi = window.joi;
 
+// originally empty variables, store a holder for the name and current kwh rating of the
+// device to edit/remove, so after the user confirms it, it can be sent to the server
+let currentDevice = undefined;
+let currentKWH = undefined;
+
 /*
   Populate the search textbox with options based on the list of devices in the json file.
   Note: This code was mostly written by GPT, with modifications to fit our code.
@@ -66,9 +71,17 @@ document.addEventListener("DOMContentLoaded", async function() {
 });
 
 /*
-  Add an event listener to the help button for adding a device, to prevent the default
-  function and do something else.
+  Add an event listener to each of the edit and delete buttons to track the device being targeted,
+  so that the correct device can be sent to the server for querying.
 */
-document.getElementById("device-help").addEventListener("click", e => {
-  e.preventDefault();
+let allEditButtons = document.querySelectorAll(".edit-delete");
+allEditButtons.forEach(editButton => {
+  editButton.addEventListener("click", (e) => {
+
+    currentDevice = e.target.getAttribute("data-device");
+    currentKWH = e.target.getAttribute("data-kwh");
+
+    // console.log(currentDevice);
+    // console.log(currentKWH);
+  });
 });

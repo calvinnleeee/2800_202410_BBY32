@@ -266,14 +266,19 @@ app.get('/main', (req, res) => {
 //   res.render('dash');
 // });
 
-
-app.get('/devices', (req, res) => {
+/*
+  Device page load
+  Author: Calvin Lee
+  Description: Take a user's list of devices, stored in the database under their document,
+    and load it into the page to show the user their devices.
+*/
+app.get('/devices', async (req, res) => {
   // load the user's list of devices and store it in an array
-  // let userid = req.session.userid;
-  // let userDevices = await userCollection.find({userid: userid}).project({devices: 1}).toArray();
+  let userid = req.session.userid;
+  let userDevices = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  userDevices = userDevices[0].user_devices;
 
-  // res.render('devices');
-  res.render('devices', {deviceList: []});
+  res.render('devices', {deviceList: userDevices});
   return;
 });
 
