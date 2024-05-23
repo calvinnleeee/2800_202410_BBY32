@@ -266,6 +266,20 @@ app.get('/main', (req, res) => {
 //   res.render('dash');
 // });
 
+
+/*
+  Author: Calvin Lee
+  Description: Load the list of possible devices from the database for the user to search
+    from when adding a new device
+*/
+app.get('/loadDevices', async (req, res) => {
+  const deviceCollection = database.db("devices").collection('appliances');
+  const data = await deviceCollection.find({}).project({_id: 0, name: 1, kWh: 1}).toArray();
+
+  res.json(data);
+  return;
+});
+
 /*
   Device page load
   Author: Calvin Lee
@@ -277,8 +291,43 @@ app.get('/devices', async (req, res) => {
   let userid = req.session.userid;
   let userDevices = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
   userDevices = userDevices[0].user_devices;
-
+  
   res.render('devices', {deviceList: userDevices});
+  return;
+});
+
+
+app.get('/addDevice', async (req, res) => {
+  let newName = decodeURIComponent(req.query.device);
+  let newKWH = decodeURIComponent(req.query.kwh);
+  let userid = req.session.userid;
+  console.log(newName, newKWH);
+
+  // get the user's current list of devices
+  let prevDeviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  if (prevDeviceList.length < 1) {
+    prevDeviceList = undefined;
+  }
+  else {
+    prevDeviceList = prevDeviceList[0].user_devices;
+  }
+
+  console.log(prevDeviceList);
+
+  let newDeviceList = [];
+  // if the user has no previous list of devices
+  if (!prevDeviceList) {
+    newDeviceList = [ {name: newName, kWh: newKWH} ];
+  }
+  // if a previous list exists
+  else {
+    newDeviceList = prevDeviceList.concat( {name: newName, kWh: newKWH} );
+    console.log(newDeviceList);
+  }
+
+  await userCollection.updateOne({userid: userid}, {$set: {user_devices: newDeviceList}});
+
+  res.redirect('/devices');
   return;
 });
 

@@ -25,7 +25,7 @@
       </tr>
     </thead>
 
-    <tbody>
+    <tbody id="device-table">
     <!-- use EJS and pass in an array of devices from the server to populate this section -->
     <!-- generating fake information for now -->
 
@@ -45,32 +45,7 @@
         </td>
       </tr>
     <% } %>
-
-      <tr>
-        <th scope="row">14</th>
-        <td colspan="3">air conditioner</td>
-        <td>
-          <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
-            <img class="device-icon mx-1" src="/img/icons/settings-dropdown.png">
-          </a>
-          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
-            <img class="device-icon" src="/img/icons/delete-icon.png">
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">12</th>
-        <td colspan="3">bitcoin miner</td>
-        <td>
-          <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
-            <img class="device-icon mx-1" src="/img/icons/settings-dropdown.png">
-          </a>
-          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
-            <img class="device-icon" src="/img/icons/delete-icon.png">
-          </a>
-        </td>
-      </tr>
-      
+    
     </tbody>
 
   </table>
@@ -90,27 +65,33 @@
       </div>
       <div class="modal-body">
         
-        <h2 class="text-center">Add a New Device</h2>
-        <p class="device-error text-center"><br/></p>
+        <p class="add-error text-center"><br/></p>
         <form action="/addDevice" method="post">
+
           <label class="mb-1" for="deviceName">Device name:</label><br/>
           <div class="form-input">
-
             <div id="deviceDropdown">
               <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
               <div class="deviceDrop" id="deviceDrop">
                 <!-- fill in options with JS here -->
               </div>
             </div>
-            
           </div>
           
           <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
           <div class="form-input">
-            <input class="mb-4 form-textbox" type="number" id="deviceWattage" name="deviceWattage"
-                  placeholder="Units in kWh"><br/>
+            <input class="form-textbox" type="number" id="deviceWattage" name="deviceWattage"
+                  placeholder="Units in kW"><br/>
           </div>
 
+          <label class="mb-1 mt-3" for="deviceUsage">Device usage:</label><br/>
+          <div class="form-input">
+            <input class="mb-4 form-textbox" type="number" id="deviceUsage" name="deviceUsage"
+                  placeholder="Time used per day in hours"><br/>
+          </div>
+          <p style="font-size: 10pt; color: gray;">
+            (Enter 0 in both wattage and usage if you are unsure. We'll give you an average based on your province's average usage of that device.)
+          </p>
           <input class="btn btn-md btn-success device-submit" type="submit" value="Add device">
 
         </form>
@@ -166,7 +147,7 @@
         <!-- Edit device text input here -->
         <p>Your "device-name-here" current has a wattage rating of X kWh.</p>
         <p>Enter the new wattage rating for this device here: </p>
-        <input type="number">
+        <input type="number" id="editKWH">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -197,6 +178,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/joi@17.13.1/dist/joi-browser.min.js"></script>
 <script src="/js/devices.js"></script>
 
 <%- include('templates/footerAfterLogin') %>
