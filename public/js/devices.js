@@ -115,7 +115,7 @@ allEditButtons.forEach(editButton => {
 /*
   Add an event listener to the add device submission button to add a new device
 */
-document.querySelector(".device-submit").addEventListener("click", (e) => {
+document.getElementById("add-submit").addEventListener("click", (e) => {
   e.preventDefault();
 
   let newDeviceName = document.getElementById("deviceName").value;
@@ -178,7 +178,7 @@ document.querySelector(".device-submit").addEventListener("click", (e) => {
     kwh = possibleDevices[deviceIndex].kWh;
   }
 
-  document.querySelector(".add-error").innerHTML = "<br/>";
+  document.getElementById("add-error").innerHTML = "<br/>";
   window.location.href = `/addDevice?device=${encodeURIComponent(newDeviceName)}`
       + `&kwh=${encodeURIComponent(kwh)}`;
 });
@@ -222,4 +222,16 @@ document.getElementById("edit-submit").addEventListener("click", async (e) => {
   errorBox.innerHTML = "<br/>";
   window.location.href = `/editDevice?device=${encodeURIComponent(currentDevice)}`
       + `&kwh=${encodeURIComponent(newKWH)}`;
+});
+
+
+/*
+  Add an event listener to the delete device submission button to remove the device from
+  the user's list.
+*/
+document.getElementById("delete-submit").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  window.location.href = `/deleteDevice?device=${encodeURIComponent(currentDevice)}`
+      + `&kwh=${encodeURIComponent(currentKWH)}`;
 });
