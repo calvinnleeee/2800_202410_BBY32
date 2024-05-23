@@ -169,8 +169,12 @@ body {
   display: inline-block;
 }
 
-.device-submit {
+#device-add {
   display: inline-block;
+}
+
+.device-submit {
+  float: right;
 }
 
 #table-kwh {
@@ -180,6 +184,11 @@ body {
 .device-icon {
   width: 25px;
   height: auto;
+}
+
+.table-container {
+  max-height: 65vh;
+  overflow-y: scroll;
 }
 
 /* ---------------------------------------------------------------- */
