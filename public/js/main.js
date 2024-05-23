@@ -21,7 +21,7 @@
     const displayRandomFact = (fact) => {
         document.getElementById('factText').innerText = fact.fact;
         document.getElementById('factSource').innerText = fact.source;
-        // document.getElementById('factImage').innerText=fact.image;
+        // document.getElementById('factImage').innerText = fact.image;
     };
 
 
