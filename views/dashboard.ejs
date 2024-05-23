@@ -1,0 +1,39 @@
+<%- include('templates/headerAfterLogin') %>
+
+    <!--
+  Dashboard page EJS.
+  Author: Ethan Nguyen
+  Description: Dashboard page used to display all of the user's
+  energy consumption/carbon emissions through graphs.
+ -->
+    <style>
+        .scaling-div {
+    width: 100px;
+    height: 100px;
+    background-color: #3498db;
+    transform-origin: left;
+    animation-name: scaleRight;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes scaleRight {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(2);
+    }
+}
+    </style>
+
+    <div class="scaling-div"></div>
+
+    <script>
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        ctx.fillRect(0, 0, 180, 75);
+    </script>
+
+<%- include('templates/footerAfterLogin') %>

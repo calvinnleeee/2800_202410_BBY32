@@ -256,6 +256,32 @@ app.get('/profile', (req, res) => {
 });
 
 // ---------------------------------------------------------------------------------
+// Dashboard button
+
+app.get('/dashboard', (req, res) => {
+  if (isValidSession(req)) {
+      // If logged in, render the 'profile' page
+      res.render('dashboard');
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
+})
+
+// ---------------------------------------------------------------------------------
+// Home button
+
+app.get('/main', (req, res) => {
+  if (isValidSession(req)) {
+      // If logged in, render the 'profile' page
+      res.render('main');
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
+})
+
+// ---------------------------------------------------------------------------------
 // Log out button
 
 app.get('/logout', (req, res) => {
