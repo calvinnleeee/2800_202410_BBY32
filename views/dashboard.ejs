@@ -5,35 +5,46 @@
   Author: Ethan Nguyen
   Description: Dashboard page used to display all of the user's
   energy consumption/carbon emissions through graphs.
- -->
-    <style>
-        .scaling-div {
-    width: 100px;
-    height: 100px;
-    background-color: #3498db;
-    transform-origin: left;
-    animation-name: scaleRight;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-}
+-->
 
-@keyframes scaleRight {
-    from {
-        transform: scaleX(1);
-    }
-    to {
-        transform: scaleX(2);
-    }
-}
-    </style>
+    <link rel="stylesheet" href="/css/dashboard.css">
 
-    <div class="scaling-div"></div>
-
-    <script>
-        var c = document.getElementById("myCanvas");
-        var ctx = c.getContext("2d");
-
-        ctx.fillRect(0, 0, 180, 75);
-    </script>
+    <h2>Dashboard</h2>
+    <div class="container-fluid">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-12 col-md-6 mb-4">
+                <!-- new -->
+                <div class="card text-center border">
+                    <h5 class="card-header">Largest Energy Consumers</h5>
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active text-success" href="#">Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-success" href="#">Month</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-success" href="#">Year</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="myCanvas"></canvas>
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="/js/dashboard.js"></script>
 
 <%- include('templates/footerAfterLogin') %>
