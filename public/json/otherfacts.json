@@ -3,32 +3,28 @@
         {
             "number": 1,
             "fact": "Cows belch methane, a greenhouse gas 25 times more potent than CO2, making livestock farming a significant contributor to climate change.",
-            "source": "@WeirdClimateFact from CNN",
-            "image": ""
+            "source": "@WeirdClimateFact from CNN"
         },
         {
             "number": 2,
             "fact": "Fast fashion clothes are produced in high volume which means a high cost to the planet: 10% of global CO2 emissions are caused by the textile industry",
-            "source": "@WeirdClimateFact from OxFam",
-            "image": "https://staticassets.oxfam.org.uk/oxfamgb-production/images/SHS_Stat_5_Patch_AW-e1568104343646.width-1000.jpg"
+            "source": "@WeirdClimateFact from OxFam"
         },
         {
             "number": 3,
             "fact": "The ocean absorbs about 90% of the heat from global warming, which is causing a decline in phytoplankton, the base of the marine food web.",
-            "source": "@WeirdClimateFact from Nature",
-            "image": ""
+            "source": "@WeirdClimateFact from Nature"
         },
         {
             "number": 4,
             "fact": "Climate change is causing plants to produce more pollen, exacerbating allergies and respiratory issues.",
-            "source": "@WeirdClimateFact from Climate Central",
-            "image": ""
+            "source": "@WeirdClimateFact from Climate Central"
         },
         {
             "number": 5,
             "fact": "Rising temperatures are causing the sex ratio of some species, like sea turtles, to skew heavily female, as sex is determined by incubation temperature.",
-            "source": "@WeirdClimateFact from Oceanservice",
-            "image": ""
+            "source": "@WeirdClimateFact from Oceanservice"
+
         }
     ]
 }
