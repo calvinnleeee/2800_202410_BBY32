@@ -18,6 +18,7 @@ Colour theme
 body {
   background-color: white;
   height: 100vh;
+  font-size: 10pt;
 }
 
 #back-button {
@@ -52,10 +53,11 @@ body {
 }
 
 .center-me {
-  margin-top: 35%;
+  margin-top: 10%;
   text-align: center;
-  height: 50vh;
+  height: 60vh;
   animation: fadeIn ease 2s;
+  overflow-y: scroll;
 }
 
 .carousel-inner {
