@@ -262,12 +262,6 @@ app.get('/main', (req, res) => {
 });
 
 
-// app.get('/dash', (req, res) => {
-
-//   res.render('dash');
-// });
-
-
 /*
   Author: Calvin Lee
   Description: Load the list of possible devices from the database for the user to search
