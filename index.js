@@ -94,26 +94,31 @@ app.get('/main', async (req, res) => {
       // Extract the user_devices array from the user doc
       const userDevices = user.user_devices;
 
-      // Calculate total kWh
-      let totalKwh = 0;
-      userDevices.forEach(device => {
+      if (userDevices && userDevices.length > 0) {
+        // If the user has devices, calculate total kWh
+        let totalKwh = 0;
+        userDevices.forEach(device => {
+          if (device.usage) {
+            const kWh = parseInt(device.kWh);
+            const usage = parseInt(device.usage);
+            totalKwh += kWh * usage;
+          } else {
+            const kWh = parseInt(device.kWh);
+            totalKwh += kWh;
+          }
+        });
 
-        if (device.usage) {
-          const kWh = parseInt(device.kWh);
-          const usage = parseInt(device.usage);
-          totalKwh += kWh * usage;
-        } else {
-          const kWh = parseInt(device.kWh);
-          totalKwh += kWh;
-        }
-      });
+        // Calculate total cost
+        // $0.114 is 11.4 cents 
+        const costPerKwh = 0.114; 
+        const totalCost = totalKwh * costPerKwh;
 
-      // Calculate total cost
-      // $0.114 is 11.4 cents 
-      const costPerKwh = 0.114; 
-      const totalCost = totalKwh * costPerKwh;
-
-      res.render('main', { name: name, totalKwh: totalKwh, totalCost: totalCost });
+        // Render the main page with the total kWh and total cost
+        res.render('main', { name: name, totalKwh: totalKwh, totalCost: totalCost });
+      } else {
+        // If the user doesn't have devices, render the main page with a "Get started" message
+        res.render('main', { name: name, message: "Get started by adding your devices!", devicesLink: "/devices" });
+      }
     } catch (error) {
       console.error("Error retrieving user data:", error);
       res.status(500).send("Internal Server Error");

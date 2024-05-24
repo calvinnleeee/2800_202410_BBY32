@@ -29,18 +29,27 @@
         <h5 class="card-header">Summary</h5>
         
         <div class="card-body">
-          <div id="chart_div">
-            <input type="hidden" id="totalKwh" value="<%= totalKwh %>"> 
-          </div>
-          <br>
-          <div id="costs_chart_div"></div>
-          <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
-          <br>
-          <div id="savings_message_container">
-            <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
-            <span id="savings_message"></span>
-          </div>
+          <% if (typeof message !== 'undefined') { %>
+            <p><%= message %></p>
+            <% if (typeof devicesLink !== 'undefined') { %>
+              <a href="<%= devicesLink %>">Add Devices</a>
+            <% } %>
+          <% } else { %>
+            <div id="chart_div">
+              <input type="hidden" id="totalKwh" value="<%= totalKwh %>">
+            </div>
+            <br>
+            <div id="costs_chart_div"></div>
+            <br>
+            <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
+            <br>
+            <div id="savings_message_container">
+              <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
+              <span id="savings_message"></span>
+            </div>
+          <% } %>
         </div>
+        
       </div>
     </div>
     <!-- Cap of the day -->
