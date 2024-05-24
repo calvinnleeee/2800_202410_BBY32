@@ -8,7 +8,9 @@
     margin: 0;
   }
   .container-fluid {
+    padding-top: 5px;
     padding-bottom: 70px; 
+    z-index: -1;
   }
 </style>
 
@@ -22,8 +24,8 @@
     <div class="col-12 col-md-6 mb-4">
       <!-- new -->
       <div class="card text-center border">
-        <h5 class="card-header">Dashboard</h5>
-        <div class="card-header">
+        <h5 class="card-header">Summary</h5>
+        <!-- <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
               <a class="nav-link active text-success" aria-current="true" href="#">Day</a>
@@ -38,10 +40,12 @@
               <a class="nav-link text-success" href="#">Year</a>
             </li>
           </ul>
-        </div>
+        </div> -->
         <div class="card-body">
-          <img src="/img/mockdata.png" alt="Logo" class="img-fluid mb-3" style="object-fit: cover;">
-          <a href="#" class="btn btn-success">Details</a>
+<!-- PLace summary content here -->
+<div id="chart_div"></div>
+<div id="costs_chart_div"></div>
+
         </div>
       </div>
       <!-- new -->
@@ -89,6 +93,9 @@
       })
       .catch(error => console.error('Error fetching facts:', error));
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="/js/usage.js"></script>
+<script src="/js/costs.js"></script>
 
 <!-- Template should be after login -->
 <%- include('templates/footerAfterLogin') %>

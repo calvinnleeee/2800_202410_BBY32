@@ -363,7 +363,36 @@ if (!errorMessage) {
   res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
 }
 });
+// ---------------------------------------------------------------------------------
+// Get user information
+app.get('/logUserData', async (req, res) => {
+  let email = req.session.email;
+  // Ensure the user is logged in
+  if (!isValidSession(req)) {
+    res.redirect('/'); // Redirect to the home page if not logged in
+    return;
+  }
 
+  try {
+    // Retrieve the user's document from the collection
+    const user = await userCollection.findOne({ email: email });
+
+    // Check if the user exists
+    if (!user) {
+      res.status(404).send("User not found");
+      return;
+    }
+
+    // Log the user document
+    console.log("User:", user);
+
+    // Send the user doc to the client 
+    res.json(user); //put it in json format
+  } catch (error) {
+    console.error("Error retrieving user data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 // ---------------------------------------------------------------------------------
 // Log out button
 
