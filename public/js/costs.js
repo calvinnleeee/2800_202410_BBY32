@@ -6,7 +6,7 @@ function drawMaterial() {
 
     var totalCost = parseFloat(document.getElementById('totalCost').value);
 
-    // Average cost in dollars
+    // Average cost in dollars (from the average user)
     var averageCost = 114;
 
     var data = google.visualization.arrayToDataTable([
