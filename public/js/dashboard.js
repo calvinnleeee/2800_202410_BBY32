@@ -1,3 +1,4 @@
+// Time Period selector (week, month year)
 const period = document.querySelectorAll('a');
 
 period.forEach(time => {
@@ -11,6 +12,8 @@ period.forEach(time => {
 
 let possibleDevices = undefined;
 
+// fetches all the devices a user has
+// assisted by chatgpt to write the google chart portions
 document.addEventListener("DOMContentLoaded", async function() {
   try {
     const response = await fetch('/dashboardDevices');
@@ -23,6 +26,8 @@ document.addEventListener("DOMContentLoaded", async function() {
   }
 });
 
+// draws the piechart onto the ejs file
+// utilizes google charts open source pie chart to display visuals
 function drawChart() {
   if (!possibleDevices) {
     console.error('No devices data available');
@@ -45,15 +50,3 @@ function drawChart() {
   const chart = new google.visualization.PieChart(document.getElementById('piechart'));
   chart.draw(data, options);
 }
-
-
-/*
-  Add an event listener to the body of the table, so that if no devices were detected,
-  a message is shown to the user.
-*/
-document.addEventListener("DOMContentLoaded", (e) => {
-  let tableBody = document.getElementById("device-table");
-  if (!tableBody.rows.length) {
-    tableBody.innerHTML = `<tr><td></td><td colspan="3">You have no devices yet!</td></tr>`;
-  }
-});
