@@ -258,15 +258,23 @@ app.get('/profile', (req, res) => {
 // ---------------------------------------------------------------------------------
 // Dashboard button
 
-app.get('/dashboard', (req, res) => {
-  if (isValidSession(req)) {
-      // If logged in, render the 'profile' page
-      res.render('dashboard');
-  } else {
-      // If not logged in, redirect to the login page
-      res.redirect('/login'); 
+app.get('/dashboard', async (req, res) => {
+  try {
+    if (isValidSession(req)) {
+      let userid = req.session.userid;
+      let user = await userCollection.findOne({ userid: userid }, { projection: { user_devices: 1 } });
+
+      let device_list = user ? user.user_devices : undefined;
+      res.render('dashboard', { user: user });
+    } else {
+      res.redirect('/login');
+    }
+  } catch (error) {
+    console.error('Error fetching device list:', error);
+    res.status(500).send('Internal Server Error');
   }
-})
+});
+
 
 // ---------------------------------------------------------------------------------
 // Home button
