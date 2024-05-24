@@ -259,21 +259,26 @@ app.get('/profile', (req, res) => {
 // Dashboard button
 
 app.get('/dashboard', async (req, res) => {
-  try {
     if (isValidSession(req)) {
-      let userid = req.session.userid;
-      let user = await userCollection.findOne({ userid: userid }, { projection: { user_devices: 1 } });
-
-      let device_list = user ? user.user_devices : undefined;
-      res.render('dashboard', { user: user });
+      res.render('dashboard');
     } else {
       res.redirect('/login');
     }
+});
+
+// ---------------------------------------------------------------------------------
+// Retrieve devices for dashboard
+app.get('/dashboardDevices', async (req, res) => {
+  try {
+    const userDevices = database.db("carboncap_users").collection('users');
+    const data = await userDevices.findOne({ userid: req.session.userid }, { projection: { _id: 0, user_devices: 1 } });
+    res.json(data.user_devices);
   } catch (error) {
-    console.error('Error fetching device list:', error);
+    console.error('Error fetching devices:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 // ---------------------------------------------------------------------------------
