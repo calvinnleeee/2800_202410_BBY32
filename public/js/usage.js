@@ -7,7 +7,7 @@ function drawMaterial() {
     var totalKwh = parseFloat(document.getElementById('totalKwh').value);
     var data = google.visualization.arrayToDataTable([
         ['', 'You', 'Average User'],
-        ['Kwh', totalKwh, 1000], 
+        ['kWh', totalKwh + 'kWh', 900 + 'kWh'] , 
     ]);
 
     // Define chart options
