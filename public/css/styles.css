@@ -66,6 +66,18 @@ body {
   margin-top: 33vh;
 }
 
+
+#savings_message_container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #94ad97; 
+  border-radius: 4px; 
+  padding: 10px; 
+}
+#savings_message_container img {
+  margin-right: 10px; 
+}
+
 /* ---------------------------------------------------------------- */
 /* Etc. */
 

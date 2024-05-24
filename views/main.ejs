@@ -24,7 +24,7 @@
       <h4 class="capping">Let's get capping!</h4>
     </div>
     <div class="col-12 col-md-6 mb-4">
-      <!-- new -->
+      <!-- Summary -->
       <div class="card text-center border">
         <h5 class="card-header">Summary</h5>
         
@@ -35,10 +35,15 @@
           <br>
           <div id="costs_chart_div"></div>
           <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
+          <br>
+          <div id="savings_message_container">
+            <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
+            <span id="savings_message"></span>
+          </div>
         </div>
       </div>
-      <!-- new -->
     </div>
+    <!-- Cap of the day -->
     <div class="col-12 col-md-3 mb-4">
       <div class="card">
         <h5 class="card-header">CAP OF THE DAY</h5>
