@@ -4,11 +4,15 @@
   .btn {
     margin-right: 10px;
   }
+
   .card-header h5 {
     margin: 0;
   }
+
   .container-fluid {
-    padding-bottom: 70px; 
+    padding-top: 5px;
+    padding-bottom: 70px;
+    z-index: -1;
   }
 </style>
 
@@ -20,42 +24,48 @@
       <h4 class="capping">Let's get capping!</h4>
     </div>
     <div class="col-12 col-md-6 mb-4">
-      <!-- new -->
-      <div class="card text-center border">
-        <h5 class="card-header">Here's a quick look!</h5>
-        <div class="card-header">
-          <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-              <a class="nav-link active text-success" aria-current="true" href="#">Day</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-success" href="#">Week</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-success" href="#">Month</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-success" href="#">Year</a>
-            </li>
-          </ul>
+      <% if (typeof message !== 'undefined' || typeof devicesLink !== 'undefined') { %>
+        <div class="card mb-3">
+          <img src="/img/addDevice.png" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><%= message %></h5>
+            <p class="card-text">To track your carbon footprint, we'll need access to your device information. Just click below to set up your device and leave the rest to us!</p>
+            <p class="card-text"><small class="text-muted">
+              <a href="<%= devicesLink %>">Setup your devices</a>
+            </small></p>
+          </div>
         </div>
-        <div class="card-body">
-          <img src="/img/mockdata.png" alt="Logo" class="img-fluid mb-3" style="object-fit: cover;">
-          <a href="#" class="btn btn-success">Details</a>
+      <% } else { %>
+        <!-- Summary -->
+        <div class="card text-center border">
+          <h5 class="card-header">Summary</h5>
+          <div class="card-body">
+            <div id="chart_div">
+              <input type="hidden" id="totalKwh" value="<%= totalKwh %>">
+            </div>
+            <br>
+            <div id="costs_chart_div"></div>
+            <br>
+            <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
+            <br>
+            <div id="savings_message_container">
+              <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
+              <span id="savings_message"></span>
+            </div>
+          </div>
         </div>
-      </div>
-      <!-- new -->
+      <% } %>
     </div>
+    <!-- Cap of the day -->
     <div class="col-12 col-md-3 mb-4">
       <div class="card">
         <h5 class="card-header">CAP OF THE DAY</h5>
         <div class="card-body">
           <p id="factText" class="card-text"></p>
           <p id="factSource" class="text-sm text-green font-bold mt-1"></p>
-          <p id="factImage" class="card-text"></p>
           <div class="d-flex justify-content-between mt-2">
             <button id="moreFacts" class="btn btn-success">More facts</button>
-            <img id="easter" src="../img/transparentcap.png" style="display: none; width: 50px; height: auto;">
+            <button id="readMore" class="btn btn-success">Read more</button>
           </div>
         </div>
       </div>
@@ -63,10 +73,33 @@
   </div>
 </div>
 
-
 <!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElR16o87II1Y6n0Z8e3c8638oa32310bF7h+t25t3v6e0uztq6/PXF3g82w863P2r212+r68n37568432655" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  // Fetch facts from the JSON file called facts.json
+  fetch('../json/facts.json')
+    .then(response => response.json())
+    .then(data => {
+      const facts = data.facts;
 
-<script src="/js/main.js"></script>
+      function getRandomFact() {
+        const randomNumber = Math.floor(Math.random() * facts.length);
+        const randomFact = facts[randomNumber];
+        document.getElementById('factText').innerText = randomFact.fact;
+        document.getElementById('factSource').innerText = randomFact.source;
+      }
+
+      // This is the new initial fact when the user loads the page
+      getRandomFact();
+
+      // Click "More facts" button click to generate a new random fact.
+      document.getElementById('moreFacts').addEventListener('click', getRandomFact);
+    })
+    .catch(error => console.error('Error fetching facts:', error));
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="/js/usage.js"></script>
+<script src="/js/costs.js"></script>
 
 <!-- Template should be after login -->
 <%- include('templates/footerAfterLogin') %>
