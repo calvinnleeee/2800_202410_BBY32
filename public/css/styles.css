@@ -55,7 +55,7 @@ body {
 .center-me {
   margin-top: 10%;
   text-align: center;
-  height: 60vh;
+  height: 70vh;
   animation: fadeIn ease 2s;
   overflow-y: scroll;
 }
@@ -89,9 +89,9 @@ body {
 }
 
 .nav-icon {
-  width: 65px;
+  width: 40px;
   height: auto;
-  padding: 3px;
+  padding: 2px;
 }
 
 .nav-icon-active {
