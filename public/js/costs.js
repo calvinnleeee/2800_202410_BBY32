@@ -1,10 +1,14 @@
+// Taken from google Charts
 google.charts.load('current', { packages: ['corechart', 'bar'] });
 google.charts.setOnLoadCallback(drawMaterial);
 
 function drawMaterial() {
+
+    var totalCost = parseFloat(document.getElementById('totalCost').value);
+
     var data = google.visualization.arrayToDataTable([
         ['', 'You', 'Average User'],
-        ['Dollars', 0.2, 0.4],
+        ['CDN', '$ '+ totalCost, '$ '+ 114],
     ]);
 
     var materialOptions = {
@@ -12,7 +16,7 @@ function drawMaterial() {
             title: 'Costs'
         },
         hAxis: {
-            title: '$',
+            title: '',
             minValue: 0,
         },
         bars: 'horizontal',

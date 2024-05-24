@@ -75,13 +75,51 @@ app.get('/', (req, res) => {
 });
 
 // ---------------------------------------------------------------------
-// Main page (After login)
-
-app.get('/main', (req, res) => {
+//Main page (After Login)
+app.get('/main', async (req, res) => {
   if (isValidSession(req)) {
-		let name = req.session.name;
-		// If user is logged in, render the 'index' page for welcome message
-    res.render('main', {name: name});
+    let name = req.session.name;
+    let email = req.session.email;
+
+    try {
+      // Retrieve the user's document from the collection
+      const user = await userCollection.findOne({ email: email });
+
+      // Check if the user exists
+      if (!user) {
+        res.status(404).send("User not found");
+        return;
+      }
+
+      // Extract the user_devices array from the user doc
+      const userDevices = user.user_devices;
+
+      // Calculate total kWh
+      let totalKwh = 0;
+      userDevices.forEach(device => {
+
+        if (device.usage) {
+          const kWh = parseInt(device.kWh);
+          const usage = parseInt(device.usage);
+          totalKwh += kWh * usage;
+        } else {
+          const kWh = parseInt(device.kWh);
+          totalKwh += kWh;
+        }
+      });
+
+      // Calculate total cost
+      // $0.114 is 11.4 cents 
+      const costPerKwh = 0.114; 
+      const totalCost = totalKwh * costPerKwh;
+
+      res.render('main', { name: name, totalKwh: totalKwh, totalCost: totalCost });
+    } catch (error) {
+      console.error("Error retrieving user data:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  } else {
+    res.redirect('/login'); 
   }
 });
 
@@ -363,9 +401,11 @@ if (!errorMessage) {
   res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
 }
 });
+
 // ---------------------------------------------------------------------------------
-// Get user information
-app.get('/logUserData', async (req, res) => {
+// Calculate total KWH usage
+
+app.get('/calculateTotalKwh', async (req, res) => {
   let email = req.session.email;
   // Ensure the user is logged in
   if (!isValidSession(req)) {
@@ -383,16 +423,35 @@ app.get('/logUserData', async (req, res) => {
       return;
     }
 
-    // Log the user document
-    console.log("User:", user);
+    // Extract the user_devices array from the user doc
+    const userDevices = user.user_devices;
 
-    // Send the user doc to the client 
-    res.json(user); //put it in json format
+    // calc total kWh
+    let totalKwh = 0;
+    userDevices.forEach(device => {
+      // Check if the device has a usage value
+      if (device.usage) {
+        const kWh = parseInt(device.kWh);
+        //it has usage?? but disapearred lol
+        const usage = parseInt(device.usage);
+        totalKwh += kWh * usage;
+      } else {
+        const kWh = parseInt(device.kWh);
+        totalKwh += kWh;
+      }
+    });
+
+    // Log the total kWh
+    console.log("Total kWh:", totalKwh);
+
+    // Send the total kWh to the client 
+    res.json({ totalKwh }); 
   } catch (error) {
-    console.error("Error retrieving user data:", error);
+    console.error("Error calculating total kWh:", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
 // ---------------------------------------------------------------------------------
 // Log out button
 
