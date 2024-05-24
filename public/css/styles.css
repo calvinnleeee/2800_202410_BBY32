@@ -18,6 +18,14 @@ Colour theme
 body {
   background-color: white;
   height: 100vh;
+  font-size: 10pt;
+}
+
+#back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
 }
 
 .header-colours {
@@ -32,6 +40,11 @@ body {
   height: 10vh;
 }
 
+.nav-colours-after {
+  background: linear-gradient(0deg, #519E5C 40%, rgba(255, 255, 255, 0));
+  height: 10vh;
+}
+
 /* ---------------------------------------------------------------- */
 /* Login/signup pages */
 
@@ -40,14 +53,15 @@ body {
 }
 
 .center-me {
-  margin-top: 35%;
+  margin-top: 7%;
   text-align: center;
-  height: 50vh;
+  height: 70vh;
   animation: fadeIn ease 2s;
+  overflow-y: scroll;
 }
 
 .carousel-inner {
-  height: 60vh;
+  height: 75vh;
 }
 
 .error {
@@ -55,15 +69,140 @@ body {
 }
 
 .carousel-item {
-  height: 70vh;
+  height: 75vh;
 }
 
 .landing-btn {
-  width: 40vw;
+  width: 25vw;
 }
 
 .errorPage {
   margin-top: 33vh;
+}
+
+
+#savings_message_container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #94ad97; 
+  border-radius: 4px; 
+  padding: 10px; 
+}
+#savings_message_container img {
+  margin-right: 10px; 
+}
+
+/* ---------------------------------------------------------------- */
+/* Navigation icons */
+
+.nav-div {
+  width: 100%;
+  height: 60%;
+}
+
+.nav-icon {
+  width: 45px;
+  height: auto;
+  padding: 2px;
+}
+
+.nav-icon-active {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+  border-radius: 20%;
+}
+
+/* ---------------------------------------------------------------- */
+/* Dropdown menu */
+
+.dropdown-icon {
+  width: 45px;
+  height: auto;
+}
+
+#dropdown {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
+
+.dropdown-item {
+  font-size: 14pt;
+  color: #635C51;
+}
+
+.dropdown-icons {
+  width: 24px;
+  height: auto;
+}
+
+/* ---------------------------------------------------------------- */
+/* Devices page */
+
+.error-text {
+  color: red;
+}
+
+.form-input {
+  text-align: center;
+}
+
+.form-textbox, #deviceName {
+  width: 75vw;
+}
+
+#deviceDropdown {
+  position: relative;
+}
+
+#deviceDropdown .deviceDrop {
+  position: absolute;
+  width: 80%;
+  margin: auto;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  background: white;
+  display: none;
+  z-index: 1000;
+}
+
+.option {
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: rgb(75, 75, 75);
+}
+
+#device-help {
+  display: inline-block;
+}
+
+#device-add {
+  display: inline-block;
+}
+
+.device-submit {
+  float: right;
+}
+
+#table-kwh {
+  font-size: 10pt;
+}
+
+.device-icon {
+  width: 25px;
+  height: auto;
+}
+
+.table-container {
+  max-height: 65vh;
+  overflow-y: scroll;
 }
 
 /* ---------------------------------------------------------------- */

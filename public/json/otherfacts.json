@@ -1,0 +1,30 @@
+{
+    "weird_climate_facts": [
+        {
+            "number": 1,
+            "fact": "Cows belch methane, a greenhouse gas 25 times more potent than CO2, making livestock farming a significant contributor to climate change.",
+            "source": "@WeirdClimateFact from CNN"
+        },
+        {
+            "number": 2,
+            "fact": "Polluting particles, such as PM10 or PM2.5, which cause adverse health effects similar to those of cigarettes, actually reflect the sun's heat rather than trap it.",
+            "source": "@WeirdClimateFact from Nature."
+        },
+        {
+            "number": 3,
+            "fact": "The hybrids: offspring of mixed species brought together by climate change and encroaching development. In addition to the Grolar, now Coywolves (coyote-wolves) and Blinxes (bobcat-lynxes)",
+            "source": "@WeirdClimateFact from Living Planet Report"
+        },
+        {
+            "number": 4,
+            "fact": "Climate change is causing plants to produce more pollen, exacerbating allergies and respiratory issues.",
+            "source": "@WeirdClimateFact from Climate Central"
+        },
+        {
+            "number": 5,
+            "fact": "Rising temperatures are causing the sex ratio of some species, like sea turtles, to skew heavily female, as sex is determined by incubation temperature.",
+            "source": "@WeirdClimateFact from Oceanservice"
+
+        }
+    ]
+}
