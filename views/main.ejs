@@ -1,5 +1,5 @@
 <%- include('templates/headerAfterLogin') %>
-
+<!-- Styling  -->
 <style>
   .btn {
     margin-right: 10px;
@@ -15,45 +15,50 @@
     z-index: -1;
   }
 </style>
-
+<!-- Main container -->
 <div class="container-fluid">
   <div class="row d-flex align-items-center justify-content-center">
+    <!-- Welcome message -->
     <div class="col-12 col-md-3 text-center mb-4">
       <img src='/img/mainlogo.png' alt="Logo" class="img-fluid" style="max-width: 130px; height: auto;">
       <h1 class="hello">Welcome, <%= name %>!</h1>
       <h4 class="capping">Let's get capping!</h4>
     </div>
+    <!-- Summary / instructions -->
     <div class="col-12 col-md-6 mb-4">
+      <!-- Instructions for no devices -->
       <% if (typeof message !== 'undefined' || typeof devicesLink !== 'undefined') { %>
-        <div class="card mb-3">
-          <img src="/img/addDevice.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title"><%= message %></h5>
-            <p class="card-text">To track your carbon footprint, we'll need access to your device information. Just click below to set up your device and leave the rest to us!</p>
-            <p class="card-text"><small class="text-muted">
+      <div class="card mb-3">
+        <img src="/img/addDevice.png" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title"><%= message %></h5>
+          <p class="card-text">To track your carbon footprint, we'll need access to your device information. Just click below to set up your device and leave the rest to us!</p>
+          <p class="card-text">
+            <small class="text-muted">
               <a href="<%= devicesLink %>">Setup your devices</a>
-            </small></p>
-          </div>
+            </small>
+          </p>
         </div>
+      </div>
       <% } else { %>
-        <!-- Summary -->
-        <div class="card text-center border">
-          <h5 class="card-header">Summary</h5>
-          <div class="card-body">
-            <div id="chart_div">
-              <input type="hidden" id="totalKwh" value="<%= totalKwh %>">
-            </div>
-            <br>
-            <div id="costs_chart_div"></div>
-            <br>
-            <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
-            <br>
-            <div id="savings_message_container">
-              <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
-              <span id="savings_message"></span>
-            </div>
+      <!-- Summary for devices -->
+      <div class="card text-center border">
+        <h5 class="card-header">Summary</h5>
+        <div class="card-body">
+          <div id="chart_div">
+            <input type="hidden" id="totalKwh" value="<%= totalKwh %>">
+          </div>
+          <br>
+          <div id="costs_chart_div"></div>
+          <br>
+          <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
+          <br>
+          <div id="savings_message_container">
+            <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
+            <span id="savings_message"></span>
           </div>
         </div>
+      </div>
       <% } %>
     </div>
     <!-- Cap of the day -->
@@ -81,5 +86,5 @@
 <script src="/js/usage.js"></script>
 <script src="/js/costs.js"></script>
 
-<!-- Template should be after login -->
+<!-- Footer afer login -->
 <%- include('templates/footerAfterLogin') %>

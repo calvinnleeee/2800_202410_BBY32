@@ -86,6 +86,12 @@ app.get('/', (req, res) => {
 
 // ---------------------------------------------------------------------
 //Main page (After Login)
+/*
+  Main page after login.
+  Author: Brian Diep
+  Description: The main page after the user logs in. If the user has a device display the summary section; else, display instructions.
+  Summary section will display totalkWh and totalCosts with a message 
+*/
 
 app.get('/main', async (req, res) => {
   if (isValidSession(req)) {
@@ -479,6 +485,13 @@ app.get('/profile', (req, res) => {
 
 // ---------------------------------------------------------------------------------
 // Profile Update
+/*
+  Profile Update
+  Author: Brian Diep
+  Description: Update the profile userID, name, email and password. Will handle errors for
+  UserID and Email already in use/taken, wrong current password, new password cannot be the same, and joi validation with the approriate mesages.
+  Succesful changes will display "Succesfully updated".
+*/
 
 app.post('/updateProfile', async (req, res) => {
   let errorMessage = '';
@@ -625,7 +638,14 @@ app.get('/main', (req, res) => {
   }
 })
 
-// Calculate total KWH usage
+// ---------------------------------------------------------------------------------
+// CalculateTotalKwh
+/*
+  Profile Update
+  Author: Brian Diep
+  Description: Calculate's the total kWh usage based on the User.
+*/
+
 
 app.get('/calculateTotalKwh', async (req, res) => {
   let email = req.session.email;
