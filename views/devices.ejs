@@ -4,11 +4,9 @@
 
 <h1 class="text-center my-3">Your devices</h1>
 
-<div class="container d-flex justify-content-between mt-4 px-4">
-  <button type="button" class="btn btn-md btn-success" id="device-help"
-    data-bs-toggle="modal" data-bs-target="#helpText">?</button>
+<div class="container text-center mt-4">
   <button class="btn btn-md btn-success" id="device-add" type="submit" value="Add device"
-    data-bs-toggle="modal" data-bs-target="#addDevice">+</button>
+    data-bs-toggle="modal" data-bs-target="#addDevice">Add new device</button>
 </div>
 
 
@@ -52,51 +50,77 @@
 
 </div>
 
-<!-- <button type="button" class="btn btn-md btn-success" id="device-help"
-        data-bs-toggle="modal" data-bs-target="#helpText">?</button> -->
 
 <!-- Modal component for the add device button -->
 <div class="modal fade" id="addDevice" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add a new device</h5>
+        <h5 class="modal-title">Add new device</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
-        <p class="error-text text-center" id="add-error"><br/></p>
-        <form action="/addDevice" method="post">
 
-          <label class="mb-1" for="deviceName">Device name:</label><br/>
-          <div class="form-input">
-            <div id="deviceDropdown">
-              <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
-              <div class="deviceDrop" id="deviceDrop">
-                <!-- fill in options with JS here -->
-              </div>
+        <div id="add-device-carousel" class="carousel slide" data-bs-touch="false">
+          <div class="carousel-inner">
+
+            <div class="carousel-item" id="help-text" style="font-size: 12pt;">
+              <!-- Help text here -->
+              <p>
+                The wattage is the amount of energy your device consumes over a period of time.
+                Multiplying it with the 24 hours per day and dividing by 1000 will give you kWh
+                (kiloWatt-hours), which measures the amount of energy used by the device per day.
+              </p>
+              <p>
+                To find the wattage of your device, look for the information labels that are usually
+                placed on the back of the device.
+              </p>
+              <p>
+                If you cannot find the label, search online for the estimated wattage of your device
+                and it will be enough for this app.
+              </p>
             </div>
-          </div>
-          
-          <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
-          <div class="form-input">
-            <input class="form-textbox" type="number" id="deviceWattage" name="deviceWattage"
-                  placeholder="Units in kW"><br/>
-          </div>
 
-          <label class="mb-1 mt-3" for="deviceUsage">Device usage:</label><br/>
-          <div class="form-input">
-            <input class="mb-4 form-textbox" type="number" id="deviceUsage" name="deviceUsage"
-                  placeholder="Time used per day in hours"><br/>
+            <div class="carousel-item active" id="add-device-form">
+              <p class="error-text text-center" id="add-error"><br/></p>
+              <form action="/addDevice" method="post">
+      
+                <label class="mb-1" for="deviceName">Device name:</label><br/>
+                <div class="form-input">
+                  <div id="deviceDropdown">
+                    <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
+                    <div class="deviceDrop" id="deviceDrop">
+                      <!-- fill in options with JS here -->
+                    </div>
+                  </div>
+                </div>
+                
+                <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
+                <div class="form-input">
+                  <input class="form-textbox" type="number" id="deviceWattage" name="deviceWattage"
+                        placeholder="Units in kW"><br/>
+                </div>
+      
+                <label class="mb-1 mt-3" for="deviceUsage">Device usage:</label><br/>
+                <div class="form-input">
+                  <input class="mb-4 form-textbox" type="number" id="deviceUsage" name="deviceUsage"
+                        placeholder="Time used per day in hours"><br/>
+                </div>
+                <p style="font-size: 10pt; color: gray;">
+                  (Enter 0 in both wattage and usage if you are unsure. We'll give you an average based on your province's average usage of that device.)
+                </p>
+      
+              </form>
+            </div>
+            
           </div>
-          <p style="font-size: 10pt; color: gray;">
-            (Enter 0 in both wattage and usage if you are unsure. We'll give you an average based on your province's average usage of that device.)
-          </p>
-
-        </form>
+        </div>
 
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="display: grid; grid-template-columns: max-content 1fr max-content max-content;">
+        <button type="button" class="btn btn-md btn-success" id="device-help"
+          data-bs-target="#add-device-carousel" data-bs-slide="prev">?</button>
+        <div style="width: 20%;"></div>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" id="add-submit">Add device</button>
       </div>
