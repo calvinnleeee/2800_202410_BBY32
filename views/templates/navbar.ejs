@@ -27,7 +27,17 @@
           <div class="col-8">Settings</div>
         </div>
 
-        <!-- <button class="btn btn-success" type="submit">Settings</button> -->
+      </a></li>
+
+      <li><a class="dropdown-item" href="/aboutus">
+
+        <div class="row align-items-start">
+          <div class="col-4">
+            <img class="dropdown-icons" src="/img/icons/settings-dropdown.png">
+          </div>
+          <div class="col-8">About Us</div>
+        </div>
+
       </a></li>
 
       <li><hr class="dropdown-divider"></li>
@@ -41,30 +51,25 @@
 </div>
 
 <!-- Navigation bar items -->
-<div class="d-flex justify-content-evenly mx-auto nav-div position-relative mb-2">
+<div class="d-flex justify-content-evenly mx-auto nav-div position-relative mb-3">
 
-  <div class="d-inline-block">
+  <div class="nav-container d-inline-block text-center <% if (locals.currentPage == "/main") { %> nav-icon-active <% } %>">
     <a href="/main">
-      <img  class="nav-icon <% if (locals.currentPage == "/main") { %> nav-icon-active <% } %>"
-            id="home-icon" src="/img/icons/home-icon.png" alt="Home">
+      <img class="nav-icon" id="home-icon" src="/img/icons/navbar-home.png" alt="Home"><br/>
     </a>
+    <span class="nav-text">Home</span> 
   </div>
-  <div class="d-inline-block"> 
+  <div class="nav-container d-inline-block text-center <% if (locals.currentPage == "/dashboard") { %> nav-icon-active <% } %>"> 
     <a href="/dashboard">
-      <img  class="nav-icon <% if (locals.currentPage == "/dashboard") { %> nav-icon-active <% } %>"
-            id="dash-icon" src="/img/icons/dashboard-icon.png" alt="Dashboard">
+      <img  class="nav-icon" id="dash-icon" src="/img/icons/navbar-dash.png" alt="Dashboard"><br/>
     </a>
+    <span class="nav-text">Dashboard</span>
   </div>
-  <div class="d-inline-block"> 
+  <div class="nav-container d-inline-block text-center <% if (locals.currentPage == "/devices") { %> nav-icon-active <% } %>"> 
     <a href="/devices">
-      <img  class="nav-icon <% if (locals.currentPage == "/devices") { %> nav-icon-active <% } %>"
-            id="device-icon" src="/img/icons/devices-icon.png" alt="Devices">
+      <img  class="nav-icon" id="device-icon" src="/img/icons/navbar-devices.png" alt="Devices"><br/>
     </a>
+    <span class="nav-text">Devices</span>
   </div>
-  <!-- <div class="d-inline-block">
-    <a href="/settings">
-      <img class="nav-icon" id="settings-icon" src="/img/icons/settings-icon.png" alt="Settings">
-    </a>
-  </div> -->
 
 </div>

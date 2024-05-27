@@ -100,15 +100,26 @@ body {
   height: 60%;
 }
 
+.nav-container {
+  width: 70px;
+  height: 70px;
+}
+
 .nav-icon {
-  width: 45px;
+  width: 55px;
   height: auto;
-  padding: 2px;
 }
 
 .nav-icon-active {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
   border-radius: 20%;
+}
+
+.nav-text {
+  color: #635C51;
+  font-weight: bold;
+  position: relative;
+  top: -10px;
 }
 
 /* ---------------------------------------------------------------- */
