@@ -141,7 +141,7 @@ app.get('/main', async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   } else {
-    res.redirect('/login'); 
+    res.redirect('/'); 
   }
 });
 
