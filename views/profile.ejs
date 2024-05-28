@@ -8,7 +8,8 @@
 <!-- Styling -->
 <style>
   .container-fluid {
-    padding-bottom: 40px; 
+    padding-top:20px;
+    padding-bottom: 82px; 
   }
 </style>
 <!-- Bootstrap template with adjustments -->
@@ -16,7 +17,7 @@
 <div class="container-fluid">
   <!-- Back button -->
   <a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
-  <h1 class="text-center">User Profile</h1>
+  <h1 class="text-center mb-2 text-success" >User Profile</h1>
   
   <div class="row gutters">
     <!-- User Profile Card -->
@@ -26,6 +27,7 @@
           <div class="user-avatar">
             <img src="/img/edit-user-icon.png" alt="Logo" width="130" height="120">
           </div>
+          <br>
           <h5 class="user-id">User ID: <%= userid %></h5>
           <h5 class="user-name">Name: <%= name %></h5>
           <h5 class="user-email">Email: <%= email %></h5>
@@ -34,35 +36,39 @@
     </div>
     
     <!-- User Details and Update Form -->
-    <form action="/updateProfile" method="post">
+    <form id="updateProfileForm" action="/updateProfile" method="post">
     <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
       <div class="card h-100">
         <div class="card-body">
           <!-- Form -->
-          <h6 class="mb-2 text-success">Personal Details</h6>
+          
+          <h6 class="mb-3 text-success">Account Details</h6>
           <div class="row gutters">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="userid">User ID</label>
-                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter new user ID">
+                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter new User ID">
               </div>
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="fullName">Name</label>
                 <input type="text" name="name" class="form-control" id="fullName" placeholder="Enter new Name">
               </div>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="eMail">Email</label>
-                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter new email">
+                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter new Email">
             </div>
-              <div class="form-group">
+            <!-- Divider -->
+            <hr>
+            <h6 class="mb-3 text-success">Account Password</h6> 
+              <div class="mb-3">
                 <label for="oldPassword">Current Password</label>
-                <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Enter current password">
+                <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Enter current Password">
               </div>
-              <div class="form-group">
+              <div class="mb-3">
                 <label for="newPassword">New Password</label>
-                <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new password">
+                <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new Password">
               </div>
             </div>
           </div>
@@ -88,3 +94,10 @@
   </div>
 </div>
 <%- include('templates/footerAfterLogin') %>
+
+<script>
+  // Cancel button will reset the forms on click.
+  document.getElementById('cancel').addEventListener('click', function() {
+    document.getElementById('updateProfileForm').reset();
+  });
+</script>
