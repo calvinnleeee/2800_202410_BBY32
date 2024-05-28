@@ -1,23 +1,107 @@
 [
-  "air conditioner",
-  "clothes dryer",
-  "clothers washer",
-  "coffee maker",
-  "dehumidifier",
-  "dishwasher",
-  "computer",
-  "freezer",
-  "furnace humidifier",
-  "hair dryer",
-  "iron",
-  "lawn mower",
-  "microwave",
-  "refrigerator",
-  "tv",
-  "stereo",
-  "stove",
-  "toaster",
-  "vacuum",
-  "water cooler",
-  "water heater"
+  {
+    "name": "air conditioner",
+    "min": "1000",
+    "max": "4000"
+  },
+  {
+    "name": "clothes dryer",
+    "min": "1000",
+    "max": "4000"
+  },
+  {
+    "name": "clothes washer",
+    "min": "400",
+    "max": "800"
+  },
+  {
+    "name": "coffee maker",
+    "min": "800",
+    "max": "1400"
+  },
+  {
+    "name": "dehumidifier",
+    "min": "20",
+    "max": "30"
+  },
+  {
+    "name": "dishwasher",
+    "min": "1200",
+    "max": "1500"
+  },
+  {
+    "name": "computer",
+    "min": "150",
+    "max": "600"
+  },
+  {
+    "name": "freezer",
+    "min": "30",
+    "max": "50"
+  },
+  {
+    "name": "furnace humidifier",
+    "min": "30",
+    "max": "50"
+  },
+  {
+    "name": "hair dryer",
+    "min": "1800",
+    "max": "2500"
+  },
+  {
+    "name": "iron",
+    "min": "700",
+    "max": "1000"
+  },
+  {
+    "name": "lawn mower",
+    "min": "1000",
+    "max": "1400"
+  },
+  {
+    "name": "microwave",
+    "min": "900",
+    "max": "1800"
+  },
+  {
+    "name": "refrigerator",
+    "min": "100",
+    "max": "300"
+  },
+  {
+    "name": "tv",
+    "min": "20",
+    "max": "120"
+  },
+  {
+    "name": "stereo",
+    "min": "80",
+    "max": "120"
+  },
+  {
+    "name": "stove",
+    "min": "1500",
+    "max": "2250"
+  },
+  {
+    "name": "toaster",
+    "min": "800",
+    "max": "1800"
+  },
+  {
+    "name": "vacuum",
+    "min": "450",
+    "max": "900"
+  },
+  {
+    "name": "water cooler",
+    "min": "70",
+    "max": "100"
+  },
+  {
+    "name": "water heater",
+    "min": "70",
+    "max": "100"
+  }
 ]
