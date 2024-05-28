@@ -7,13 +7,37 @@
 
 <!-- Styling  -->
 <style>
+  #easter {
+    display: none;
+    width: 50px;
+    height: auto;
+  }
+
+
+  .spin {
+    animation: spin 2s linear infinite;
+  }
+
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+
   .btn {
     margin-right: 10px;
   }
 
+
   .card-header h5 {
     margin: 0;
   }
+
 
   .container-fluid {
     padding-top: 5px;
@@ -21,6 +45,7 @@
     z-index: -1;
   }
 </style>
+
 <!-- Main container -->
 <div class="container-fluid">
   <div class="row d-flex align-items-center justify-content-center">
