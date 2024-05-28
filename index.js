@@ -694,6 +694,19 @@ app.get('/calculateTotalKwh', async (req, res) => {
   }
 });
 
+// ------------------------------------------------------------------------------
+// redirect to aboutus.ejs
+
+app.get('/aboutus', (req, res) => {
+  if (isValidSession(req)) {
+      // If logged in, render the 'aboutus' page
+      res.render('aboutus');
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
+})
+
 // ---------------------------------------------------------------------------------
 // Log out button
 
