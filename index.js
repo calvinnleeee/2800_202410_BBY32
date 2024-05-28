@@ -112,7 +112,13 @@ app.post('/signupSubmit', async (req, res) => {
 
   // create a new user in db with the provided name, email, and password (after encrypting it)
   var hashedpw = await bcrypt.hash(pw, saltRounds);
-  await userCollection.insertOne({ userid: id, username: name, email: email, password: hashedpw });
+  await userCollection.insertOne({
+    userid: id,
+    username: name,
+    email: email,
+    password: hashedpw,
+    user_devices: [],
+  });
   // search db for a user with given userid
   const result = await userCollection.find({userid: id})
     .project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
@@ -331,8 +337,9 @@ app.get('/loadDevices', async (req, res) => {
 app.get('/devices', async (req, res) => {
   // Load the user's list of devices and store it in an array
   let userid = req.session.userid;
-  let userDevices = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
-  if (!userDevices) {
+  let userDevices = await userCollection.find({userid: userid}).project({_id: 0, user_devices: 1}).toArray();
+
+  if (!userDevices || !userDevices[0].user_devices) {
     userDevices = [];
   }
   else {

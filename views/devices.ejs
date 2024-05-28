@@ -1,10 +1,18 @@
 <%- include('templates/headerAfterLogin') %>
 
+<!-- 
+  Device page EJS.
+  Author: Calvin Lee
+  Description: Displays the list of devices that user is currently tracking, and buttons
+    for adding, removing, and editing a device. 
+ -->
+
 <a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
 
+<!-- Header for the page -->
 <h1 class="text-center my-3">Your devices</h1>
 <p class="mx-4">
-  Use this page to see what electronic devices, appliances, and vehicles you are currently tracking.
+  Use this page to see what electronic devices and appliances you are currently tracking.
 </p>
 
 <div class="container text-center mt-4">
@@ -12,7 +20,7 @@
     data-bs-toggle="modal" data-bs-target="#addDevice">Add new device</button>
 </div>
 
-
+<!-- Table for the devices -->
 <div class="table-container container px-0">
 
   <table class="table">
@@ -26,7 +34,7 @@
       </tr>
     </thead>
 
-    <tbody id="device-table">
+    <tbody id="device-table" style="overflow-y: scroll;">
     <!-- use EJS and pass in an array of devices from the server to populate this section -->
     <!-- generating fake information for now -->
 
