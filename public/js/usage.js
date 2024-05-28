@@ -33,7 +33,7 @@ function drawMaterial() {
             minValue: 0,
             format: '# kWh',
             gridlines: {
-                count: 4
+                count: 3
             },
             textStyle: {
                 fontSize: 13
