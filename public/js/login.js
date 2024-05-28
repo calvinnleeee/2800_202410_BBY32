@@ -92,7 +92,6 @@ else if (sessionStorage.getItem("prev") == "login") {
   // If there is an error, display a meaningful message to the user depending on the error
   if (validationResult.error != null) {
     var errorMsg = validationResult.error.details[0].message;
-    console.log(errorMsg);
     displayError(errorMsg, "signupError");
   }
 
