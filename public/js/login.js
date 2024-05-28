@@ -82,7 +82,7 @@ else if (sessionStorage.getItem("prev") == "login") {
   // Joi validation
   const schema = Joi.object({
     ID:     Joi.string().min(6).max(20).pattern(new RegExp(`^[a-zA-Z0-9_-]+$`)).required(),
-    name:   Joi.string().max(30).pattern(new RegExp(`^[a-zA-Z]+$`)).required(),
+    name:   Joi.string().max(30).trim().pattern(new RegExp(`^[a-zA-Z]+ ?[a-zA-Z]+$]+$`)).required(),
     email:  Joi.string().email({
       minDomainSegments: 2, tlds: { allow: ['com', 'org', 'net', 'ca']}}).required(),
     pw:     Joi.string().min(6).max(20).pattern(new RegExp(`^\\S+$`)).required()
