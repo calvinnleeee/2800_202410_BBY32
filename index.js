@@ -1,7 +1,10 @@
 /*
-  Index.js, server-side code for 2800 project.
-  Authors: Anna Dao, Brian Diep, Calvin Lee, Ethan Nguyen
+Test file for mockup landing page for 2800 project.
+
 */
+
+// .env files for local testing
+require('dotenv').config();
 
 // Requires, express setup
 const express = require('express');
@@ -13,13 +16,11 @@ const MongoStore = require('connect-mongo');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Setup for EJS and directory routing
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({extended: false}));
 
-// .env / secrets setup
-require('dotenv').config();
+// Env file / Secrets setup
 const mongodb_host = process.env.MONGODB_HOST;
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -30,19 +31,22 @@ const google_client_id = process.env.GOOGLE_CLIENT_ID;
 const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
 const google_refresh_token = process.env.GOOGLE_REFRESH_TOKEN;
 const google_user = process.env.GOOGLE_USER;
+// const accessToken = process.env.GOOGLE_ACCESS_TOKEN;
 
-// MongoDB connection setup
+// MongoDB setup (maybe move out and use an include to reduce clutter?)
 const MongoClient = require("mongodb").MongoClient;
 const atlasURI = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true`;
 var database = new MongoClient(atlasURI);
 const userCollection = database.db(mongodb_database).collection('users');
 var mongoStore = MongoStore.create({
 	mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
-	crypto: { secret: mongodb_session_secret }
+	crypto: {
+		secret: mongodb_session_secret
+	}
 });
 
-// BCrypt password hashing, number of salt rounds to use
-const saltRounds = 12;
+// Other required variable setup
+const saltRounds = 12;    // used for bcrypt password hashing
 
 // Cookies for sessions
 const expireTime = 1000 * 60 * 60;  // 1 hour
@@ -53,8 +57,12 @@ app.use(session({
   resave: true
 }));
 
-// Use middlware functions for checking valid session and setting up header/footers
-app.use('/', isValidSession);
+// Check if user's session is valid
+function isValidSession(req) {
+	return req.session.authenticated === true;
+}
+
+// Set up navbars for pages after login
 app.use('/', setupNav);
 
 // ---------------------------------------------------------------------------------
@@ -66,6 +74,11 @@ app.use('/', setupNav);
   Description: The main page for the root URL.
 */
 app.get('/', (req, res) => {
+  // redirect if there is already a valid session
+  if (isValidSession(req)) {
+    res.redirect('/main');
+    return;
+  }
   res.render('index');
   return;
 });
@@ -81,50 +94,54 @@ app.get('/', (req, res) => {
 */
 
 app.get('/main', async (req, res) => {
-  let name = req.session.name;
-  let email = req.session.email;
+  if (isValidSession(req)) {
+    let name = req.session.name;
+    let email = req.session.email;
 
-  try {
-    // Retrieve the user's document from the collection
-    const user = await userCollection.findOne({ email: email });
+    try {
+      // Retrieve the user's document from the collection
+      const user = await userCollection.findOne({ email: email });
 
-    // Check if the user exists
-    if (!user) {
-      res.status(404).send("User not found");
-      return;
+      // Check if the user exists
+      if (!user) {
+        res.status(404).send("User not found");
+        return;
+      }
+
+      // Extract the user_devices array from the user doc
+      const userDevices = user.user_devices;
+
+      if (userDevices && userDevices.length > 0) {
+        // If the user has devices, calculate total kWh
+        let totalKwh = 0;
+        userDevices.forEach(device => {
+          if (device.usage) {
+            const kWh = parseInt(device.kWh);
+            const usage = parseInt(device.usage);
+            totalKwh += kWh * usage;
+          } else {
+            const kWh = parseInt(device.kWh);
+            totalKwh += kWh;
+          }
+        });
+
+        // Calculate total cost
+        // $0.114 is 11.4 cents 
+        const costPerKwh = 0.114; 
+        const totalCost = totalKwh * costPerKwh;
+
+        // Render the main page with the total kWh and total cost
+        res.render('main', { name: name, totalKwh: totalKwh, totalCost: totalCost });
+      } else {
+        // If the user doesn't have devices, render the main page with a "Get started" message
+        res.render('main', { name: name, message: "Get started by adding your devices!", devicesLink: "/devices" });
+      }
+    } catch (error) {
+      console.error("Error retrieving user data:", error);
+      res.status(500).send("Internal Server Error");
     }
-
-    // Extract the user_devices array from the user doc
-    const userDevices = user.user_devices;
-
-    if (userDevices && userDevices.length > 0) {
-      // If the user has devices, calculate total kWh
-      let totalKwh = 0;
-      userDevices.forEach(device => {
-        if (device.usage) {
-          const kWh = parseInt(device.kWh);
-          const usage = parseInt(device.usage);
-          totalKwh += kWh * usage;
-        } else {
-          const kWh = parseInt(device.kWh);
-          totalKwh += kWh;
-        }
-      });
-
-      // Calculate total cost
-      // $0.114 is 11.4 cents 
-      const costPerKwh = 0.114; 
-      const totalCost = totalKwh * costPerKwh;
-
-      // Render the main page with the total kWh and total cost
-      res.render('main', { name: name, totalKwh: totalKwh, totalCost: totalCost });
-    } else {
-      // If the user doesn't have devices, render the main page with a "Get started" message
-      res.render('main', { name: name, message: "Get started by adding your devices!", devicesLink: "/devices" });
-    }
-  } catch (error) {
-    console.error("Error retrieving user data:", error);
-    res.status(500).send("Internal Server Error");
+  } else {
+    res.redirect('/'); 
   }
 });
 
@@ -294,10 +311,16 @@ app.post('/forgotSubmit', async (req, res) => {
     valid session. Redirect to the login page if there's no existing session.
 */
 app.get('/main', (req, res) => {
-  let name = req.session.name;
-  // If user is logged in, render the 'index' page for welcome message
-  res.render('main', {name: name});
-  return;
+  if (isValidSession(req)) {
+		let name = req.session.name;
+		// If user is logged in, render the 'index' page for welcome message
+    res.render('main', {name: name});
+    return;
+  }
+  else {
+    res.redirect('/');
+    return;
+  }
 });
 
 
@@ -448,9 +471,16 @@ app.get('/profile', (req, res) => {
   let name = req.session.name;
   let userid = req.session.userid;
   let email = req.session.email;
-
-  res.render('profile', { name: name, userid: userid, email: email });
-  return;
+  if (isValidSession(req)) {
+      // If logged in, render the 'profile' page
+      res.render('profile', { name: name, userid: userid, email: email });
+      return;
+  }
+  else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login');
+      return;
+  }
 });
 
 // ---------------------------------------------------------------------------------
@@ -573,7 +603,11 @@ if (!errorMessage) {
 // Dashboard button
 
 app.get('/dashboard', async (req, res) => {
-  res.render('dashboard');
+    if (isValidSession(req)) {
+      res.render('dashboard');
+    } else {
+      res.redirect('/login');
+    }
 });
 
 // ---------------------------------------------------------------------------------
@@ -595,8 +629,13 @@ app.get('/dashboardDevices', async (req, res) => {
 // Home button
 
 app.get('/main', (req, res) => {
-  res.render('main');
-  return;
+  if (isValidSession(req)) {
+      // If logged in, render the 'profile' page
+      res.render('main');
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
 })
 
 // ---------------------------------------------------------------------------------
@@ -610,6 +649,11 @@ app.get('/main', (req, res) => {
 
 app.get('/calculateTotalKwh', async (req, res) => {
   let email = req.session.email;
+  // Ensure the user is logged in
+  if (!isValidSession(req)) {
+    res.redirect('/'); // Redirect to the home page if not logged in
+    return;
+  }
 
   try {
     // Retrieve the user's document from the collection
@@ -633,8 +677,7 @@ app.get('/calculateTotalKwh', async (req, res) => {
         //it has usage?? but disapearred lol
         const usage = parseInt(device.usage);
         totalKwh += kWh * usage;
-      }
-      else {
+      } else {
         const kWh = parseInt(device.kWh);
         totalKwh += kWh;
       }
@@ -645,8 +688,7 @@ app.get('/calculateTotalKwh', async (req, res) => {
 
     // Send the total kWh to the client 
     res.json({ totalKwh }); 
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error calculating total kWh:", error);
     res.status(500).send("Internal Server Error");
   }
@@ -680,17 +722,6 @@ app.listen(port, () => {
 
 // ---------------------------------------------------------------------------------
 // Middleware
-
-// Check if user's session is valid
-function isValidSession(req) {
-  if (req.session.authenticated) {
-    next();
-  }
-  else {
-    res.render('index');
-    return;
-  }
-}
 
 function setupNav(req, res, next) {
   app.locals.currentPage = req.path;
