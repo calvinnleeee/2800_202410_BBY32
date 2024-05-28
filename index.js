@@ -331,7 +331,7 @@ app.get('/main', (req, res) => {
 */
 app.get('/loadDevices', async (req, res) => {
   const deviceCollection = database.db("devices").collection('appliances');
-  const data = await deviceCollection.find({}).project({_id: 0, name: 1, kWh: 1}).toArray();
+  const data = await deviceCollection.find({}).project({_id: 0, name: 1, min: 1, max: 1}).toArray();
 
   res.json(data);
   return;
@@ -728,3 +728,26 @@ function setupNav(req, res, next) {
   // console.log(req.path)
   next();
 }
+
+
+// ---------------------------------------------------------------------------------
+// Database things
+
+/*
+  Author: Calvin Lee
+  Description: This function is used to populate the list of devices in the MongoDB database.
+    It updates the current items by searching for their name, and updating their values 
+*/
+// let deviceData = require("./public/json/devices.json");
+async function updateDatabase() {
+  // console.log(deviceData);
+  const deviceCollection = database.db('devices').collection('appliances');
+
+  for (let i = 0; i < deviceData.length; i++) {
+    console.log(deviceData[i]);
+    let result = await deviceCollection.insertOne(deviceData[i]);
+    console.log("added");
+  }
+
+}
+// updateDatabase();
