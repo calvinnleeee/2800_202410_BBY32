@@ -519,6 +519,14 @@ app.post('/updateProfile', async (req, res) => {
   console.log('New Password:', newPw);
   console.log('---------------------');
 
+  // Regex to check for whitespace
+  const noWhitespaceRegex = /^\S*$/;
+  // Check new UserID for whitespace
+  if (newUserId && !noWhitespaceRegex.test(newUserId)) {
+    errorMessage = 'User ID must not contain whitespace';
+    return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+  }
+
   // Update password if new password is provided
   if (newPw) {
     let email = req.session.email;
