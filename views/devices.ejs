@@ -1,23 +1,31 @@
 <%- include('templates/headerAfterLogin') %>
 
+<!-- 
+  Device page EJS.
+  Author: Calvin Lee
+  Description: Displays the list of devices that user is currently tracking, and buttons
+    for adding, removing, and editing a device. 
+ -->
+
 <a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
 
+<!-- Header for the page -->
 <h1 class="text-center my-3">Your devices</h1>
 <p class="mx-4">
-  Use this page to see what electronic devices, appliances, and vehicles you are currently tracking.
+  Use this page to see what electronic devices and appliances you are currently tracking.
 </p>
 
-<div class="container text-center mt-4">
+<div class="container text-center mt-4 mb-2">
   <button class="btn btn-md btn-success" id="device-add" type="submit" value="Add device"
     data-bs-toggle="modal" data-bs-target="#addDevice">Add new device</button>
 </div>
 
-
+<!-- Table for the devices -->
 <div class="table-container container px-0">
 
   <table class="table">
 
-    <thead>
+    <thead style="position: sticky; top: 0;">
       <tr>
         <th scope="col" id="table-kwh" class="px-0 mx-0 d-flex align-items-end"><img class="device-icon" src="/img/icons/electricity-icon.png">kWh/day</th>
         <th scope="col" colspan="2">Name of device</th>
@@ -26,10 +34,8 @@
       </tr>
     </thead>
 
-    <tbody id="device-table">
+    <tbody id="device-table" style="overflow-y: scroll;">
     <!-- use EJS and pass in an array of devices from the server to populate this section -->
-    <!-- generating fake information for now -->
-
     <% for (let i = 0; i < deviceList.length; i++) { %>
       <tr>
         <th scope="row" class="text-center"><%= deviceList[i].kWh %></th>
@@ -55,6 +61,7 @@
 
 
 <!-- Modal component for the add device button -->
+<!-- Contains a carousel to swap back and forth between help text and add device form -->
 <div class="modal fade" id="addDevice" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -131,37 +138,6 @@
   </div>
 </div>
 
-<!-- Modal component for the help button -->
-<div class="modal fade" id="helpText" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Device wattage</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Help text here -->
-        <p>
-          The wattage is the amount of energy your device consumes over a period of time.
-          Multiplying it with the 24 hours per day and dividing by 1000 will give you kWh
-           (kiloWatt-hours), which measures the amount of energy used by the device per day.
-        </p>
-        <p>
-          To find the wattage of your device, look for the information labels that are usually
-          placed on the back of the device.
-        </p>
-        <p>
-          If you cannot find the label, search online for the estimated wattage of your device
-          and it will be enough for this app.
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Modal component for the edit device button -->
 <div class="modal fade" id="deviceEdit" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
@@ -196,7 +172,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Edit device text input here -->
+        <!-- Delete confirmation message -->
         <p>Are you sure you want to delete this device?</p>
         <p>Warning: You will lose all associated data/history associated with this device.</p>
       </div>
@@ -208,6 +184,7 @@
   </div>
 </div>
 
+<!-- Scripts for page functionality and browser-side Joi -->
 <script src="https://cdn.jsdelivr.net/npm/joi@17.13.1/dist/joi-browser.min.js"></script>
 <script src="/js/devices.js"></script>
 
