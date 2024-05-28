@@ -18,7 +18,7 @@ const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 // Env file / Secrets setup
 const mongodb_host = process.env.MONGODB_HOST;
@@ -39,10 +39,10 @@ const atlasURI = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_ho
 var database = new MongoClient(atlasURI);
 const userCollection = database.db(mongodb_database).collection('users');
 var mongoStore = MongoStore.create({
-	mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
-	crypto: {
-		secret: mongodb_session_secret
-	}
+  mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
+  crypto: {
+    secret: mongodb_session_secret
+  }
 });
 
 // Other required variable setup
@@ -50,16 +50,16 @@ const saltRounds = 12;    // used for bcrypt password hashing
 
 // Cookies for sessions
 const expireTime = 1000 * 60 * 60;  // 1 hour
-app.use(session({ 
+app.use(session({
   secret: node_session_secret,
   store: mongoStore,
-  saveUninitialized: false, 
+  saveUninitialized: false,
   resave: true
 }));
 
 // Check if user's session is valid
 function isValidSession(req) {
-	return req.session.authenticated === true;
+  return req.session.authenticated === true;
 }
 
 // Set up navbars for pages after login
@@ -127,7 +127,7 @@ app.get('/main', async (req, res) => {
 
         // Calculate total cost
         // $0.114 is 11.4 cents 
-        const costPerKwh = 0.114; 
+        const costPerKwh = 0.114;
         const totalCost = totalKwh * costPerKwh;
 
         // Render the main page with the total kWh and total cost
@@ -141,7 +141,7 @@ app.get('/main', async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   } else {
-    res.redirect('/'); 
+    res.redirect('/');
   }
 });
 
@@ -162,14 +162,14 @@ app.post('/signupSubmit', async (req, res) => {
 
   // Joi validation done on browser side, move on to next step
   // verify that email and id do not already exist in the database, fail if it does
-  const emailExists = (await userCollection.countDocuments({email: email})) > 0 ? true : false;
-  const idExists = (await userCollection.countDocuments({userid: id})) > 0 ? true : false;
+  const emailExists = (await userCollection.countDocuments({ email: email })) > 0 ? true : false;
+  const idExists = (await userCollection.countDocuments({ userid: id })) > 0 ? true : false;
   if (emailExists) {
-    res.render("signupError", {err: "email"});
+    res.render("signupError", { err: "email" });
     return;
   }
   else if (idExists) {
-    res.render("signupError", {err: "ID"});
+    res.render("signupError", { err: "ID" });
     return;
   }
 
@@ -177,7 +177,7 @@ app.post('/signupSubmit', async (req, res) => {
   var hashedpw = await bcrypt.hash(pw, saltRounds);
   await userCollection.insertOne({ userid: id, username: name, email: email, password: hashedpw });
   // search db for a user with given userid
-  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
+  const result = await userCollection.find({ userid: id }).project({ username: 1, password: 1, email: 1, userid: 1, }).toArray();
 
   // create a session for the user and log them in
   req.session.authenticated = true;
@@ -205,7 +205,7 @@ app.post('/loginSubmit', async (req, res) => {
   let pw = req.body.password;
 
   // search db for a user with given userid
-  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
+  const result = await userCollection.find({ userid: id }).project({ username: 1, password: 1, email: 1, userid: 1, }).toArray();
 
   // if no user was found
   if (result.length != 1) {
@@ -240,12 +240,12 @@ app.post('/forgotSubmit', async (req, res) => {
   let email = req.body.email;
 
   // search the db to see if a user with the provided email exists
-  const result = await userCollection.find({email: email}).project({userid: 1}).toArray();
+  const result = await userCollection.find({ email: email }).project({ userid: 1 }).toArray();
 
   // if a user was found, reset their password and send them an email
   if (result.length == 1) {
     let userid = result[0].userid;
-    
+
     // generate a random 6-character password
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let newPw = '';
@@ -254,15 +254,15 @@ app.post('/forgotSubmit', async (req, res) => {
     }
     console.log("The new password is '" + newPw + "'");
     let hashedPw = await bcrypt.hash(newPw, saltRounds);
-    userCollection.updateOne({email: email}, {$set: {password: hashedPw}});
+    userCollection.updateOne({ email: email }, { $set: { password: hashedPw } });
 
     // this section done with help from video in COMP2800 tech gems (https://youtu.be/18qA61bpfUs)
     const nodemailer = require("nodemailer");
     const { google } = require("googleapis");
     const OAuth2 = google.auth.OAuth2;
-    
+
     const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
-    OAuth2_client.setCredentials({refresh_token: `${google_refresh_token}`});
+    OAuth2_client.setCredentials({ refresh_token: `${google_refresh_token}` });
     let accessToken = await OAuth2_client.getAccessToken();
 
     let transport = nodemailer.createTransport({
@@ -312,9 +312,9 @@ app.post('/forgotSubmit', async (req, res) => {
 */
 app.get('/main', (req, res) => {
   if (isValidSession(req)) {
-		let name = req.session.name;
-		// If user is logged in, render the 'index' page for welcome message
-    res.render('main', {name: name});
+    let name = req.session.name;
+    // If user is logged in, render the 'index' page for welcome message
+    res.render('main', { name: name });
     return;
   }
   else {
@@ -331,7 +331,7 @@ app.get('/main', (req, res) => {
 */
 app.get('/loadDevices', async (req, res) => {
   const deviceCollection = database.db("devices").collection('appliances');
-  const data = await deviceCollection.find({}).project({_id: 0, name: 1, min: 1, max: 1}).toArray();
+  const data = await deviceCollection.find({}).project({ _id: 0, name: 1, min: 1, max: 1 }).toArray();
 
   res.json(data);
   return;
@@ -347,12 +347,12 @@ app.get('/loadDevices', async (req, res) => {
 app.get('/devices', async (req, res) => {
   // load the user's list of devices and store it in an array
   let userid = req.session.userid;
-  let userDevices = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  let userDevices = await userCollection.find({ userid: userid }).project({ user_devices: 1 }).toArray();
   userDevices = userDevices[0].user_devices;
 
   if (!userDevices) userDevices = [];
-  
-  res.render('devices', {deviceList: userDevices});
+
+  res.render('devices', { deviceList: userDevices });
   return;
 });
 
@@ -368,7 +368,7 @@ app.get('/addDevice', async (req, res) => {
   let userid = req.session.userid;
 
   // get the user's current list of devices
-  let prevDeviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  let prevDeviceList = await userCollection.find({ userid: userid }).project({ user_devices: 1 }).toArray();
   if (prevDeviceList.length < 1) {
     prevDeviceList = undefined;
   }
@@ -379,14 +379,14 @@ app.get('/addDevice', async (req, res) => {
   let newDeviceList = [];
   // if the user has no previous list of devices
   if (!prevDeviceList) {
-    newDeviceList = [ {name: newName, kWh: newKWH} ];
+    newDeviceList = [{ name: newName, kWh: newKWH }];
   }
   // if a previous list exists
   else {
-    newDeviceList = prevDeviceList.concat( {name: newName, kWh: newKWH} );
+    newDeviceList = prevDeviceList.concat({ name: newName, kWh: newKWH });
   }
 
-  await userCollection.updateOne({userid: userid}, {$set: {user_devices: newDeviceList}});
+  await userCollection.updateOne({ userid: userid }, { $set: { user_devices: newDeviceList } });
 
   res.redirect('/devices');
   return;
@@ -405,7 +405,7 @@ app.get('/editDevice', async (req, res) => {
 
   // find the index of the device in the previous array
   // editing means array already exists, don't need to handle the user_devices array not existing
-  let deviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  let deviceList = await userCollection.find({ userid: userid }).project({ user_devices: 1 }).toArray();
   deviceList = deviceList[0].user_devices;
   let deviceIndex = undefined;
   for (let i = 0; i < deviceList.length; i++) {
@@ -416,7 +416,7 @@ app.get('/editDevice', async (req, res) => {
 
   // update the device to the new kWh rating and push it to the database
   deviceList[deviceIndex] = { name: deviceName, kWh: newKWH };
-  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+  await userCollection.updateOne({ userid: userid }, { $set: { user_devices: deviceList } });
 
   res.redirect('/devices');
   return;
@@ -435,7 +435,7 @@ app.get('/deleteDevice', async (req, res) => {
 
   // find the index of the device in the previous array
   // deleting means array already exists, don't need to handle the user_devices array not existing
-  let deviceList = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
+  let deviceList = await userCollection.find({ userid: userid }).project({ user_devices: 1 }).toArray();
   deviceList = deviceList[0].user_devices;
   let deviceIndex = undefined;
   for (let i = 0; i < deviceList.length; i++) {
@@ -446,7 +446,7 @@ app.get('/deleteDevice', async (req, res) => {
 
   // remove the device from the array and push it back to the database
   deviceList = deviceList.toSpliced(deviceIndex, 1);
-  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+  await userCollection.updateOne({ userid: userid }, { $set: { user_devices: deviceList } });
 
   res.redirect('/devices');
   return;
@@ -472,14 +472,14 @@ app.get('/profile', (req, res) => {
   let userid = req.session.userid;
   let email = req.session.email;
   if (isValidSession(req)) {
-      // If logged in, render the 'profile' page
-      res.render('profile', { name: name, userid: userid, email: email });
-      return;
+    // If logged in, render the 'profile' page
+    res.render('profile', { name: name, userid: userid, email: email });
+    return;
   }
   else {
-      // If not logged in, redirect to the login page
-      res.redirect('/login');
-      return;
+    // If not logged in, redirect to the login page
+    res.redirect('/login');
+    return;
   }
 });
 
@@ -489,8 +489,8 @@ app.get('/profile', (req, res) => {
   Profile Update
   Author: Brian Diep
   Description: Update the profile userID, name, email and password. Will handle errors for
-  UserID and Email already in use/taken, wrong current password, new password cannot be the same, and joi validation with the approriate mesages.
-  Succesful changes will display "Succesfully updated".
+  UserID and Email already in use/taken, wrong current password, new password cannot be the same, and form validation with the approriate mesages.
+  Succesful changes will display "[Info] succesfully updated".
 */
 
 app.post('/updateProfile', async (req, res) => {
@@ -519,6 +519,63 @@ app.post('/updateProfile', async (req, res) => {
   console.log('New Password:', newPw);
   console.log('---------------------');
 
+  // Update password if new password is provided
+  if (newPw) {
+    let email = req.session.email;
+    const user = await userCollection.findOne({ email: email });
+
+    // If user exists and old password matches the stored password
+    if (user && await bcrypt.compare(oldPw, user.password)) {
+      console.log('User Password:', user.password); // Log the hashed password from the database
+
+      // Check if the new password is the same as the old password
+      if (await bcrypt.compare(newPw, user.password)) {
+        errorMessage = 'The new password cannot be the same as the old password.';
+        return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
+      }
+
+      // Hash the new password
+      const hashedNewPassword = await bcrypt.hash(newPw, saltRounds);
+      console.log('Hashed New Password:', hashedNewPassword); // Log the hashed new password
+
+      // Update the user's password in the database
+      await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
+      successMessage += 'Password succesfully updated! ';
+    } else {
+      errorMessage = 'Current password is incorrect.';
+      return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
+    }
+  }
+
+  // Update name if new name is provided
+  if (newName) {
+    await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
+    // Update the session with the new name
+    req.session.name = newName;
+    successMessage += 'Name succesfully updated! ';
+  }
+
+  // Update email if new email is provided
+  // Check if a new email is provided and doesn't already exist
+  if (newEmail) {
+    const emailExists = await userCollection.countDocuments({ email: newEmail }) > 0;
+    if (!emailExists) {
+      await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
+      req.session.email = newEmail;
+      successMessage += 'Email succesfully updated! ';
+    } else {
+      const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
+      const errorMessage = "An account is already associated with this E-mail";
+      res.render('profile', {
+        errorMessage: errorMessage,
+        userid: oldUserId,
+        name: oldName,
+        email: oldEmail,
+      });
+      return;
+    }
+  }
+
   // Regex to check for whitespace
   const noWhitespaceRegex = /^\S*$/;
   // Check new UserID for whitespace
@@ -527,95 +584,38 @@ app.post('/updateProfile', async (req, res) => {
     return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
   }
 
-  // Update password if new password is provided
-  if (newPw) {
-    let email = req.session.email;
-    const user = await userCollection.findOne({ email: email });
-
-    // If user exists and old password matches the stored password
-    if (user && await bcrypt.compare(oldPw, user.password)) {
-        console.log('User Password:', user.password); // Log the hashed password from the database
-
-        // Check if the new password is the same as the old password
-        if (await bcrypt.compare(newPw, user.password)) {
-            errorMessage = 'The new password cannot be the same as the old password.';
-            return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
-        }
-
-        // Hash the new password
-        const hashedNewPassword = await bcrypt.hash(newPw, saltRounds);
-        console.log('Hashed New Password:', hashedNewPassword); // Log the hashed new password
-
-        // Update the user's password in the database
-        await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
-        successMessage += 'Succesfully updated! ';
-    } else {
-        errorMessage = 'Current password is incorrect.';
-        return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
-    }
-}
-
-  // Update name if new name is provided
-  if (newName) {
-      await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
-      // Update the session with the new name
-      req.session.name = newName;
-      successMessage += 'Succesfully updated! ';
-  }
-
-  // Update email if new email is provided
-  // Check if a new email is provided and doesn't already exist
-  if (newEmail) {
-    const emailExists = await userCollection.countDocuments({ email: newEmail }) > 0;
-    if (!emailExists) {
-        await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
-        req.session.email = newEmail;
-        successMessage += 'Succesfully updated! ';
-    } else {
-        const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-        const errorMessage = "An account is already associated with this E-mail";
-        res.render('profile', {
-            errorMessage: errorMessage,
-            userid: oldUserId, 
-            name: oldName, 
-            email: oldEmail, 
-        });
-        return;
-    }
-}
-
-// Check if the new user ID already exists
-const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
-if (newUserId && !idExists) {
+  // Check if the new user ID already exists
+  const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
+  if (newUserId && !idExists) {
     await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
     req.session.userid = newUserId;
-    successMessage += 'Succesfully updated! ';
-} else if (newUserId && idExists) {
+    successMessage += 'User ID succesfully updated! ';
+  } else if (newUserId && idExists) {
     const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
     const errorMessage = "An account is already associated with this User ID";
     res.render('profile', {
-        errorMessage: errorMessage,
-        userid: oldUserId, 
-        name: oldName, 
-        email: oldEmail, 
+      errorMessage: errorMessage,
+      userid: oldUserId,
+      name: oldName,
+      email: oldEmail,
     });
     return;
-}
+  }
 
-if (!errorMessage) {
-  res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
-}
+  if (!errorMessage) {
+    res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
+  }
 });
 
 // ---------------------------------------------------------------------------------
 // Dashboard button
 
 app.get('/dashboard', async (req, res) => {
-    if (isValidSession(req)) {
-      res.render('dashboard');
-    } else {
-      res.redirect('/login');
-    }
+  if (isValidSession(req)) {
+    res.render('dashboard');
+  } else {
+    res.redirect('/login');
+  }
 });
 
 // ---------------------------------------------------------------------------------
@@ -638,11 +638,11 @@ app.get('/dashboardDevices', async (req, res) => {
 
 app.get('/main', (req, res) => {
   if (isValidSession(req)) {
-      // If logged in, render the 'profile' page
-      res.render('main');
+    // If logged in, render the 'profile' page
+    res.render('main');
   } else {
-      // If not logged in, redirect to the login page
-      res.redirect('/login'); 
+    // If not logged in, redirect to the login page
+    res.redirect('/login');
   }
 })
 
@@ -695,7 +695,7 @@ app.get('/calculateTotalKwh', async (req, res) => {
     console.log("Total kWh:", totalKwh);
 
     // Send the total kWh to the client 
-    res.json({ totalKwh }); 
+    res.json({ totalKwh });
   } catch (error) {
     console.error("Error calculating total kWh:", error);
     res.status(500).send("Internal Server Error");
