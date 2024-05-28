@@ -13,16 +13,16 @@
 </div>
 
 
-<div class="table-container container mt-3 pt-3">
+<div class="table-container container px-0">
 
   <table class="table">
 
     <thead>
       <tr>
-        <th scope="col" id="table-kwh"><img class="device-icon" src="/img/icons/electricity-icon.png">(kWh)</th>
+        <th scope="col" id="table-kwh" class="px-0 mx-0 d-flex align-items-end"><img class="device-icon" src="/img/icons/electricity-icon.png">kWh/day</th>
         <th scope="col" colspan="2">Name of device</th>
         <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col" style="width: 22vw;"></th>
       </tr>
     </thead>
 
@@ -32,14 +32,14 @@
 
     <% for (let i = 0; i < deviceList.length; i++) { %>
       <tr>
-        <th scope="row"><%= deviceList[i].kWh %></th>
+        <th scope="row" class="text-center"><%= deviceList[i].kWh %></th>
         <td colspan="3"><%= deviceList[i].name %></td>
         <td data-device="<%= deviceList[i].name %>" data-kwh="<%= deviceList[i].kWh %>">
           <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
             <img class="edit-delete device-icon mx-1" src="/img/icons/settings-dropdown.png"
                  data-device="<%= deviceList[i].name %>" data-kwh="<%= deviceList[i].kWh %>">
           </a>
-          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
+          <a style="margin-left: 3px;" data-bs-toggle="modal" data-bs-target="#deviceDelete">
             <img class="edit-delete device-icon" src="/img/icons/delete-icon.png"
                  data-device="<%= deviceList[i].name %>" data-kwh="<%= deviceList[i].kWh %>">
           </a>
@@ -98,16 +98,16 @@
                   </div>
                 </div>
                 
-                <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
+                <label class="mb-1 mt-3" for="deviceWattage">Device wattage (W):</label><br/>
                 <div class="form-input">
                   <input class="form-textbox" type="number" id="deviceWattage" name="deviceWattage"
-                        placeholder="Units in kW"><br/>
+                        placeholder="Units in watts"><br/>
                 </div>
       
-                <label class="mb-1 mt-3" for="deviceUsage">Device usage:</label><br/>
+                <label class="mb-1 mt-3" for="deviceUsage">Device usage (hours):</label><br/>
                 <div class="form-input">
                   <input class="mb-4 form-textbox" type="number" id="deviceUsage" name="deviceUsage"
-                        placeholder="Time used per day in hours"><br/>
+                        placeholder="Time used per day"><br/>
                 </div>
                 <p style="font-size: 10pt; color: gray;">
                   (Enter 0 in both wattage and usage if you are unsure. We'll give you an average based on your province's average usage of that device.)

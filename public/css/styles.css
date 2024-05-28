@@ -92,6 +92,11 @@ body {
   margin-right: 10px; 
 }
 
+#costs_chart_div {
+    width: 100%;
+    height: 100%;
+}
+
 /* ---------------------------------------------------------------- */
 /* Navigation icons */
 

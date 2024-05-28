@@ -1,4 +1,4 @@
-// Taken from google Charts
+//Google charts
 google.charts.load('current', { packages: ['corechart', 'bar'] });
 google.charts.setOnLoadCallback(drawMaterial);
 
@@ -7,25 +7,62 @@ function drawMaterial() {
     var totalCost = parseFloat(document.getElementById('totalCost').value);
 
     // Average cost in dollars (from the average user)
-    var averageCost = 114;
+    var averageCost = 113;
+    totalCost *= 30;
 
     var data = google.visualization.arrayToDataTable([
-        ['', 'You', 'Average User'],
-        ['CDN', '$ '+ totalCost, '$ '+ averageCost],
+        ['', 'You', 'Average User',],
+        ['CDN', totalCost, averageCost],
     ]);
+
+    // Formatter
+    var formatter = new google.visualization.NumberFormat({
+        prefix: '$',
+        fractionDigits: 2
+    });
+
+    // Fomatter
+    formatter.format(data, 1); // "You"
+    formatter.format(data, 2); // "Average User"
 
     var materialOptions = {
         chart: {
-            title: 'Costs'
+            position: 'top',
+            title: 'Estimated Monthly Projected Costs',
+            titleTextStyle: {
+                fontSize: 18,
+                bold: true
+            }
         },
         hAxis: {
-            title: '',
+            title: 'Monthly Projected Costs',
+            titleTextStyle: {
+                fontSize: 14,
+                bold: true
+            },
             minValue: 0,
+            format: 'currency',
+            gridlines: {
+                count: 4
+            },
+            textStyle: {
+                fontSize: 12
+            },
         },
         bars: 'horizontal',
+        series: {
+            0: { color: '#519E5C' },  // 'You'
+            1: { color: '#90C2E7' }   // 'Average User'
+        },
+        legend: {
+            position: 'top',
+            textStyle: {
+                fontSize: 14
+            }
+        },
     };
 
-    var materialChart = new google.charts.Bar(document.getElementById('costs_chart_div'));
+    var materialChart = new google.visualization.BarChart(document.getElementById('costs_chart_div'));
     materialChart.draw(data, google.charts.Bar.convertOptions(materialOptions));
 
     // Comparing savings
@@ -49,11 +86,11 @@ function drawMaterial() {
     // Display savings message
     var message = "";
     if (savings > 0) {
-        message = `Great work! You've currently saving $${savings.toFixed(2)} more than the average user, which would have been ${comparison}, 30 years ago.`;
+        message = `Great work! If you keep this up, you'll be on track to save $${savings.toFixed(2)} more than the average user, which would have been ${comparison}, 30 years ago.`;
     } else if (savings === 0) {
         message = "You've spent the same amount as the average user. Try to reduce the use of your devices to save!";
     } else {
-        message = `You've spent $${(-savings).toFixed(2)} more than the average user but no worries, its a learning process!`;
+        message = `You'll be on track to spend $${(-savings).toFixed(2)} more than the average user but no worries, its a learning process!`;
     }
 
     document.getElementById('savings_message').innerText = message;
