@@ -302,7 +302,8 @@ app.get('/main', async (req, res) => {
           message: "Get started by adding your devices!", devicesLink: "/devices"
         });
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error("Error retrieving user data:", error);
       res.status(500).send("Internal Server Error");
     }
@@ -596,12 +597,12 @@ app.post('/updateProfile', async (req, res) => {
 // Dashboard button
 
 app.get('/dashboard', async (req, res) => {
-    if (isValidSession(req)) {
-      res.render('dashboard');
-    }
-    else {
-      res.redirect('/login');
-    }
+  if (isValidSession(req)) {
+    res.render('dashboard');
+  }
+  else {
+    res.redirect('/login');
+  }
 });
 
 
@@ -700,11 +701,11 @@ app.get('/calculateTotalKwh', async (req, res) => {
 
 app.get('/aboutus', (req, res) => {
   if (isValidSession(req)) {
-      // If logged in, render the 'aboutus' page
-      res.render('aboutus');
+    // If logged in, render the 'aboutus' page
+    res.render('aboutus');
   } else {
-      // If not logged in, redirect to the login page
-      res.redirect('/login'); 
+    // If not logged in, redirect to the login page
+    res.redirect('/login'); 
   }
 })
 
