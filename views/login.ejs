@@ -17,20 +17,21 @@
       <h2>Forgot your password?</h2>
       <p class="error" id="forgotError"><br/></p>
       <form method="post" action="/forgotSubmit" id="forgotForm">
-        <div class="mb-3">
+        <div class="container">
           <p>Enter your email address.</p>
           <p>If your email exists, we'll send you a new password.</p>
           <p>You can login and head to your profile settings to reset your password.</p>
             
-          <input type="email" class="form-control" name="email" id="forgot-email">
-        </div>
+          <input type="email" class="form-control mb-3" name="email" id="forgot-email">
 
-        <a  class="btn btn-md btn-secondary mb-4 landing-btn"
+          <a  class="btn btn-md btn-secondary mb-3 landing-btn"
             role="button"
             data-bs-target="#loginWheel"
             data-bs-slide="next">Go back</a>
 
-        <input class="btn btn-md btn-success mb-3 landing-btn" type="submit" value="Send"/>
+          <input class="btn btn-md btn-success mb-3 landing-btn" type="submit" value="Send"/>
+
+        </div>
       </form>
       
     </div>
