@@ -25,14 +25,17 @@
 <!-- Main container -->
 <div class="container-fluid">
   <div class="row d-flex align-items-center justify-content-center mb-2">
+
     <!-- Welcome message -->
     <div class="col-12 col-md-3 text-center mb-4">
       <img src='/img/mainlogo.png' alt="Logo" class="img-fluid" style="max-width: 130px; height: auto;">
       <h1 class="hello">Welcome, <%= name %>!</h1>
       <h4 class="capping">Let's get capping!</h4>
     </div>
+
     <!-- Summary / instructions -->
     <div class="col-12 col-md-6 mb-4">
+      
       <!-- Instructions for no devices -->
       <% if (typeof message !== 'undefined' || typeof devicesLink !== 'undefined') { %>
         <div class="card mb-3">
@@ -67,6 +70,7 @@
       </div>
       <% } %>
     </div>
+
     <!-- Cap of the day -->
     <div class="col-12 col-md-3 mb-5">
       <div class="card">

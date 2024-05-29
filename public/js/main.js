@@ -2,6 +2,7 @@
   Author: Anna Dao
   Description: Fetch facts from the JSON file called facts.json
 */
+
 // Start the clickCount at 0, when the user clicks
 let clickCount = 0;
 let lastDisplayedFact = null;
@@ -11,7 +12,8 @@ const fetchFacts = async (url) => {
   try {
     const response = await fetch(url);
     return await response.json();
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error fetching facts from ${url}:`, error);
     return null;
   }
@@ -28,6 +30,7 @@ const getRandomFact = (facts) => {
   do {
     randomFact = facts[Math.floor(Math.random() * facts.length)];
   } while (randomFact.fact === lastDisplayedFact);
+  
   lastDisplayedFact = randomFact.fact;
   return randomFact;
 };
@@ -63,10 +66,10 @@ const handleFactFetching = async () => {
         }
       });
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error handling facts:', error);
   }
 };
 
 handleFactFetching();
-
