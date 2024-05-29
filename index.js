@@ -83,68 +83,6 @@ app.get('/', (req, res) => {
 });
 
 
-// ---------------------------------------------------------------------
-//Main page (After Login)
-/*
-  Main page after login.
-  Author: Brian Diep
-  Description: The main page after the user logs in. If the user has a device display the summary section; else, display instructions.
-  Summary section will display totalkWh and totalCosts with a message 
-*/
-
-app.get('/main', async (req, res) => {
-  if (isValidSession(req)) {
-    let name = req.session.name;
-    let email = req.session.email;
-
-    try {
-      // Retrieve the user's document from the collection
-      const user = await userCollection.findOne({ email: email });
-
-      // Check if the user exists
-      if (!user) {
-        res.status(404).send("User not found");
-        return;
-      }
-
-      // Extract the user_devices array from the user doc
-      const userDevices = user.user_devices;
-
-      if (userDevices && userDevices.length > 0) {
-        // If the user has devices, calculate total kWh
-        let totalKwh = 0;
-        userDevices.forEach(device => {
-          if (device.usage) {
-            const kWh = parseInt(device.kWh);
-            const usage = parseInt(device.usage);
-            totalKwh += kWh * usage;
-          } else {
-            const kWh = parseInt(device.kWh);
-            totalKwh += kWh;
-          }
-        });
-
-        // Calculate total cost
-        // $0.114 is 11.4 cents 
-        const costPerKwh = 0.114;
-        const totalCost = totalKwh * costPerKwh;
-
-        // Render the main page with the total kWh and total cost
-        res.render('main', { name: name, totalKwh: totalKwh, totalCost: totalCost });
-      } else {
-        // If the user doesn't have devices, render the main page with a "Get started" message
-        res.render('main', { name: name, message: "Get started by adding your devices!", devicesLink: "/devices" });
-      }
-    } catch (error) {
-      console.error("Error retrieving user data:", error);
-      res.status(500).send("Internal Server Error");
-    }
-  } else {
-    res.redirect('/');
-  }
-});
-
-
 /*
   Signup submission
   Author: Calvin Lee
@@ -172,7 +110,7 @@ app.post('/signupSubmit', async (req, res) => {
     return;
   }
 
-  // create a new user in db with the provided name, email, and password (after encrypting it)
+  // Create a new user in db with the provided name, email, and password (after encrypting it)
   var hashedpw = await bcrypt.hash(pw, saltRounds);
   await userCollection.insertOne({
     userid: id,
@@ -181,11 +119,11 @@ app.post('/signupSubmit', async (req, res) => {
     password: hashedpw,
     user_devices: [],
   });
-  // search db for a user with given userid
+  // Search db for a user with given userid
   const result = await userCollection.find({userid: id})
     .project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
 
-  // create a session for the user and log them in
+  // Create a session for the user and log them in
   req.session.authenticated = true;
   req.session.name = name;
   req.session.email = result[0].email;
@@ -513,7 +451,7 @@ app.get('/deleteDevice', async (req, res) => {
 
 
 // ---------------------------------------------------------------------------------
-// Pages from the hamburger menu
+// Profile page
 
 /*
   Profile page
@@ -543,16 +481,15 @@ app.get('/profile', (req, res) => {
   }
 });
 
-// ---------------------------------------------------------------------------------
-// Profile Update
+
 /*
   Profile Update
   Author: Brian Diep
-  Description: Update the profile userID, name, email and password. Will handle errors for
-  UserID and Email already in use/taken, wrong current password, new password cannot be the same, and form validation with the approriate mesages.
-  Succesful changes will display "[Info] succesfully updated".
+  Description: Update the profile userID, name, email and password. Will handle errors
+    for userid and email already in use/taken, wrong current password, new password cannot
+    be the same, and form validation with the approriate mesages. Successful changes will
+    display "[Info] successfully updated".
 */
-
 app.post('/updateProfile', async (req, res) => {
   let errorMessage = '';
   let successMessage = '';
@@ -654,6 +591,7 @@ app.post('/updateProfile', async (req, res) => {
   }
 });
 
+
 // ---------------------------------------------------------------------------------
 // Dashboard button
 
@@ -665,6 +603,7 @@ app.get('/dashboard', async (req, res) => {
       res.redirect('/login');
     }
 });
+
 
 // ---------------------------------------------------------------------------------
 // Retrieve devices for dashboard
@@ -703,10 +642,11 @@ app.get('/main', (req, res) => {
   }
 })
 
+
 // ---------------------------------------------------------------------------------
 // CalculateTotalKwh
+
 /*
-  Profile Update
   Author: Brian Diep
   Description: Calculate's the total kWh usage based on the User.
 */
@@ -754,8 +694,9 @@ app.get('/calculateTotalKwh', async (req, res) => {
   }
 });
 
+
 // ------------------------------------------------------------------------------
-// redirect to aboutus.ejs
+// About us
 
 app.get('/aboutus', (req, res) => {
   if (isValidSession(req)) {
@@ -767,6 +708,7 @@ app.get('/aboutus', (req, res) => {
   }
 })
 
+
 // ---------------------------------------------------------------------------------
 // Log out button
 
@@ -775,6 +717,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/'); // Redirect to the index page
   return;
 });
+
 
 // ---------------------------------------------------------------------------------
 // 404 - Handle non-existent pages
