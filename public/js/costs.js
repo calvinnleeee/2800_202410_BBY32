@@ -96,7 +96,7 @@ function drawMaterial() {
   } else if (savings === 0) {
     message = "You've spent the same amount as the average user. Try to reduce the use of your devices to save!";
   } else {
-    message = `You'll be on track to spend $${(-savings).toFixed(2)} more than the average user but no worries, its a learning process!`;
+    message = `You'll be on track to spend $${(-savings).toFixed(2)} more than the average user but no worries, it's a learning process!`;
   }
 
   document.getElementById('savings_message').innerText = message;
