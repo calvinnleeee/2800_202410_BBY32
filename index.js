@@ -19,7 +19,7 @@ const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 // .env / secrets setup
 require('dotenv').config();
@@ -52,13 +52,13 @@ const expireTime = 1000 * 60 * 60 * 24; // 24 hours
 app.use(session({ 
   secret: node_session_secret,
   store: mongoStore,
-  saveUninitialized: false, 
+  saveUninitialized: false,
   resave: true
 }));
 
 // Check if user's session is valid
 function isValidSession(req) {
-	return req.session.authenticated === true;
+  return req.session.authenticated === true;
 }
 
 // Set up navbars for pages after login
@@ -102,22 +102,28 @@ app.post('/signupSubmit', async (req, res) => {
   const emailExists = (await userCollection.countDocuments({email: email})) > 0 ? true : false;
   const idExists = (await userCollection.countDocuments({userid: id})) > 0 ? true : false;
   if (emailExists) {
-    res.render("signupError", {err: "email"});
+    res.render("signupError", { err: "email" });
     return;
   }
   else if (idExists) {
-    res.render("signupError", {err: "ID"});
+    res.render("signupError", { err: "ID" });
     return;
   }
 
-  // create a new user in db with the provided name, email, and password (after encrypting it)
+  // Create a new user in db with the provided name, email, and password (after encrypting it)
   var hashedpw = await bcrypt.hash(pw, saltRounds);
-  await userCollection.insertOne({ userid: id, username: name, email: email, password: hashedpw });
-  // search db for a user with given userid
+  await userCollection.insertOne({
+    userid: id,
+    username: name,
+    email: email,
+    password: hashedpw,
+    user_devices: [],
+  });
+  // Search db for a user with given userid
   const result = await userCollection.find({userid: id})
     .project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
 
-  // create a session for the user and log them in
+  // Create a session for the user and log them in
   req.session.authenticated = true;
   req.session.name = name;
   req.session.email = result[0].email;
@@ -190,15 +196,15 @@ app.post('/forgotSubmit', async (req, res) => {
       newPw += chars[Math.floor(Math.random() * chars.length)];
     }
     let hashedPw = await bcrypt.hash(newPw, saltRounds);
-    userCollection.updateOne({email: email}, {$set: {password: hashedPw}});
+    userCollection.updateOne({ email: email }, { $set: { password: hashedPw } });
 
     // This section done with help from video in COMP2800 tech gems (https://youtu.be/18qA61bpfUs)
     const nodemailer = require("nodemailer");
     const { google } = require("googleapis");
     const OAuth2 = google.auth.OAuth2;
-    
+
     const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
-    OAuth2_client.setCredentials({refresh_token: `${google_refresh_token}`});
+    OAuth2_client.setCredentials({ refresh_token: `${google_refresh_token}` });
     let accessToken = await OAuth2_client.getAccessToken();
 
     let transport = nodemailer.createTransport({
@@ -331,8 +337,9 @@ app.get('/loadDevices', async (req, res) => {
 app.get('/devices', async (req, res) => {
   // Load the user's list of devices and store it in an array
   let userid = req.session.userid;
-  let userDevices = await userCollection.find({userid: userid}).project({user_devices: 1}).toArray();
-  if (!userDevices) {
+  let userDevices = await userCollection.find({userid: userid}).project({_id: 0, user_devices: 1}).toArray();
+
+  if (!userDevices || !userDevices[0].user_devices) {
     userDevices = [];
   }
   else {
@@ -367,14 +374,14 @@ app.get('/addDevice', async (req, res) => {
   let newDeviceList = [];
   // If the user has no previous list of devices
   if (!prevDeviceList) {
-    newDeviceList = [ {name: newName, kWh: newKWH} ];
+    newDeviceList = [{ name: newName, kWh: newKWH }];
   }
   // If a previous list exists
   else {
-    newDeviceList = prevDeviceList.concat( {name: newName, kWh: newKWH} );
+    newDeviceList = prevDeviceList.concat({ name: newName, kWh: newKWH });
   }
 
-  await userCollection.updateOne({userid: userid}, {$set: {user_devices: newDeviceList}});
+  await userCollection.updateOne({ userid: userid }, { $set: { user_devices: newDeviceList } });
 
   res.redirect('/devices');
   return;
@@ -405,7 +412,7 @@ app.get('/editDevice', async (req, res) => {
 
   // Update the device to the new kWh rating and push it to the database
   deviceList[deviceIndex] = { name: deviceName, kWh: newKWH };
-  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+  await userCollection.updateOne({ userid: userid }, { $set: { user_devices: deviceList } });
 
   res.redirect('/devices');
   return;
@@ -436,7 +443,7 @@ app.get('/deleteDevice', async (req, res) => {
 
   // Remove the device from the array and push it back to the database
   deviceList = deviceList.toSpliced(deviceIndex, 1);
-  await userCollection.updateOne({userid: userid}, {$set: {user_devices: deviceList}});
+  await userCollection.updateOne({ userid: userid }, { $set: { user_devices: deviceList } });
 
   res.redirect('/devices');
   return;
@@ -444,7 +451,7 @@ app.get('/deleteDevice', async (req, res) => {
 
 
 // ---------------------------------------------------------------------------------
-// Pages from the hamburger menu
+// Profile page
 
 /*
   Profile page
@@ -460,25 +467,29 @@ app.get('/profile', (req, res) => {
     // If logged in, render the 'profile' page
     res.render('profile', { name: name, userid: userid, email: email });
     return;
+    // If logged in, render the 'profile' page
+    res.render('profile', { name: name, userid: userid, email: email });
+    return;
   }
   else {
+    // If not logged in, redirect to the login page
+    res.redirect('/login');
+    return;
     // If not logged in, redirect to the login page
     res.redirect('/login');
     return;
   }
 });
 
-// ---------------------------------------------------------------------------------
-// Profile Update
+
 /*
   Profile Update
   Author: Brian Diep
   Description: Update the profile userID, name, email and password. Will handle errors
-    for userID and email already in use/taken, wrong current password, new password
-    cannot be the same, and joi validation with the approriate mesages. Successful
-    changes will display "Succesfully updated".
+    for userid and email already in use/taken, wrong current password, new password cannot
+    be the same, and form validation with the approriate mesages. Successful changes will
+    display "[Info] successfully updated".
 */
-
 app.post('/updateProfile', async (req, res) => {
   let errorMessage = '';
   let successMessage = '';
@@ -513,9 +524,8 @@ app.post('/updateProfile', async (req, res) => {
 
       // Update the user's password in the database
       await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
-      successMessage += 'Succesfully updated! ';
-    }
-    else {
+      successMessage += 'Password successfully updated! ';
+    } else {
       errorMessage = 'Current password is incorrect.';
       return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
     }
@@ -526,7 +536,7 @@ app.post('/updateProfile', async (req, res) => {
     await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
     // Update the session with the new name
     req.session.name = newName;
-    successMessage += 'Succesfully updated! ';
+    successMessage += 'Name successfully updated! ';
   }
 
   // Update email if new email is provided
@@ -536,18 +546,26 @@ app.post('/updateProfile', async (req, res) => {
     if (!emailExists) {
       await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
       req.session.email = newEmail;
-      successMessage += 'Succesfully updated! ';
+      successMessage += 'Email successfully updated! ';
     } else {
       const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-      const errorMessage = "An account is already associated with this E-mail";
+      const errorMessage = "An account is already associated with this e-mail";
       res.render('profile', {
         errorMessage: errorMessage,
-        userid: oldUserId, 
-        name: oldName, 
-        email: oldEmail, 
+        userid: oldUserId,
+        name: oldName,
+        email: oldEmail,
       });
       return;
     }
+  }
+
+  // Regex to check for whitespace
+  const noWhitespaceRegex = /^\S*$/;
+  // Check new UserID for whitespace
+  if (newUserId && !noWhitespaceRegex.test(newUserId)) {
+    errorMessage = 'User ID must not contain whitespace';
+    return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
   }
 
   // Check if the new user ID already exists
@@ -555,16 +573,16 @@ app.post('/updateProfile', async (req, res) => {
   if (newUserId && !idExists) {
     await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
     req.session.userid = newUserId;
-    successMessage += 'Succesfully updated! ';
+    successMessage += 'User ID successfully updated! ';
   } else if (newUserId && idExists) {
     const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-    const errorMessage = "An account is already associated with this User ID";
+    const errorMessage = "An account is already associated with this user ID";
     res.render('profile', {
       errorMessage: errorMessage,
-      userid: oldUserId, 
-      name: oldName, 
-      email: oldEmail, 
-      });
+      userid: oldUserId,
+      name: oldName,
+      email: oldEmail,
+    });
     return;
   }
 
@@ -572,6 +590,7 @@ app.post('/updateProfile', async (req, res) => {
     res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
   }
 });
+
 
 // ---------------------------------------------------------------------------------
 // Dashboard button
@@ -584,6 +603,7 @@ app.get('/dashboard', async (req, res) => {
       res.redirect('/login');
     }
 });
+
 
 // ---------------------------------------------------------------------------------
 // Retrieve devices for dashboard
@@ -614,18 +634,19 @@ app.get('/dashboardDevices', async (req, res) => {
 
 app.get('/main', (req, res) => {
   if (isValidSession(req)) {
-      // If logged in, render the 'profile' page
-      res.render('main');
+    // If logged in, render the 'profile' page
+    res.render('main');
   } else {
-      // If not logged in, redirect to the login page
-      res.redirect('/login'); 
+    // If not logged in, redirect to the login page
+    res.redirect('/login');
   }
 })
 
+
 // ---------------------------------------------------------------------------------
 // CalculateTotalKwh
+
 /*
-  Profile Update
   Author: Brian Diep
   Description: Calculate's the total kWh usage based on the User.
 */
@@ -666,15 +687,16 @@ app.get('/calculateTotalKwh', async (req, res) => {
     });
 
     // Send the total kWh to the client 
-    res.json({ totalKwh }); 
+    res.json({ totalKwh });
   } catch (error) {
     console.error("Error calculating total kWh:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
+
 // ------------------------------------------------------------------------------
-// redirect to aboutus.ejs
+// About us
 
 app.get('/aboutus', (req, res) => {
   if (isValidSession(req)) {
@@ -686,6 +708,7 @@ app.get('/aboutus', (req, res) => {
   }
 })
 
+
 // ---------------------------------------------------------------------------------
 // Log out button
 
@@ -694,6 +717,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/'); // Redirect to the index page
   return;
 });
+
 
 // ---------------------------------------------------------------------------------
 // 404 - Handle non-existent pages
