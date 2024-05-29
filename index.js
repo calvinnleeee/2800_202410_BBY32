@@ -707,7 +707,21 @@ app.get('/aboutus', (req, res) => {
     // If not logged in, redirect to the login page
     res.redirect('/login'); 
   }
-})
+});
+
+
+// ------------------------------------------------------------------------------
+// Settings (no implementation)
+
+app.get('/settings', (req, res) => {
+  if (isValidSession(req)) {
+    // If logged in, render the 'settings' page
+    res.render('settings');
+  } else {
+    // If not logged in, redirect to the login page
+    res.redirect('/login'); 
+  }
+});
 
 
 // ---------------------------------------------------------------------------------
