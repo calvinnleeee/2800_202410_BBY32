@@ -160,9 +160,6 @@ app.post('/signupSubmit', async (req, res) => {
   let pw = req.body.password;
 
   // Joi validation done on browser side, move on to next step
-  // verify that email and id do not already exist in the database, fail if it does
-  const emailExists = (await userCollection.countDocuments({ email: email })) > 0 ? true : false;
-  const idExists = (await userCollection.countDocuments({ userid: id })) > 0 ? true : false;
   // Verify that email and id do not already exist in the database, fail if it does
   const emailExists = (await userCollection.countDocuments({email: email})) > 0 ? true : false;
   const idExists = (await userCollection.countDocuments({userid: id})) > 0 ? true : false;
