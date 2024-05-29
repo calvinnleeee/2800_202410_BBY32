@@ -524,7 +524,7 @@ app.post('/updateProfile', async (req, res) => {
 
       // Update the user's password in the database
       await userCollection.updateOne({ email: req.session.email }, { $set: { password: hashedNewPassword } });
-      successMessage += 'Password succesfully updated! ';
+      successMessage += 'Password successfully updated! ';
     } else {
       errorMessage = 'Current password is incorrect.';
       return res.render('profile', { errorMessage: errorMessage, userid: user.userid, name: user.name, email: user.email });
@@ -536,7 +536,7 @@ app.post('/updateProfile', async (req, res) => {
     await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
     // Update the session with the new name
     req.session.name = newName;
-    successMessage += 'Name succesfully updated! ';
+    successMessage += 'Name successfully updated! ';
   }
 
   // Update email if new email is provided
@@ -546,10 +546,10 @@ app.post('/updateProfile', async (req, res) => {
     if (!emailExists) {
       await userCollection.updateOne({ email: oldEmail }, { $set: { email: newEmail } });
       req.session.email = newEmail;
-      successMessage += 'Email succesfully updated! ';
+      successMessage += 'Email successfully updated! ';
     } else {
       const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-      const errorMessage = "An account is already associated with this E-mail";
+      const errorMessage = "An account is already associated with this e-mail";
       res.render('profile', {
         errorMessage: errorMessage,
         userid: oldUserId,
@@ -573,10 +573,10 @@ app.post('/updateProfile', async (req, res) => {
   if (newUserId && !idExists) {
     await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
     req.session.userid = newUserId;
-    successMessage += 'User ID succesfully updated! ';
+    successMessage += 'User ID successfully updated! ';
   } else if (newUserId && idExists) {
     const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-    const errorMessage = "An account is already associated with this User ID";
+    const errorMessage = "An account is already associated with this user ID";
     res.render('profile', {
       errorMessage: errorMessage,
       userid: oldUserId,

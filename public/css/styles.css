@@ -31,7 +31,7 @@ body {
 .header-colours {
   background: linear-gradient(180deg, #90C2E7, rgba(255, 255, 255, 0));
   height: 10vh;
-  z-index: 0;
+  z-index: 1;
 }
 
 .nav-colours {

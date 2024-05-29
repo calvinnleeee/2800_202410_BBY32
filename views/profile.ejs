@@ -19,9 +19,9 @@
   <a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
   <h1 class="text-center mb-2 text-success" >User Profile</h1>
   
-  <div class="row gutters">
+  <div class="row gutters mb-5">
     <!-- User Profile Card -->
-    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 mb-2">
       <div class="card h-100">
         <div class="card-body text-center">
           <div class="user-avatar">
@@ -37,67 +37,99 @@
     
     <!-- User Details and Update Form -->
     <form id="updateProfileForm" action="/updateProfile" method="post">
-    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-      <div class="card h-100">
-        <div class="card-body">
-          <!-- Form -->
-          
-          <h6 class="mb-3 text-success">Account Details</h6>
-          <div class="row gutters">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-              <div class="mb-3">
-                <label for="userid">User ID</label>
-                <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter new User ID">
-              </div>
-              <div class="mb-3">
-                <label for="fullName">Name</label>
-                <input type="text" name="name" class="form-control" id="fullName" placeholder="Enter new Name">
-              </div>
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-              <div class="mb-3">
-                <label for="eMail">Email</label>
-                <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter new Email">
-            </div>
-            <!-- Divider -->
-            <hr>
-            <h6 class="mb-3 text-success">Account Password</h6> 
-              <div class="mb-3">
-                <label for="oldPassword">Current Password</label>
-                <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Enter current Password">
-              </div>
-              <div class="mb-3">
-                <label for="newPassword">New Password</label>
-                <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new Password">
-              </div>
-            </div>
-          </div>
-          <!-- Form buttons -->
-          <div class="text-right">
-            <button type="button" id="cancel" name="cancel" class="btn btn-secondary">Cancel</button>
-              <button class="btn btn-success" type="submit">Update</button>
-              <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
-                <div class="alert alert-danger mt-2">
-                  <%= errorMessage %>
+      <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+        <div class="card h-100">
+          <div class="card-body">
+            <!-- Form -->
+            
+            <h6 class="mb-3 text-success">Account Details</h6>
+            <div class="row gutters">
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+
+                <div class="mb-3">
+                  <label for="userid">User ID</label>
+                  <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter new user ID">
                 </div>
-            <% } %>
-            <% if (typeof successMessage !== 'undefined' && successMessage) { %>
-              <div class="alert alert-success mt-2">
-                  <%= successMessage %>
+
+                <div class="mb-3">
+                  <label for="fullName">Name</label>
+                  <input type="text" name="name" class="form-control" id="fullName" placeholder="Enter new name">
+                </div>
+
               </div>
-          <% } %>
+
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="mb-3">
+                  <label for="eMail">Email</label>
+                  <input type="email" name="email" class="form-control" id="eMail" placeholder="Enter new email">
+                </div>
+
+                <!-- Divider -->
+                <hr>
+                <h6 class="mb-3 text-success">Account Password</h6> 
+
+                <div class="mb-3">
+                  <label for="oldPassword">Current password</label>
+                  <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Enter current password">
+                </div>
+
+                <div class="mb-3">
+                  <label for="newPassword">New password</label>
+                  <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Enter new password">
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Form buttons -->
+            <div class="d-flex justify-content-end" style="width: 100%;">
+              <button type="button" id="cancel" name="cancel" class="btn btn-secondary mx-2">Cancel</button>
+              <button class="btn btn-success" type="submit">Update</button>
+            </div>
+
+
           </div>
         </div>
       </div>
-    </div>
-  </form>
+
+    </form>
   </div>
 </div>
-<%- include('templates/footerAfterLogin') %>
 
+<!-- Modal to display success/error message upon sending request to server -->
+<div  <% if ((typeof errorMessage !== 'undefined') || (typeof successMessage !== 'undefined')) { %> 
+        id="modalOn"
+      <% } %>
+      class="modal fade" style="display: none;" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body">
+        <!-- Message depends on success/error -->
+        <% if (typeof errorMessage !== 'undefined') { %>
+          <h6 class="text-danger text-center mt-3"><%= errorMessage %></h6>
+        <% } else if (typeof successMessage !== 'undefined') { %>
+          <h6 class="text-success text-center mt-3"><%= successMessage %></h6>
+        <% } %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
   // Cancel button will reset the forms on click.
   document.getElementById('cancel').addEventListener('click', function() {
     document.getElementById('updateProfileForm').reset();
   });
+
+  // Load 
+  window.addEventListener('load', function () {
+    var modal = new bootstrap.Modal(document.getElementById('modalOn'));
+    modal.show();
+  });
 </script>
+
+<%- include('templates/footerAfterLogin') %>
