@@ -36,8 +36,8 @@ else if (sessionStorage.getItem("prev") == "login") {
   document.getElementById("loginForm").addEventListener("submit", function(event) {
   // Prevent default form submission and temporarily disable the button
   event.preventDefault();
-  event.target.disabled = true;
-  event.target.value = "Logging in...";
+  document.getElementById("login-button").disabled = true;
+  document.getElementById("login-button").value = "Logging in...";
 
   // Get form inputs
   var userID = document.getElementById("login-id").value;
@@ -55,8 +55,8 @@ else if (sessionStorage.getItem("prev") == "login") {
   if (validationResult.error != null) {
     var errorMsg = validationResult.error.details[0].message;
     displayError(errorMsg, "loginError");
-    event.target.disabled = false;
-    event.target.value = "Login";
+    document.getElementById("login-button").disabled = false;
+    document.getElementById("login-button").value = "Login";
   }
 
   // If there is no error, proceed to post to the server for bcrypt password hashing
@@ -77,8 +77,8 @@ else if (sessionStorage.getItem("prev") == "login") {
   document.getElementById("signupForm").addEventListener("submit", function(event) {
   // Prevent default form submission and temporarily disable the button
   event.preventDefault();
-  event.target.disabled = true;
-  event.target.value = "Signing up...";
+  document.getElementById("signup-button").disabled = true;
+  document.getElementById("signup-button").value = "Signing up...";
 
   // Get form inputs
   var userID = document.getElementById("signup-id").value;
@@ -102,8 +102,8 @@ else if (sessionStorage.getItem("prev") == "login") {
     var errorMsg = validationResult.error.details[0].message;
     console.log(errorMsg);
     displayError(errorMsg, "signupError");
-    event.target.disabled = false;
-    event.target.value = "Submit";
+    document.getElementById("signup-button").disabled = false;
+    document.getElementById("signup-button").value = "Submit";
   }
 
   // If there is no error, proceed to post to the server for bcrypt password hashing
@@ -135,9 +135,11 @@ document.querySelectorAll(".clear-error").forEach((btn) => {
 /*
   Add an event listener to the forgot password form to prevent multiple submissions.
 */
-document.getElementById("forgot-pw-button").addEventListener('click', function(event) {
-  event.target.disabled = true;
-  event.target.value = "Submitting..."
+document.getElementById("forgotForm").addEventListener('submit', function(event) {
+  event.preventDefault();
+  document.getElementById("forgot-pw-button").disabled = true;
+  document.getElementById("forgot-pw-button").value = "Submitting..."
+  this.submit();
 });
 
 
