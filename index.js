@@ -560,11 +560,11 @@ app.post('/updateProfile', async (req, res) => {
     }
   }
 
-  // Regex to check for whitespace
-  const noWhitespaceRegex = /^\S*$/;
-  // Check new UserID for whitespace
-  if (newUserId && !noWhitespaceRegex.test(newUserId)) {
-    errorMessage = 'User ID must not contain whitespace';
+  // Regex to check for whitespace and alphanum only
+  const regex = /^[a-zA-Z0-9_-]+$/;
+  // Check new UserID for whitespace and alphanum
+  if (newUserId && !regex.test(newUserId)) {
+    errorMessage = 'UserID must not contain any whitespace and only use alphanumeric characters.';
     return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
   }
 
