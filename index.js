@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
   Index.js, server-side code for BBY32, COMP2800 project.
   Project members:
     Anna Dao
@@ -7,6 +8,15 @@
     Ethan Nguyen
 */
 
+=======
+Test file for mockup landing page for 2800 project.
+
+*/
+
+// .env files for local testing
+require('dotenv').config();
+
+>>>>>>> dev-dashboard-graphs
 // Requires, express setup
 const express = require('express');
 const session = require('express-session');
@@ -19,10 +29,16 @@ const port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + "/public"));
+<<<<<<< HEAD
 app.use(express.urlencoded({ extended: false }));
 
 // .env / secrets setup
 require('dotenv').config();
+=======
+app.use(express.urlencoded({extended: false}));
+
+// Env file / Secrets setup
+>>>>>>> dev-dashboard-graphs
 const mongodb_host = process.env.MONGODB_HOST;
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -33,14 +49,21 @@ const google_client_id = process.env.GOOGLE_CLIENT_ID;
 const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
 const google_refresh_token = process.env.GOOGLE_REFRESH_TOKEN;
 const google_user = process.env.GOOGLE_USER;
+<<<<<<< HEAD
 
 // MongoDB setup 
+=======
+// const accessToken = process.env.GOOGLE_ACCESS_TOKEN;
+
+// MongoDB setup (maybe move out and use an include to reduce clutter?)
+>>>>>>> dev-dashboard-graphs
 const MongoClient = require("mongodb").MongoClient;
 const atlasURI = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/?retryWrites=true`;
 var database = new MongoClient(atlasURI);
 const userCollection = database.db(mongodb_database).collection('users');
 var mongoStore = MongoStore.create({
 	mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/sessions`,
+<<<<<<< HEAD
 	crypto: { secret: mongodb_session_secret }
 });
 
@@ -53,11 +76,28 @@ app.use(session({
   secret: node_session_secret,
   store: mongoStore,
   saveUninitialized: false,
+=======
+	crypto: {
+		secret: mongodb_session_secret
+	}
+});
+
+// Other required variable setup
+const saltRounds = 12;    // used for bcrypt password hashing
+
+// Cookies for sessions
+const expireTime = 1000 * 60 * 60;  // 1 hour
+app.use(session({ 
+  secret: node_session_secret,
+  store: mongoStore,
+  saveUninitialized: false, 
+>>>>>>> dev-dashboard-graphs
   resave: true
 }));
 
 // Check if user's session is valid
 function isValidSession(req) {
+<<<<<<< HEAD
   return req.session.authenticated === true;
 }
 
@@ -74,12 +114,37 @@ app.use('/', setupNav);
 */
 app.get('/', (req, res) => {
   // Redirect if there is already a valid session
+=======
+	return req.session.authenticated === true;
+}
+
+// ---------------------------------------------------------------------------------
+// Landing page (Login/Signup)
+
+app.get('/', (req, res) => {
+  // redirect if there is already a valid session
+>>>>>>> dev-dashboard-graphs
   if (isValidSession(req)) {
     res.redirect('/main');
     return;
   }
+<<<<<<< HEAD
   res.render('login');
   return;
+=======
+  res.render('index');
+});
+
+// ---------------------------------------------------------------------
+// Main page (After login)
+
+app.get('/main', (req, res) => {
+  if (isValidSession(req)) {
+		let name = req.session.name;
+		// If user is logged in, render the 'index' page for welcome message
+    res.render('main', {name: name});
+  }
+>>>>>>> dev-dashboard-graphs
 });
 
 
@@ -87,17 +152,26 @@ app.get('/', (req, res) => {
   Signup submission
   Author: Calvin Lee
   Description: Signup validation and creating a new user in the database.
+<<<<<<< HEAD
   Notes: Most of this code was taken from COMP2537 assignment 2 work, with modifications to
     variables to fit our application.
 */
 app.post('/signupSubmit', async (req, res) => {
   // User variables
+=======
+  Notes: Most of this code was taken from COMP2537 assignment 2 work, with modifications to variables
+    our application.
+*/
+app.post('/signupSubmit', async (req, res) => {
+  // user variables
+>>>>>>> dev-dashboard-graphs
   let id = req.body.id;
   let name = req.body.name;
   let email = req.body.email;
   let pw = req.body.password;
 
   // Joi validation done on browser side, move on to next step
+<<<<<<< HEAD
   // Verify that email and id do not already exist in the database, fail if it does
   const emailExists = (await userCollection.countDocuments({email: email})) > 0 ? true : false;
   const idExists = (await userCollection.countDocuments({userid: id})) > 0 ? true : false;
@@ -129,6 +203,33 @@ app.post('/signupSubmit', async (req, res) => {
   req.session.email = result[0].email;
   req.session.userid = result[0].userid;
   req.session.cookie.maxAge = expireTime;
+=======
+  // verify that email and id do not already exist in the database, fail if it does
+  const emailExists = (await userCollection.countDocuments({email: email})) > 0 ? true : false;
+  const idExists = (await userCollection.countDocuments({userid: id})) > 0 ? true : false;
+  if (emailExists) {
+    res.render("signupError", {err: "email"});
+    return;
+  }
+  else if (idExists) {
+    res.render("signupError", {err: "ID"});
+    return;
+  }
+
+  // create a new user in db with the provided name, email, and password (after encrypting it)
+  var hashedpw = await bcrypt.hash(pw, saltRounds);
+  await userCollection.insertOne({ userid: id, username: name, email: email, password: hashedpw });
+  // search db for a user with given userid
+  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
+
+  // create a session for the user and log them in
+  req.session.authenticated = true;
+  req.session.name = name;
+  req.session.name = result[0].username;
+  req.session.email = result[0].email;
+  req.session.userid = result[0].userid;
+  req.session.cookie.maxAge = 1000 * 60 * 60 * 24;  // 24 hours
+>>>>>>> dev-dashboard-graphs
   res.redirect("/main");
   return;
 });
@@ -143,6 +244,7 @@ app.post('/signupSubmit', async (req, res) => {
     to match our application.
 */
 app.post('/loginSubmit', async (req, res) => {
+<<<<<<< HEAD
   // User variables
   let id = req.body.id;
   let pw = req.body.password;
@@ -156,6 +258,20 @@ app.post('/loginSubmit', async (req, res) => {
     return;
   }
   // Password is correct, create a session and log the user in
+=======
+  // user variables
+  let id = req.body.id;
+  let pw = req.body.password;
+
+  // search db for a user with given userid
+  const result = await userCollection.find({userid: id}).project({username: 1, password: 1, email: 1, userid: 1,}).toArray();
+
+  // if no user was found
+  if (result.length != 1) {
+    res.render("loginError");
+  }
+  // password is correct, create a session and log the user in
+>>>>>>> dev-dashboard-graphs
   else if (await bcrypt.compare(pw, result[0].password)) {
     req.session.authenticated = true;
     req.session.name = result[0].username;
@@ -165,14 +281,21 @@ app.post('/loginSubmit', async (req, res) => {
     res.redirect("/main");
     return;
   }
+<<<<<<< HEAD
   // Otherwise password was wrong
+=======
+  // otherwise password was wrong
+>>>>>>> dev-dashboard-graphs
   else {
     res.render("loginError");
     return;
   }
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev-dashboard-graphs
 /*
   Forgot password submission
   Author: Calvin Lee
@@ -182,6 +305,7 @@ app.post('/loginSubmit', async (req, res) => {
 app.post('/forgotSubmit', async (req, res) => {
   let email = req.body.email;
 
+<<<<<<< HEAD
   // Search the db to see if a user with the provided email exists
   const result = await userCollection.find({email: email}).project({userid: 1}).toArray();
 
@@ -190,11 +314,22 @@ app.post('/forgotSubmit', async (req, res) => {
     let userid = result[0].userid;
     
     // Generate a random 6-character password
+=======
+  // search the db to see if a user with the provided email exists
+  const result = await userCollection.find({email: email}).project({userid: 1}).toArray();
+
+  // if a user was found, reset their password and send them an email
+  if (result.length == 1) {
+    let userid = result[0].userid;
+    
+    // generate a random 6-character password
+>>>>>>> dev-dashboard-graphs
     const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let newPw = '';
     for (let i = 0; i < 6; i++) {
       newPw += chars[Math.floor(Math.random() * chars.length)];
     }
+<<<<<<< HEAD
     let hashedPw = await bcrypt.hash(newPw, saltRounds);
     userCollection.updateOne({ email: email }, { $set: { password: hashedPw } });
 
@@ -205,6 +340,19 @@ app.post('/forgotSubmit', async (req, res) => {
 
     const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
     OAuth2_client.setCredentials({ refresh_token: `${google_refresh_token}` });
+=======
+    console.log("The new password is '" + newPw + "'");
+    let hashedPw = await bcrypt.hash(newPw, saltRounds);
+    userCollection.updateOne({email: email}, {$set: {password: hashedPw}});
+
+    // this section done with help from video in COMP2800 tech gems (https://youtu.be/18qA61bpfUs)
+    const nodemailer = require("nodemailer");
+    const { google } = require("googleapis");
+    const OAuth2 = google.auth.OAuth2;
+    
+    const OAuth2_client = new OAuth2(google_client_id, google_client_secret, "http://localhost:3000/");
+    OAuth2_client.setCredentials({refresh_token: `${google_refresh_token}`});
+>>>>>>> dev-dashboard-graphs
     let accessToken = await OAuth2_client.getAccessToken();
 
     let transport = nodemailer.createTransport({
@@ -237,6 +385,7 @@ app.post('/forgotSubmit', async (req, res) => {
       transport.close();
     });
   }
+<<<<<<< HEAD
   // Whether or not there was a user or not, render the resetPw.ejs to tell the user that
   //  an email has been sent if the account exists.
   res.render('resetPw');
@@ -460,11 +609,23 @@ app.get('/deleteDevice', async (req, res) => {
   Description: Access to the profile page for editing user information, from the
     hamburger menu.
 */
+=======
+  // whether or not there was a user or not, render the resetPw.ejs to tell the user that
+  // an email has been sent if the account exists.
+  res.render('resetPw');
+
+});
+
+// ---------------------------------------------------------------------------------
+// Profile button
+
+>>>>>>> dev-dashboard-graphs
 app.get('/profile', (req, res) => {
   let name = req.session.name;
   let userid = req.session.userid;
   let email = req.session.email;
   if (isValidSession(req)) {
+<<<<<<< HEAD
     // If logged in, render the 'profile' page
     res.render('profile', { name: name, userid: userid, email: email });
     return;
@@ -593,10 +754,21 @@ app.post('/updateProfile', async (req, res) => {
 });
 
 
+=======
+      // If logged in, render the 'profile' page
+      res.render('profile', { name: name, userid: userid, email: email });
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
+});
+
+>>>>>>> dev-dashboard-graphs
 // ---------------------------------------------------------------------------------
 // Dashboard button
 
 app.get('/dashboard', async (req, res) => {
+<<<<<<< HEAD
   if (isValidSession(req)) {
     res.render('dashboard');
   }
@@ -615,26 +787,52 @@ app.get('/dashboard', async (req, res) => {
   Description: Get a user's list of tracked devices to display its data on the
     dashboard page.
 */
+=======
+    if (isValidSession(req)) {
+      res.render('dashboard');
+    } else {
+      res.redirect('/login');
+    }
+});
+
+// ---------------------------------------------------------------------------------
+// Retrieve devices for dashboard
+>>>>>>> dev-dashboard-graphs
 app.get('/dashboardDevices', async (req, res) => {
   try {
     const userDevices = database.db("carboncap_users").collection('users');
     const data = await userDevices.findOne(
       { userid: req.session.userid },
+<<<<<<< HEAD
       { projection: { _id: 0, user_devices: 1 } });
     res.json(data.user_devices);
   }
   catch (error) {
+=======
+      { projection: { _id: 0, user_devices_history: 1 } }
+    );
+    if (data && data.user_devices_history) {
+      res.json(data.user_devices_history);
+    } else {
+      res.status(404).json({ error: "User devices history not found" });
+    }
+  } catch (error) {
+>>>>>>> dev-dashboard-graphs
     console.error('Error fetching devices:', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev-dashboard-graphs
 // ---------------------------------------------------------------------------------
 // Home button
 
 app.get('/main', (req, res) => {
   if (isValidSession(req)) {
+<<<<<<< HEAD
     // If logged in, render the 'profile' page
     res.render('main');
   } else {
@@ -724,32 +922,54 @@ app.get('/settings', (req, res) => {
 });
 
 
+=======
+      // If logged in, render the 'profile' page
+      res.render('main');
+  } else {
+      // If not logged in, redirect to the login page
+      res.redirect('/login'); 
+  }
+})
+
+>>>>>>> dev-dashboard-graphs
 // ---------------------------------------------------------------------------------
 // Log out button
 
 app.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/'); // Redirect to the index page
+<<<<<<< HEAD
   return;
 });
 
 
+=======
+});
+
+>>>>>>> dev-dashboard-graphs
 // ---------------------------------------------------------------------------------
 // 404 - Handle non-existent pages
 
 app.get('*', (req, res) => {
   res.status(404);
+<<<<<<< HEAD
   res.render("404");
   return;
 });
 
 
+=======
+  // res.render("404");
+});
+
+>>>>>>> dev-dashboard-graphs
 // ---------------------------------------------------------------------------------
 // Listen - run server
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+<<<<<<< HEAD
 
 
 // ---------------------------------------------------------------------------------
@@ -782,3 +1002,5 @@ async function updateDatabase() {
 
 }
 // updateDatabase();
+=======
+>>>>>>> dev-dashboard-graphs

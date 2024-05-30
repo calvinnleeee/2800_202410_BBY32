@@ -1,4 +1,5 @@
 <%- include('templates/headerAfterLogin') %>
+<<<<<<< HEAD
 <!--
   Main page EJS.
   Author: Brian Diep, Anna Dao
@@ -6,10 +7,14 @@
 -->
 
 <!-- Styling (specific to this page) -->
+=======
+
+>>>>>>> dev-dashboard-graphs
 <style>
   .btn {
     margin-right: 10px;
   }
+<<<<<<< HEAD
 
   .card-header h5 {
     margin: 0;
@@ -27,11 +32,24 @@
   <div class="row d-flex align-items-center justify-content-center mb-2">
 
     <!-- Welcome message -->
+=======
+  .card-header h5 {
+    margin: 0;
+  }
+  .container-fluid {
+    padding-bottom: 70px; 
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row d-flex align-items-center justify-content-center">
+>>>>>>> dev-dashboard-graphs
     <div class="col-12 col-md-3 text-center mb-4">
       <img src='/img/mainlogo.png' alt="Logo" class="img-fluid" style="max-width: 130px; height: auto;">
       <h1 class="hello">Welcome, <%= name %>!</h1>
       <h4 class="capping">Let's get capping!</h4>
     </div>
+<<<<<<< HEAD
 
     <!-- Summary / instructions -->
     <div class="col-12 col-md-6 mb-4">
@@ -73,6 +91,36 @@
 
     <!-- Cap of the day -->
     <div class="col-12 col-md-3 mb-5">
+=======
+    <div class="col-12 col-md-6 mb-4">
+      <!-- new -->
+      <div class="card text-center border">
+        <h5 class="card-header">Here's a quick look!</h5>
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active text-success" aria-current="true" href="#">Day</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="#">Week</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="#">Month</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="#">Year</a>
+            </li>
+          </ul>
+        </div>
+        <div class="card-body">
+          <img src="/img/mockdata.png" alt="Logo" class="img-fluid mb-3" style="object-fit: cover;">
+          <a href="#" class="btn btn-success">Details</a>
+        </div>
+      </div>
+      <!-- new -->
+    </div>
+    <div class="col-12 col-md-3 mb-4">
+>>>>>>> dev-dashboard-graphs
       <div class="card">
         <h5 class="card-header">CAP OF THE DAY</h5>
         <div class="card-body">
@@ -86,6 +134,7 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
 
   </div>
 </div>
@@ -97,4 +146,15 @@
 <script src="/js/costs.js"></script>
 
 <!-- Footer afer login -->
+=======
+  </div>
+</div>
+
+
+<!-- Scripts -->
+
+<script src="/js/main.js"></script>
+
+<!-- Template should be after login -->
+>>>>>>> dev-dashboard-graphs
 <%- include('templates/footerAfterLogin') %>
