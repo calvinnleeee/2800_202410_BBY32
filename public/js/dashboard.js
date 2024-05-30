@@ -1,3 +1,22 @@
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/dashboardDevices');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const json = await response.text();
+    console.log('Fetched JSON:', json); // Log the fetched JSON string
+
+    userDevicesHistory = JSON.parse(json);
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(() => drawPieChart(userDevicesHistory));
+    google.charts.setOnLoadCallback(() => drawBarGraph(userDevicesHistory));
+  } catch (error) {
+    console.error('Error loading devices:', error);
+  }
+});
+
 const period = document.querySelectorAll('a');
 
 // Convert NodeList to an array and select only the first 3 elements
@@ -8,56 +27,91 @@ firstThreeLinks.forEach(time => {
     event.preventDefault();
     firstThreeLinks.forEach(t => t.className = 'nav-link text-success');
     time.className = 'nav-link active text-success';
+    filterData(time.textContent.toLowerCase(), 'pie');
   });
 });
 
 // Convert NodeList to an array and select only the second 3 elements
-const secondsThreeLinks = Array.from(period).slice(3, 7);
+const secondsThreeLinks = Array.from(period).slice(3, 6);
 
 secondsThreeLinks.forEach(time => {
   time.addEventListener('click', (event) => {
     event.preventDefault();
     secondsThreeLinks.forEach(t => t.className = 'nav-link text-success');
     time.className = 'nav-link active text-success';
+    filterData(time.textContent.toLowerCase(), 'bar');
   });
 });
 
-let possibleDevices = undefined;
+let userDevicesHistory = [];
 
-// fetches all the devices a user has
-// assisted by chatgpt to write the google chart portions
-document.addEventListener("DOMContentLoaded", async function () {
-  try {
-    const response = await fetch('/dashboardDevices');
-    possibleDevices = await response.json();
+// Filter data based on period
+function filterData(period, chartType) {
+  const now = new Date();
+  let filteredData = [];
 
-    google.charts.load('current', { 'packages': ['corechart'] });
-    google.charts.setOnLoadCallback(drawPieChart);
-    google.charts.setOnLoadCallback(drawBarGraph);
-  } catch (error) {
-    console.error('Error loading devices:', error);
+  console.log(period);
+  console.log(`Filtering data for period: ${period}`);
+
+  if (period === 'week') {
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    filteredData = userDevicesHistory.filter(entry => {
+      const entryDate = new Date(entry.date);
+      console.log(`Entry date: ${entryDate}, Week ago: ${weekAgo}`);
+      return entryDate >= weekAgo;
+    });
+  } else if (period === 'month') {
+    const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    filteredData = userDevicesHistory.filter(entry => {
+      const entryDate = new Date(entry.date);
+      console.log(`Entry date: ${entryDate}, Month ago: ${monthAgo}`);
+      return entryDate >= monthAgo;
+    });
+  } else if (period === 'year') {
+    const yearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+    filteredData = userDevicesHistory.filter(entry => {
+      const entryDate = new Date(entry.date);
+      console.log(`Entry date: ${entryDate}, Year ago: ${yearAgo}`);
+      return entryDate >= yearAgo;
+    });
   }
-});
 
-// draws the piechart onto the ejs file
-// utilizes google charts open source pie chart to display visuals
-function drawPieChart() {
-  if (!possibleDevices) {
+  console.log(`Filtered data length: ${filteredData.length}`);
+
+  if (chartType === 'pie') {
+    drawPieChart(filteredData);
+  } else if (chartType === 'bar') {
+    drawBarGraph(filteredData);
+  }
+}
+
+// Draws the pie chart onto the ejs file
+// Utilizes Google Charts open-source pie chart to display visuals
+function drawPieChart(filteredData) {
+  if (!filteredData.length) {
     console.error('No devices data available');
     return;
   }
 
   const dataArray = [['Device', 'kWh']];
-  possibleDevices.forEach(device => {
-    dataArray.push([device.name, parseFloat(device.kWh)]);
+  const deviceTotals = {};
+
+  filteredData.forEach(entry => {
+    entry.user_devices.forEach(device => {
+      deviceTotals[device.name] = (deviceTotals[device.name] || 0) + parseFloat(device.kWh);
+    });
   });
+
+  for (const [name, kWh] of Object.entries(deviceTotals)) {
+    dataArray.push([name, kWh]);
+  }
 
   const data = google.visualization.arrayToDataTable(dataArray);
 
-  const colors = generateColors(possibleDevices.length);
+  const colors = generateColors(Object.keys(deviceTotals).length);
 
   const options = {
-    title: 'Energy Consumption per Device',
+    title: 'Total Energy Consumption per Device',
     legend: { position: 'none' },
     width: '100%',
     height: 400,
@@ -66,7 +120,7 @@ function drawPieChart() {
 
   const chart = new google.visualization.PieChart(document.getElementById('piechart'));
   google.visualization.events.addListener(chart, 'ready', () => {
-    createCustomLegend(possibleDevices, colors, data);
+    createCustomLegend(deviceTotals, colors);
   });
   chart.draw(data, options);
 }
@@ -80,17 +134,17 @@ function generateColors(numberOfColors) {
   return colors;
 }
 
-function createCustomLegend(devices, colors, data) {
+function createCustomLegend(deviceTotals, colors) {
   const devicesWithColors = [];
 
-  for (let i = 1; i < data.getNumberOfRows(); i++) {
-    const deviceName = data.getValue(i, 0);
-    const deviceKWh = data.getValue(i, 1);
+  let index = 0;
+  for (const [name, kWh] of Object.entries(deviceTotals)) {
     devicesWithColors.push({
-      name: deviceName,
-      kWh: deviceKWh,
-      color: colors[i - 1]
+      name: name,
+      kWh: kWh,
+      color: colors[index]
     });
+    index++;
   }
 
   devicesWithColors.sort((a, b) => b.kWh - a.kWh);
@@ -106,10 +160,18 @@ function createCustomLegend(devices, colors, data) {
   legendDiv.innerHTML = legendHtml;
 }
 
-function drawBarGraph() {
+function drawBarGraph(filteredData) {
+  if (!filteredData.length) {
+    console.error('No devices data available');
+    return;
+  }
+
   let totalKWh = 0;
-  possibleDevices.forEach(device => {
-    totalKWh += parseFloat(device.kWh);
+
+  filteredData.forEach(entry => {
+    entry.user_devices.forEach(device => {
+      totalKWh += parseFloat(device.kWh);
+    });
   });
 
   const CO2e = (totalKWh * 127.82) / 1000;
@@ -140,5 +202,4 @@ function drawBarGraph() {
 
   const chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
   chart.draw(view, options);
-  }
-
+}
