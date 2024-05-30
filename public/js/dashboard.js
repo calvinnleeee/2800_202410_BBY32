@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-// Time Period selector (week, month year)
-const period = document.querySelectorAll('a');
-
-period.forEach(time => {
-    time.addEventListener('click', (event) => {
-        event.preventDefault();
-        period.forEach(t => t.className = 'nav-link text-success');
-        time.className = 'nav-link active text-success';
-    });
-});
-
-
-let possibleDevices = undefined;
-
-// fetches all the devices a user has
-// assisted by chatgpt to write the google chart portions
-document.addEventListener("DOMContentLoaded", async function() {
-  try {
-    const response = await fetch('/dashboardDevices');
-    possibleDevices = await response.json();
-
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-=======
 document.addEventListener("DOMContentLoaded", async function () {
   try {
     const response = await fetch('/dashboardDevices');
@@ -45,18 +20,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Trigger click event on "Week" links
     document.getElementById('pie-week-link').click();
     document.getElementById('bar-week-link').click();
->>>>>>> dev-dashboard-graphs
   } catch (error) {
     console.error('Error loading devices:', error);
   }
 });
 
-<<<<<<< HEAD
-// draws the piechart onto the ejs file
-// utilizes google charts open source pie chart to display visuals
-function drawChart() {
-  if (!possibleDevices) {
-=======
 const period = document.querySelectorAll('a');
 
 // Convert NodeList to an array and select only the first 3 elements
@@ -142,29 +110,11 @@ function filterData(period, chartType) {
 // Utilizes Google Charts open-source pie chart to display visuals
 function drawPieChart(filteredData) {
   if (!filteredData.length) {
->>>>>>> dev-dashboard-graphs
     console.error('No devices data available');
     return;
   }
 
   const dataArray = [['Device', 'kWh']];
-<<<<<<< HEAD
-  possibleDevices.forEach(device => {
-    dataArray.push([device.name, parseFloat(device.kWh)]);
-  });
-
-  const data = google.visualization.arrayToDataTable(dataArray);
-
-  const options = {
-    legend: { position: 'bottom' },
-    width: '100%',
-    height: '100%'
-  };
-
-  const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-  chart.draw(data, options);
-}
-=======
   const deviceTotals = {};
 
   filteredData.forEach(entry => {
@@ -379,4 +329,3 @@ function createBarChartLegend() {
   const legendDiv = document.getElementById('barchart-legend');
   legendDiv.innerHTML = legendHtml;
 }
->>>>>>> dev-dashboard-graphs
