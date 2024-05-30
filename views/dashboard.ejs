@@ -7,7 +7,17 @@
   energy consumption/carbon emissions through graphs.
 -->
 
-    <link rel="stylesheet" href="/css/dashboard.css">
+    <style>
+        h2 {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        li {
+            list-style: none;
+            font-size: 10pt;
+        }
+    </style>
 
     <h2>Dashboard</h2>
     <div class="container-fluid">
@@ -18,7 +28,7 @@
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active text-success" href="#">Week</a>
+                                <a id="pie-week-link" class="nav-link active text-success" href="#">Week</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-success" href="#">Month</a>
@@ -35,26 +45,26 @@
                     </div>
                 </div>
             </div>
-            <div class="row d-flex align-items-center justify-content-center">
-                <div class="col-12 col-md-6 mb-4">
-                    <div class="card text-center border">
-                        <h5 class="card-header">Carbon Emissions</h5>
-                        <div class="card-header">
-                            <ul class="nav nav-tabs card-header-tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link active text-success" href="#">Week</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-success" href="#">Month</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-success" href="#">Year</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <div id="columnchart_values"></div>
-                        </div>
+        </div>
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card text-center border mb-5">
+                    <h5 class="card-header">Carbon Emissions</h5>
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active text-success" href="#">Week</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-success" href="#">Month</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-success" href="#">Year</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div id="columnchart_values"></div>
                     </div>
                 </div>
             </div>
