@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       throw new Error('Network response was not ok');
     }
     const json = await response.text();
-    console.log('Fetched JSON:', json); // Log the fetched JSON string
 
     userDevicesHistory = JSON.parse(json);
 
@@ -80,33 +79,25 @@ function filterData(period, chartType) {
   const now = new Date();
   let filteredData = [];
 
-  console.log(period);
-  console.log(`Filtering data for period: ${period}`);
-
   if (period === 'week') {
     const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     filteredData = userDevicesHistory.filter(entry => {
       const entryDate = new Date(entry.date);
-      console.log(`Entry date: ${entryDate}, Week ago: ${weekAgo}`);
       return entryDate >= weekAgo;
     });
   } else if (period === 'month') {
     const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
     filteredData = userDevicesHistory.filter(entry => {
       const entryDate = new Date(entry.date);
-      console.log(`Entry date: ${entryDate}, Month ago: ${monthAgo}`);
       return entryDate >= monthAgo;
     });
   } else if (period === 'year') {
     const yearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
     filteredData = userDevicesHistory.filter(entry => {
       const entryDate = new Date(entry.date);
-      console.log(`Entry date: ${entryDate}, Year ago: ${yearAgo}`);
       return entryDate >= yearAgo;
     });
   }
-
-  console.log(`Filtered data length: ${filteredData.length}`);
 
   if (chartType === 'pie') {
     drawPieChart(filteredData);
@@ -233,7 +224,9 @@ function drawBarGraph(filteredData, period) {
       }
     });
 
-    for (const [date, data] of Object.entries(dailyData)) {
+    const sortedDailyData = Object.entries(dailyData).sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
+    for (const [date, data] of sortedDailyData) {
       dataArray.push([date, data.kWh, "color: #76A7FA", data.CO2e, "color: #FF6347"]);
     }
   } else if (period === 'month') {
@@ -260,7 +253,9 @@ function drawBarGraph(filteredData, period) {
       }
     });
 
-    for (const [week, data] of Object.entries(weeklyData)) {
+    const sortedWeeklyData = Object.entries(weeklyData).sort((a, b) => a[0].localeCompare(b[0]));
+
+    for (const [week, data] of sortedWeeklyData) {
       dataArray.push([week, data.kWh, "color: #76A7FA", data.CO2e, "color: #FF6347"]);
     }
   } else if (period === 'year') {
@@ -286,7 +281,9 @@ function drawBarGraph(filteredData, period) {
       }
     });
 
-    for (const [month, data] of Object.entries(monthlyData)) {
+    const sortedMonthlyData = Object.entries(monthlyData).sort((a, b) => a[0].localeCompare(b[0]));
+
+    for (const [month, data] of sortedMonthlyData) {
       dataArray.push([month, data.kWh, "color: #76A7FA", data.CO2e, "color: #FF6347"]);
     }
   }
@@ -314,5 +311,21 @@ function drawBarGraph(filteredData, period) {
   };
 
   const chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+  google.visualization.events.addListener(chart, 'ready', () => {
+    createBarChartLegend();
+  });
   chart.draw(view, options);
+}
+
+function createBarChartLegend() {
+  const legendHtml = `
+    <div style="display: flex; justify-content: center;">
+      <ul style="list-style: none; padding: 0; margin: 0 20px;">
+        <li><span style="display: inline-block; width: 10px; height: 10px; background-color: #76A7FA; margin-right: 8px;"></span>kWh</li>
+        <li><span style="display: inline-block; width: 10px; height: 10px; background-color: #FF6347; margin-right: 8px;"></span>CO2e (kg)</li>
+      </ul>
+    </div>`;
+  
+  const legendDiv = document.getElementById('barchart-legend');
+  legendDiv.innerHTML = legendHtml;
 }
