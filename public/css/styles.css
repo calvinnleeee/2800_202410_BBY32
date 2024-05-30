@@ -106,8 +106,14 @@ body {
 /* Dropdown menu */
 
 .dropdown-icon {
-  width: 45px;
+  width: 35px;
   height: auto;
+}
+
+#navbarDropdown {
+  background-color: #CED3DC;
+  border-radius: 20%;
+  padding: 3px;
 }
 
 #dropdown {
