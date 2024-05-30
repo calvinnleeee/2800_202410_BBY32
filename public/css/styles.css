@@ -18,7 +18,6 @@ Colour theme
 body {
   background-color: white;
   height: 100vh;
-<<<<<<< HEAD
   font-size: 10pt;
 }
 
@@ -26,40 +25,16 @@ body {
   background: linear-gradient(180deg, #90C2E7, rgba(255, 255, 255, 0));
   height: 10vh;
   z-index: 1;
-=======
-}
-
-#back-button {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1;
-}
-
-.header-colours {
-  /* background: linear-gradient(180deg, #519E5C, #FFFFFF); */
-  background: linear-gradient(180deg, #90C2E7, rgba(255, 255, 255, 0));
-  height: 10vh;
-  z-index: 0;
->>>>>>> dev-dashboard-graphs
 }
 
 .nav-colours {
   background: linear-gradient(0deg, #519E5C, rgba(255, 255, 255, 0));
-<<<<<<< HEAD
   height: 12.5vh;
-=======
-  height: 10vh;
->>>>>>> dev-dashboard-graphs
 }
 
 .nav-colours-after {
   background: linear-gradient(0deg, #519E5C 40%, rgba(255, 255, 255, 0));
-<<<<<<< HEAD
   height: 12.5vh;
-=======
-  height: 10vh;
->>>>>>> dev-dashboard-graphs
 }
 
 /* ---------------------------------------------------------------- */
@@ -70,7 +45,6 @@ body {
 }
 
 .center-me {
-<<<<<<< HEAD
   margin-top: 7%;
   text-align: center;
   height: 70vh;
@@ -80,16 +54,6 @@ body {
 
 .carousel-inner {
   height: max-content;
-=======
-  margin-top: 35%;
-  text-align: center;
-  height: 50vh;
-  animation: fadeIn ease 2s;
-}
-
-.carousel-inner {
-  height: 60vh;
->>>>>>> dev-dashboard-graphs
 }
 
 .error {
@@ -97,19 +61,11 @@ body {
 }
 
 .carousel-item {
-<<<<<<< HEAD
   height: max-content;
 }
 
 .landing-btn {
   width: 25vw;
-=======
-  height: 70vh;
-}
-
-.landing-btn {
-  width: 40vw;
->>>>>>> dev-dashboard-graphs
 }
 
 .errorPage {
@@ -121,7 +77,6 @@ body {
 
 .nav-div {
   width: 100%;
-<<<<<<< HEAD
   height: 100%;
 }
 
@@ -133,15 +88,6 @@ body {
 .nav-icon {
   width: 55px;
   height: auto;
-=======
-  height: 60%;
-}
-
-.nav-icon {
-  width: 65px;
-  height: auto;
-  padding: 3px;
->>>>>>> dev-dashboard-graphs
 }
 
 .nav-icon-active {
@@ -149,7 +95,6 @@ body {
   border-radius: 20%;
 }
 
-<<<<<<< HEAD
 .nav-text {
   color: #635C51;
   font-weight: bold;
@@ -157,13 +102,10 @@ body {
   top: -10px;
 }
 
-=======
->>>>>>> dev-dashboard-graphs
 /* ---------------------------------------------------------------- */
 /* Dropdown menu */
 
 .dropdown-icon {
-<<<<<<< HEAD
   width: 35px;
   height: auto;
 }
@@ -174,12 +116,6 @@ body {
   padding: 3px;
 }
 
-=======
-  width: 45px;
-  height: auto;
-}
-
->>>>>>> dev-dashboard-graphs
 #dropdown {
   position: fixed;
   top: 20px;
@@ -197,7 +133,6 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
-<<<<<<< HEAD
 /* Main/summary page */
 
 #easter {
@@ -228,8 +163,6 @@ body {
 }
 
 /* ---------------------------------------------------------------- */
-=======
->>>>>>> dev-dashboard-graphs
 /* Devices page */
 
 .error-text {
@@ -302,7 +235,6 @@ body {
 /* ---------------------------------------------------------------- */
 /* Etc. */
 
-<<<<<<< HEAD
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -311,13 +243,3 @@ body {
     transform: rotate(360deg);
   }
 }
-=======
-/* @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-} */
->>>>>>> dev-dashboard-graphs
