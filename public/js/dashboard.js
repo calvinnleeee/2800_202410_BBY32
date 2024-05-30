@@ -9,9 +9,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     userDevicesHistory = JSON.parse(json);
 
+    // Check and duplicate device history for missing dates
+    checkAndDuplicateDeviceHistory();
+
     google.charts.load('current', { 'packages': ['corechart'] });
-    google.charts.setOnLoadCallback(() => drawPieChart(userDevicesHistory));
-    google.charts.setOnLoadCallback(() => drawBarGraph(userDevicesHistory));
+    google.charts.setOnLoadCallback(() => {
+      drawPieChart(userDevicesHistory);
+      drawBarGraph(userDevicesHistory, 'week'); // Default to weekly
+    });
+
+    // Trigger click event on "Week" links
+    document.getElementById('pie-week-link').click();
+    document.getElementById('bar-week-link').click();
   } catch (error) {
     console.error('Error loading devices:', error);
   }
@@ -44,6 +53,27 @@ secondsThreeLinks.forEach(time => {
 });
 
 let userDevicesHistory = [];
+
+function checkAndDuplicateDeviceHistory() {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  if (userDevicesHistory.length === 0) return;
+
+  // Find the latest entry
+  let latestEntry = userDevicesHistory[userDevicesHistory.length - 1];
+  let latestDate = new Date(latestEntry.date);
+  latestDate.setHours(0, 0, 0, 0);
+
+  while (latestDate < today) {
+    latestDate.setDate(latestDate.getDate() + 1);
+    const newEntry = {
+      date: latestDate.toISOString(),
+      user_devices: JSON.parse(JSON.stringify(latestEntry.user_devices))
+    };
+    userDevicesHistory.push(newEntry);
+  }
+}
 
 // Filter data based on period
 function filterData(period, chartType) {
@@ -81,7 +111,7 @@ function filterData(period, chartType) {
   if (chartType === 'pie') {
     drawPieChart(filteredData);
   } else if (chartType === 'bar') {
-    drawBarGraph(filteredData);
+    drawBarGraph(filteredData, period);
   }
 }
 
@@ -111,7 +141,7 @@ function drawPieChart(filteredData) {
   const colors = generateColors(Object.keys(deviceTotals).length);
 
   const options = {
-    title: 'Total Energy Consumption per Device',
+    title: 'Energy Consumption per Device',
     legend: { position: 'none' },
     width: '100%',
     height: 400,
@@ -149,55 +179,138 @@ function createCustomLegend(deviceTotals, colors) {
 
   devicesWithColors.sort((a, b) => b.kWh - a.kWh);
 
-  let legendHtml = '<ul style="list-style: none; padding: 0;">';
-  devicesWithColors.forEach(device => {
+  const midpoint = Math.ceil(devicesWithColors.length / 2);
+  const leftColumn = devicesWithColors.slice(0, midpoint);
+  const rightColumn = devicesWithColors.slice(midpoint);
+
+  let legendHtml = '<div style="display: flex; justify-content: center;">';
+  legendHtml += '<ul style="list-style: none; padding: 0; margin: 0 20px;">';
+  leftColumn.forEach(device => {
     const deviceName = device.name.charAt(0).toUpperCase() + device.name.slice(1);
     legendHtml += `<li><span style="display: inline-block; width: 10px; height: 10px; background-color: ${device.color}; margin-right: 8px;"></span>${deviceName}</li>`;
   });
   legendHtml += '</ul>';
 
+  legendHtml += '<ul style="list-style: none; padding: 0; margin: 0 20px;">';
+  rightColumn.forEach(device => {
+    const deviceName = device.name.charAt(0).toUpperCase() + device.name.slice(1);
+    legendHtml += `<li><span style="display: inline-block; width: 10px; height: 10px; background-color: ${device.color}; margin-right: 8px;"></span>${deviceName}</li>`;
+  });
+  legendHtml += '</ul>';
+  legendHtml += '</div>';
+
   const legendDiv = document.getElementById('piechart-legend');
   legendDiv.innerHTML = legendHtml;
 }
 
-function drawBarGraph(filteredData) {
+function drawBarGraph(filteredData, period) {
   if (!filteredData.length) {
     console.error('No devices data available');
     return;
   }
 
-  let totalKWh = 0;
+  let dataArray = [["Date", "kWh", { role: "style" }, "CO2e (kg)", { role: "style" }]];
 
-  filteredData.forEach(entry => {
-    entry.user_devices.forEach(device => {
-      totalKWh += parseFloat(device.kWh);
+  if (period === 'week') {
+    const dailyData = {};
+
+    // Initialize dailyData for the past 7 days
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateString = date.toISOString().split('T')[0];
+      dailyData[dateString] = { kWh: 0, CO2e: 0 };
+    }
+
+    filteredData.forEach(entry => {
+      const entryDate = new Date(entry.date).toISOString().split('T')[0];
+      if (dailyData[entryDate]) {
+        entry.user_devices.forEach(device => {
+          const kWh = parseFloat(device.kWh);
+          dailyData[entryDate].kWh += kWh;
+          dailyData[entryDate].CO2e += (kWh * 127.82) / 1000;
+        });
+      }
     });
-  });
 
-  const CO2e = (totalKWh * 127.82) / 1000;
+    for (const [date, data] of Object.entries(dailyData)) {
+      dataArray.push([date, data.kWh, "color: #76A7FA", data.CO2e, "color: #FF6347"]);
+    }
+  } else if (period === 'month') {
+    const weeklyData = {};
 
-  const dataArray = [["Measurement", "Value", { role: "style" }]];
-  dataArray.push(["Total kWh", totalKWh, "color: #76A7FA"]);
-  dataArray.push(["CO2e (kg)", CO2e, "color: #FF6347"]);
+    // Initialize weeklyData for the past 4 weeks
+    for (let i = 0; i < 4; i++) {
+      const weekStart = new Date();
+      weekStart.setDate(weekStart.getDate() - i * 7);
+      const weekString = `Week ${4 - i}`;
+      weeklyData[weekString] = { kWh: 0, CO2e: 0 };
+    }
+
+    filteredData.forEach(entry => {
+      const entryDate = new Date(entry.date);
+      const weekIndex = Math.floor((Date.now() - entryDate) / (7 * 24 * 60 * 60 * 1000));
+      if (weekIndex < 4) {
+        const weekString = `Week ${4 - weekIndex}`;
+        entry.user_devices.forEach(device => {
+          const kWh = parseFloat(device.kWh);
+          weeklyData[weekString].kWh += kWh;
+          weeklyData[weekString].CO2e += (kWh * 127.82) / 1000;
+        });
+      }
+    });
+
+    for (const [week, data] of Object.entries(weeklyData)) {
+      dataArray.push([week, data.kWh, "color: #76A7FA", data.CO2e, "color: #FF6347"]);
+    }
+  } else if (period === 'year') {
+    const monthlyData = {};
+
+    // Initialize monthlyData for the past 12 months
+    for (let i = 0; i < 12; i++) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+      monthlyData[dateString] = { kWh: 0, CO2e: 0 };
+    }
+
+    filteredData.forEach(entry => {
+      const entryDate = new Date(entry.date);
+      const entryMonth = `${entryDate.getFullYear()}-${(entryDate.getMonth() + 1).toString().padStart(2, '0')}`;
+      if (monthlyData[entryMonth]) {
+        entry.user_devices.forEach(device => {
+          const kWh = parseFloat(device.kWh);
+          monthlyData[entryMonth].kWh += kWh;
+          monthlyData[entryMonth].CO2e += (kWh * 127.82) / 1000;
+        });
+      }
+    });
+
+    for (const [month, data] of Object.entries(monthlyData)) {
+      dataArray.push([month, data.kWh, "color: #76A7FA", data.CO2e, "color: #FF6347"]);
+    }
+  }
 
   const data = google.visualization.arrayToDataTable(dataArray);
 
   const view = new google.visualization.DataView(data);
-  view.setColumns([0, 1,
-    {
-      calc: "stringify",
-      sourceColumn: 1,
-      type: "string",
-      role: "annotation"
-    },
-    2]);
+  view.setColumns([0, 1, 2, 3, 4]);
 
   const options = {
-    title: "Total Energy Consumption and CO2e",
+    title: period === 'week' ? "Daily Energy Consumption and CO2e for the Past Week" :
+           period === 'month' ? "Weekly Energy Consumption and CO2e for the Past Month" :
+           "Monthly Energy Consumption and CO2e for the Past Year",
     width: "100%",
     height: 400,
-    bar: { groupWidth: "95%" },
+    bar: { groupWidth: "80%" },
     legend: { position: "none" },
+    hAxis: {
+      textStyle: { fontSize: 10 } // Adjust font size to fit longer labels if necessary
+    },
+    series: {
+      0: { color: '#76A7FA' },
+      1: { color: '#FF6347' }
+    }
   };
 
   const chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
