@@ -493,6 +493,7 @@ app.get('/profile', (req, res) => {
 app.post('/updateProfile', async (req, res) => {
   let errorMessage = '';
   let successMessage = '';
+  
   // Extract and log old user details
   let oldUserId = req.session.userid;
   let oldName = req.session.name;
@@ -504,6 +505,11 @@ app.post('/updateProfile', async (req, res) => {
   let newName = req.body.name;
   let newEmail = req.body.email;
   let newPw = req.body.newPassword;
+
+  // Regex for special characters
+  const regexAlphanumeric = /^[a-zA-Z0-9_-]+$/;
+  // Regex for whitespace
+  const regexWhitespace = /\s/;
 
   // Update password if new password is provided
   if (newPw) {
@@ -533,6 +539,17 @@ app.post('/updateProfile', async (req, res) => {
 
   // Update name if new name is provided
   if (newName) {
+    // Check new name for whitespace and alphanumeric characters, and max 30 characters
+    if (regexWhitespace.test(newName)) {
+      errorMessage = 'Name must not contain any whitespace.';
+      return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+    } else if (!regexAlphanumeric.test(newName)) {
+      errorMessage = 'Name must only use alphanumeric characters.';
+      return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+    } else if (newName.length > 30) {
+      errorMessage = 'Name must be a maximum of 30 characters.';
+      return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+    }
     await userCollection.updateOne({ username: oldName }, { $set: { username: newName } });
     // Update the session with the new name
     req.session.name = newName;
@@ -549,48 +566,50 @@ app.post('/updateProfile', async (req, res) => {
       successMessage += 'Email successfully updated! ';
     } else {
       const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-      const errorMessage = "An account is already associated with this e-mail";
-      res.render('profile', {
+      errorMessage = "An account is already associated with this e-mail.";
+      return res.render('profile', {
         errorMessage: errorMessage,
         userid: oldUserId,
         name: oldName,
         email: oldEmail,
       });
-      return;
     }
   }
 
-  // Regex to check for whitespace and alphanum only
-  const regex = /^[a-zA-Z0-9_-]+$/;
-  // Check new UserID for whitespace and alphanum
-  if (newUserId && !regex.test(newUserId)) {
-    errorMessage = 'UserID must not contain any whitespace and only use alphanumeric characters.';
-    return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
-  }
+  // Check new UserID for whitespace and alphanumeric characters, min 6 - max 30 characters
+  if (newUserId) {
+    if (regexWhitespace.test(newUserId)) {
+      errorMessage = 'UserID must not contain any whitespace.';
+      return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+    } else if (!regexAlphanumeric.test(newUserId)) {
+      errorMessage = 'UserID must only use alphanumeric characters.';
+      return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+    } else if (newUserId.length < 6 || newUserId.length > 30) {
+      errorMessage = 'UserID must be between 6 and 30 characters.';
+      return res.render('profile', { errorMessage: errorMessage, userid: oldUserId, name: oldName, email: oldEmail });
+    }
 
-  // Check if the new user ID already exists
-  const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
-  if (newUserId && !idExists) {
-    await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
-    req.session.userid = newUserId;
-    successMessage += 'User ID successfully updated! ';
-  } else if (newUserId && idExists) {
-    const user = await userCollection.findOne({ email: oldEmail }); // Fetch user details again if needed
-    const errorMessage = "An account is already associated with this user ID";
-    res.render('profile', {
-      errorMessage: errorMessage,
-      userid: oldUserId,
-      name: oldName,
-      email: oldEmail,
-    });
-    return;
+    // Check if the new user ID already exists
+    const idExists = await userCollection.countDocuments({ userid: newUserId }) > 0;
+    if (!idExists) {
+      await userCollection.updateOne({ userid: oldUserId }, { $set: { userid: newUserId } });
+      req.session.userid = newUserId;
+      successMessage += 'User ID successfully updated!';
+    } else {
+      errorMessage = "An account is already associated with this user ID.";
+      return res.render('profile', {
+        errorMessage: errorMessage,
+        userid: oldUserId,
+        name: oldName,
+        email: oldEmail,
+      });
+    }
   }
 
   if (!errorMessage) {
     res.render('profile', { successMessage, userid: req.session.userid, name: req.session.name, email: req.session.email });
   }
 });
-
 
 // ---------------------------------------------------------------------------------
 // Dashboard button
