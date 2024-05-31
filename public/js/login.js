@@ -34,8 +34,10 @@ else if (sessionStorage.getItem("prev") == "login") {
   Add event listener to login form to validate using Joi before posting
 */
   document.getElementById("loginForm").addEventListener("submit", function(event) {
-  // Prevent default form submission
+  // Prevent default form submission and temporarily disable the button
   event.preventDefault();
+  document.getElementById("login-button").disabled = true;
+  document.getElementById("login-button").value = "Logging in...";
 
   // Get form inputs
   var userID = document.getElementById("login-id").value;
@@ -49,9 +51,12 @@ else if (sessionStorage.getItem("prev") == "login") {
   var validationResult = schema.validate({ID: userID, pw: userPw});
 
   // If there is an error, display a meaningful message to the user depending on the error
+  // and reenable the button
   if (validationResult.error != null) {
     var errorMsg = validationResult.error.details[0].message;
     displayError(errorMsg, "loginError");
+    document.getElementById("login-button").disabled = false;
+    document.getElementById("login-button").value = "Login";
   }
 
   // If there is no error, proceed to post to the server for bcrypt password hashing
@@ -70,8 +75,10 @@ else if (sessionStorage.getItem("prev") == "login") {
   Add event listener to signup form to validate with Joi before posting
 */
   document.getElementById("signupForm").addEventListener("submit", function(event) {
-  // Prevent default form submission
+  // Prevent default form submission and temporarily disable the button
   event.preventDefault();
+  document.getElementById("signup-button").disabled = true;
+  document.getElementById("signup-button").value = "Signing up...";
 
   // Get form inputs
   var userID = document.getElementById("signup-id").value;
@@ -90,10 +97,13 @@ else if (sessionStorage.getItem("prev") == "login") {
   var validationResult = schema.validate({ID: userID, name: userName, email: userEmail, pw: userPw});
 
   // If there is an error, display a meaningful message to the user depending on the error
+  // and reenable the button.
   if (validationResult.error != null) {
     var errorMsg = validationResult.error.details[0].message;
     console.log(errorMsg);
     displayError(errorMsg, "signupError");
+    document.getElementById("signup-button").disabled = false;
+    document.getElementById("signup-button").value = "Submit";
   }
 
   // If there is no error, proceed to post to the server for bcrypt password hashing
@@ -119,6 +129,17 @@ document.querySelectorAll(".clear-error").forEach((btn) => {
     document.getElementById("signupError").textContent = "";
     document.getElementById("signupError").replaceChildren(document.createElement('br'));
   });
+});
+
+
+/*
+  Add an event listener to the forgot password form to prevent multiple submissions.
+*/
+document.getElementById("forgotForm").addEventListener('submit', function(event) {
+  event.preventDefault();
+  document.getElementById("forgot-pw-button").disabled = true;
+  document.getElementById("forgot-pw-button").value = "Submitting..."
+  this.submit();
 });
 
 
