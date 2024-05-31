@@ -214,7 +214,7 @@ document.getElementById("add-submit").addEventListener("click", (e) => {
     }
     let deviceIndex = deviceNames.indexOf(newDeviceName);
     kwh = ((possibleDevices[deviceIndex].min + possibleDevices[deviceIndex].max) / 2)
-        * Math.floor((Math.random() * 20) + 1);
+        * Math.floor((Math.random() * 20) + 1) / 1000;
   }
 
   document.getElementById("add-error").innerHTML = "<br/>";
