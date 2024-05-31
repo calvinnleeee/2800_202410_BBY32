@@ -52,6 +52,65 @@ Team Members:
 - Canva (wireframes, prototype mockups, icon designs)
 
 
+# For potential developers/contributors:
+To contribute to this project, the following software are recommmended:
+- Visual Studio Code (especially utilizing various extensions for linting in a variety of languages)
+- Studio 3T (recommended to connect and work with the database directly)
+
+API keys are required for some functions, email the repo owner if they are needed.
+
+For the various packages or modules required for this project, run the 'npm i' command in the root folder, assuming Node is installed on the machine. 
+
+A link to the current list of completed and outstanding tests left for the project can be found here:
+https://docs.google.com/spreadsheets/d/11GhRIyhW4OLQlTk19WfL_bwTugK26kNnxu6ZDfKUw9g/edit#gid=0
+
+
+# Working features in the app that can be tested by users
+- Signup/login/forgot password submission
+- Graphical summary and breakdowns in the main and dashboard pages, broken down by devices the user has added
+- Manage device page, allowing add/edit/remove device functions to manage a user's tracked devices
+- Profile page, with some functionality for changing user id/name/password/email.
+- About us page, with some background information for the app/group
+
+
+# AI
+AI was used to generate useful functions or other functions in which it would be trivial for us to write in order to same time.
+AI was also used to write some difficult functions that none of us knew how to tackle.
+A list of possible devices that the user can add was created partly by AI by asking it to generate a blank template JSON file with names and empty fields for us to fill in.
+The app itself does not interact with AI.
+
+
+# Contact
+For any questions related to this app, email the repo owner (Calvin) at calvinnleeee@gmail.com.
+
+# References:
+Canada Energy Regulator - Provincial and Territorial Energy Profiles – British Columbia
+https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/provincial-territorial-energy-profiles/provincial-territorial-energy-profiles-british-columbia.html
+
+Statistics Canada - Household energy consumption
+https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510006001
+
+BC Hydro - Electricity rates
+https://app.bchydro.com/accounts-billing/rates-energy-use/electricity-rates/residential-rates.html
+
+BC Hydro - Energy concepts, explained
+https://www.bchydro.com/powersmart/residential/energy-explained.html
+
+US EPA - Greenhouse gas equivalences calculator
+https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator#results
+
+Saskatoon Light & Power - Appliance Usage Chart
+https://www.saskatoon.ca/sites/default/files/documents/asset-financial-management/corporate-revenue/services-payments/utilities/appliance_chart-june24-850am.pdf
+
+Daft Logic - List of Power Consumption of Typical Household Appliances
+https://www.daftlogic.com/information-appliance-power-consumption.htm
+
+
+# Credits
+- Lead and supporting instructors of COMP2800
+- Our project manager / client, Carly Orr
+- ChatGPT for some helpful code templates and solving some difficult problems
+
 ## Folder Contents:
 Top level of project folder:
 
