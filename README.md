@@ -55,11 +55,11 @@ Team Members:
 ## Folder Contents:
 Top level of project folder:
 
-├── public                   # Contains public assets: Stylesheets, Images, JavaScript Files, JSON files
-├── views                    # Holds view templates and EJS files
-├── .gitattributes           # Specifies Git repository attributes
-├── .gitignore               # Ignores untracked files for Git
-├── index.js                 # Manages user authentication, routing and request handling, and static file serving
-├── package-lock.json        # Lockfile for package dependencies
-├── package.json             # Defines project configuration and dependencies
-└── README.md                # Project documentation
+├── public                    / Contains public assets: Stylesheets, Images, JavaScript Files, JSON files
+├── views                     / Holds view templates and EJS files
+├── .gitattributes            / Specifies Git repository attributes
+├── .gitignore                / Ignores untracked files for Git
+├── index.js                  / Manages user authentication, routing and request handling, and static file serving
+├── package-lock.json         / Lockfile for package dependencies
+├── package.json              / Defines project configuration and dependencies
+└── README.md                 / Project documentation
