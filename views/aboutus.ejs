@@ -1,0 +1,85 @@
+<%- include('templates/headerAfterLogin') %>
+<!--
+  Aboutus EJS.
+  Author: Anna Dao
+  Description: About us section with information about the app. 
+            -> Template obtained from bootstrap
+-->
+
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<!-- Styling  -->
+
+<style>
+  .container-fluid {
+    padding-bottom: 40px; 
+  }
+</style>
+
+<!-- About us section -->
+<section class="About-us">
+
+  <div class="container">
+    <div class="row gy-3 gy-md-4 gy-lg-0 align-items-lg-center">
+
+      <div class="col-12 col-lg-6 col-xl-5">
+        <img class="img-fluid rounded" loading="lazy" src="/img/carboncap3.png" alt="About 1">
+      </div>
+
+      <div class="col-12 col-lg-6 col-xl-7">
+        <div class="row justify-content-xl-center">
+          <div class="col-12 col-xl-11">
+
+            <h2 class="mb-3">Who are we?</h2>
+            <p class="lead fs-4 text-secondary mb-3">Carbon Cap helps people make informed decisions about their
+              energy consumption in their home. </p>
+            <p class="mb-5"> Our group, BBY-32, is developing a carbon footprint tracker to guide
+              environmentally-conscious people in reducing their footprints with visual data and useful tips </p>
+
+            <div class="row gy-4 gy-md-0 gx-xxl-5X">
+
+              <div class="col-12 col-md-6">
+                <div class="d-flex">
+
+                  <div class="me-4 text-primary">
+                    <img src="/img/energylogo.png" style="width: 60px; height: auto;">
+                  </div>
+
+                  <div>
+                    <h2 class="h4 mb-3"> Tracking energy usage </h2>
+                    <p class="text-secondary mb-0"> Users can see their daily, weekly, and monthly energy consumption and costs and compare them with the average user. </p>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="d-flex mb-5">
+
+                  <div class="me-4 text-primary">
+                    <img src="/img/energylogo.png" style="width: 60px; height: auto;">
+                  </div>
+
+                  <div>
+                    <h2 class="h4 mb-3"> Decision making </h2>
+                    <p class="text-secondary mb-0"> Users can make informed decisions regarding their energy usage,
+                      with tips to help lower their usage. This will cut costs and lead to reduced carbon emissions. </p>
+                      <br>
+                      <br>
+                      <br>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('templates/footerAfterLogin') %>

@@ -1,44 +1,49 @@
 <%- include('templates/headerAfterLogin') %>
 
-<a id="back-button" href="/main" class="btn btn-success mb-3"><</a>
+<!-- 
+  Device page EJS.
+  Author: Calvin Lee
+  Description: Displays the list of devices that user is currently tracking, and buttons
+    for adding, removing, and editing a device. 
+ -->
 
-<h1 class="text-center my-3">Your devices</h1>
+<!-- Header for the page -->
+<h1 class="text-center mt-2" style="line-height: 80%;">Your devices</h1>
+<p class="mx-4 my-0">
+  Use this page to see what electronic devices and appliances you are currently tracking.
+</p>
 
-<div class="container d-flex justify-content-between mt-4 px-4">
-  <button type="button" class="btn btn-md btn-success" id="device-help"
-    data-bs-toggle="modal" data-bs-target="#helpText">?</button>
+<div class="container text-center mt-2 mb-2">
   <button class="btn btn-md btn-success" id="device-add" type="submit" value="Add device"
-    data-bs-toggle="modal" data-bs-target="#addDevice">+</button>
+    data-bs-toggle="modal" data-bs-target="#addDevice">Add new device</button>
 </div>
 
-
-<div class="table-container container mt-3 pt-3">
+<!-- Table for the devices -->
+<div class="table-container container px-0">
 
   <table class="table">
 
-    <thead>
+    <thead style="position: sticky; top: 0;">
       <tr>
-        <th scope="col" id="table-kwh"><img class="device-icon" src="/img/icons/electricity-icon.png">(kWh)</th>
+        <th scope="col" id="table-kwh" class="px-0 mx-0 d-flex align-items-end"><img class="device-icon" src="/img/icons/electricity-icon.png">kWh/day</th>
         <th scope="col" colspan="2">Name of device</th>
         <th scope="col"></th>
-        <th scope="col"></th>
+        <th scope="col" style="width: 22vw;"></th>
       </tr>
     </thead>
 
-    <tbody id="device-table">
+    <tbody id="device-table" style="overflow-y: scroll;">
     <!-- use EJS and pass in an array of devices from the server to populate this section -->
-    <!-- generating fake information for now -->
-
     <% for (let i = 0; i < deviceList.length; i++) { %>
       <tr>
-        <th scope="row"><%= deviceList[i].kWh %></th>
+        <th scope="row" class="text-center"><%= deviceList[i].kWh %></th>
         <td colspan="3"><%= deviceList[i].name %></td>
         <td data-device="<%= deviceList[i].name %>" data-kwh="<%= deviceList[i].kWh %>">
           <a data-bs-toggle="modal" data-bs-target="#deviceEdit">
             <img class="edit-delete device-icon mx-1" src="/img/icons/settings-dropdown.png"
                  data-device="<%= deviceList[i].name %>" data-kwh="<%= deviceList[i].kWh %>">
           </a>
-          <a data-bs-toggle="modal" data-bs-target="#deviceDelete">
+          <a style="margin-left: 3px;" data-bs-toggle="modal" data-bs-target="#deviceDelete">
             <img class="edit-delete device-icon" src="/img/icons/delete-icon.png"
                  data-device="<%= deviceList[i].name %>" data-kwh="<%= deviceList[i].kWh %>">
           </a>
@@ -52,84 +57,80 @@
 
 </div>
 
-<!-- <button type="button" class="btn btn-md btn-success" id="device-help"
-        data-bs-toggle="modal" data-bs-target="#helpText">?</button> -->
 
 <!-- Modal component for the add device button -->
+<!-- Contains a carousel to swap back and forth between help text and add device form -->
 <div class="modal fade" id="addDevice" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Add a new device</h5>
+        <h5 class="modal-title">Add new device</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
-        <p class="error-text text-center" id="add-error"><br/></p>
-        <form action="/addDevice" method="post">
 
-          <label class="mb-1" for="deviceName">Device name:</label><br/>
-          <div class="form-input">
-            <div id="deviceDropdown">
-              <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
-              <div class="deviceDrop" id="deviceDrop">
-                <!-- fill in options with JS here -->
-              </div>
+        <div id="add-device-carousel" class="carousel slide" data-bs-touch="false">
+          <div class="carousel-inner">
+
+            <div class="carousel-item" id="help-text" style="font-size: 12pt;">
+              <!-- Help text here -->
+              <p>
+                The wattage is the amount of energy your device consumes over a period of time.
+                Multiplying it with the 24 hours per day and dividing by 1000 will give you kWh
+                (kiloWatt-hours), which measures the amount of energy used by the device per day.
+              </p>
+              <p>
+                To find the wattage of your device, look for the information labels that are usually
+                placed on the back of the device.
+              </p>
+              <p>
+                If you cannot find the label, search online for the estimated wattage of your device
+                and it will be enough for this app.
+              </p>
             </div>
-          </div>
-          
-          <label class="mb-1 mt-3" for="deviceWattage">Device wattage:</label><br/>
-          <div class="form-input">
-            <input class="form-textbox" type="number" id="deviceWattage" name="deviceWattage"
-                  placeholder="Units in kW"><br/>
-          </div>
 
-          <label class="mb-1 mt-3" for="deviceUsage">Device usage:</label><br/>
-          <div class="form-input">
-            <input class="mb-4 form-textbox" type="number" id="deviceUsage" name="deviceUsage"
-                  placeholder="Time used per day in hours"><br/>
+            <div class="carousel-item active" id="add-device-form">
+              <p class="error-text text-center" id="add-error"><br/></p>
+              <form action="/addDevice" method="post">
+      
+                <label class="mb-1" for="deviceName">Device name:</label><br/>
+                <div class="form-input">
+                  <div id="deviceDropdown">
+                    <input type="text" id="deviceName" name="deviceName" placeholder="Type to search...">
+                    <div class="deviceDrop" id="deviceDrop">
+                      <!-- fill in options with JS here -->
+                    </div>
+                  </div>
+                </div>
+                
+                <label class="mb-1 mt-3" for="deviceWattage">Device wattage (W):</label><br/>
+                <div class="form-input">
+                  <input class="form-textbox" type="number" id="deviceWattage" name="deviceWattage"
+                        placeholder="Units in watts"><br/>
+                </div>
+      
+                <label class="mb-1 mt-3" for="deviceUsage">Device usage (hours):</label><br/>
+                <div class="form-input">
+                  <input class="mb-4 form-textbox" type="number" id="deviceUsage" name="deviceUsage"
+                        placeholder="Time used per day"><br/>
+                </div>
+                <p style="font-size: 10pt; color: gray;">
+                  (Enter 0 in both wattage and usage if you are unsure. We'll give you an average based on your province's average usage of that device.)
+                </p>
+      
+              </form>
+            </div>
+            
           </div>
-          <p style="font-size: 10pt; color: gray;">
-            (Enter 0 in both wattage and usage if you are unsure. We'll give you an average based on your province's average usage of that device.)
-          </p>
-
-        </form>
+        </div>
 
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="display: grid; grid-template-columns: max-content 1fr max-content max-content;">
+        <button type="button" class="btn btn-md btn-success" id="device-help"
+          data-bs-target="#add-device-carousel" data-bs-slide="prev">?</button>
+        <div style="width: 20%;"></div>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" id="add-submit">Add device</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal component for the help button -->
-<div class="modal fade" id="helpText" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Device wattage</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Help text here -->
-        <p>
-          The wattage is the amount of energy your device consumes over a period of time.
-          Multiplying it with the 24 hours per day and dividing by 1000 will give you kWh
-           (kiloWatt-hours), which measures the amount of energy used by the device per day.
-        </p>
-        <p>
-          To find the wattage of your device, look for the information labels that are usually
-          placed on the back of the device.
-        </p>
-        <p>
-          If you cannot find the label, search online for the estimated wattage of your device
-          and it will be enough for this app.
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -169,7 +170,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- Edit device text input here -->
+        <!-- Delete confirmation message -->
         <p>Are you sure you want to delete this device?</p>
         <p>Warning: You will lose all associated data/history associated with this device.</p>
       </div>
@@ -181,6 +182,7 @@
   </div>
 </div>
 
+<!-- Scripts for page functionality and browser-side Joi -->
 <script src="https://cdn.jsdelivr.net/npm/joi@17.13.1/dist/joi-browser.min.js"></script>
 <script src="/js/devices.js"></script>
 

@@ -1,5 +1,11 @@
 <%- include('templates/headerAfterLogin') %>
+<!--
+  Main page EJS.
+  Author: Brian Diep, Anna Dao
+  Description: Main page after login. Displays summary/instruction section and CAP OF THE DAY and easter egg.
+-->
 
+<!-- Styling (specific to this page) -->
 <style>
   .btn {
     margin-right: 10px;
@@ -16,14 +22,21 @@
   }
 </style>
 
+<!-- Main container -->
 <div class="container-fluid">
-  <div class="row d-flex align-items-center justify-content-center">
+  <div class="row d-flex align-items-center justify-content-center mb-2">
+
+    <!-- Welcome message -->
     <div class="col-12 col-md-3 text-center mb-4">
       <img src='/img/mainlogo.png' alt="Logo" class="img-fluid" style="max-width: 130px; height: auto;">
       <h1 class="hello">Welcome, <%= name %>!</h1>
       <h4 class="capping">Let's get capping!</h4>
     </div>
+
+    <!-- Summary / instructions -->
     <div class="col-12 col-md-6 mb-4">
+      
+      <!-- Instructions for no devices -->
       <% if (typeof message !== 'undefined' || typeof devicesLink !== 'undefined') { %>
         <div class="card mb-3">
           <img src="/img/AddDevice.png" class="card-img-top" alt="...">
@@ -32,32 +45,34 @@
             <p class="card-text">To track your carbon footprint, we'll need access to your device information. Just click below to set up your device and leave the rest to us!</p>
             <p class="card-text"><small class="text-muted">
               <a href="<%= devicesLink %>">Setup your devices</a>
-            </small></p>
-          </div>
+            </small>
+          </p>
         </div>
+      </div>
       <% } else { %>
-        <!-- Summary -->
-        <div class="card text-center border">
-          <h5 class="card-header">Summary</h5>
-          <div class="card-body">
-            <div id="chart_div">
-              <input type="hidden" id="totalKwh" value="<%= totalKwh %>">
-            </div>
-            <br>
-            <div id="costs_chart_div"></div>
-            <br>
-            <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
-            <br>
-            <div id="savings_message_container">
-              <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
-              <span id="savings_message"></span>
-            </div>
+      <!-- Summary for devices -->
+      <div class="card text-center border">
+        <h5 class="card-header">Summary</h5>
+        <div class="card-body">
+          <div id="chart_div">
+            <input type="hidden" id="totalKwh" value="<%= totalKwh %>">
+          </div>
+          <br>
+          <div id="costs_chart_div"></div>
+          <br>
+          <input type="hidden" id="totalCost" value="<%= totalCost.toFixed(2) %>">
+          <br>
+          <div id="savings_message_container">
+            <img src="/img/icons/lightbulb.png" alt="Lightbulb Icon" width="40" height="40">
+            <span id="savings_message"></span>
           </div>
         </div>
+      </div>
       <% } %>
     </div>
+
     <!-- Cap of the day -->
-    <div class="col-12 col-md-3 mb-4">
+    <div class="col-12 col-md-3 mb-5">
       <div class="card">
         <h5 class="card-header">CAP OF THE DAY</h5>
         <div class="card-body">
@@ -71,15 +86,15 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
 <!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElR16o87II1Y6n0Z8e3c8638oa32310bF7h+t25t3v6e0uztq6/PXF3g82w863P2r212+r68n37568432655" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/js/main.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="/js/usage.js"></script>
 <script src="/js/costs.js"></script>
 
-<!-- Template should be after login -->
+<!-- Footer afer login -->
 <%- include('templates/footerAfterLogin') %>
