@@ -463,18 +463,12 @@ app.get('/profile', (req, res) => {
   let name = req.session.name;
   let userid = req.session.userid;
   let email = req.session.email;
+  
   if (isValidSession(req)) {
     // If logged in, render the 'profile' page
     res.render('profile', { name: name, userid: userid, email: email });
     return;
-    // If logged in, render the 'profile' page
-    res.render('profile', { name: name, userid: userid, email: email });
-    return;
-  }
-  else {
-    // If not logged in, redirect to the login page
-    res.redirect('/login');
-    return;
+  } else {
     // If not logged in, redirect to the login page
     res.redirect('/login');
     return;
